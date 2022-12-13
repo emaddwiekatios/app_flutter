@@ -304,7 +304,8 @@ class GetCarouselSlider extends StatelessWidget {
                     decoration: BoxDecoration(
                       image: DecorationImage(fit: BoxFit.fill,
                           image: ExactAssetImage( p,
-                           // width: MediaQuery.of(context).size.width,
+                           // width: MediaQuery.of(context).
+                            // size.width,
                             //fit: BoxFit.cover,
                           )
 

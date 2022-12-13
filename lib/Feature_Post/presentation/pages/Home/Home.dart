@@ -12,6 +12,7 @@ import 'package:get/get.dart';
 
 import '../../../../core/resource/template.dart';
 
+//emad add not  to test
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
 
@@ -30,10 +31,7 @@ class _HomeState extends State<Home> {
         //   backgroundColor: Colors.transparent,
         //   title: Text('Home'.tr),)
 
-        body:HomePage(),
-
-
-
+        body: HomePage(),
       ),
     );
   }
@@ -45,78 +43,84 @@ Widget GetDrower(context) {
       child: ListView(
         children: [
           Column(
-              children: [
-                UserAccountsDrawerHeader(
-                  currentAccountPicture: Container(
-                    height: get_height(context) / 5,
-                    width: get_width(context) / 5,
-                    clipBehavior: Clip.antiAlias,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                    ),
-                    child: Image.asset(
-                      AssetManager.splash1,
-                      fit: BoxFit.fill,
-                    ),
-                    //  fit: BoxFit.fill),
+            children: [
+              UserAccountsDrawerHeader(
+                currentAccountPicture: Container(
+                  height: get_height(context) / 5,
+                  width: get_width(context) / 5,
+                  clipBehavior: Clip.antiAlias,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
                   ),
-                  accountName: const Text('Emad Dwiekat'),
-                  accountEmail: const Text('Emad@gmail.com'),
-                  currentAccountPictureSize: const Size.fromRadius(40),
-                  // arrowColor: Theme.of(context).backgroundColor,
-                  //  decoration: BoxDecoration(
-                  //      color:Theme.of(context).backgroundColor
-                  //  ),
+                  child: Image.asset(
+                    AssetManager.splash1,
+                    fit: BoxFit.fill,
+                  ),
+                  //  fit: BoxFit.fill),
                 ),
-
-                ListTile(
-                    leading: Icon(Icons.home,color: ColorManager.primary,),
-                    title: Text('Home'.tr),
-                    trailing: Text('Details'.tr),
-                    onTap: () {
-                      print('ontap');
-                      Navigator.pop(context);
-                    }),
-                const Divider(
-                  height: FontManagerSize.s8,
-                ),
-                ListTile(
-                    leading: Icon(Icons.generating_tokens,color: ColorManager.primary,),
-                    title: Text('GetX'.tr),
-                    trailing: Text('Getx'.tr),
-                    onTap: () {
-                      print('ontap');
-                      Get.to(() => GetxManagement());
-                    }),
-                const Divider(
-                  height: FontManagerSize.s8,
-                ),
-
-                ListTile(
-                    leading: Icon(Icons.layers_outlined,color: ColorManager.primary,),
-                    title: Text('Layout'.tr),
-                    trailing: Text('Layout'.tr),
-                    onTap: () {
-
-                      Get.to(() => GetLayoutBuilder());
-                    }),
-                const Divider(
-                  height: FontManagerSize.s8,
-                ),
-              ],
-            ),
-
-          
+                accountName: const Text('Emad Dwiekat'),
+                accountEmail: const Text('Emad@gmail.com'),
+                currentAccountPictureSize: const Size.fromRadius(40),
+                // arrowColor: Theme.of(context).backgroundColor,
+                //  decoration: BoxDecoration(
+                //      color:Theme.of(context).backgroundColor
+                //  ),
+              ),
+              ListTile(
+                  leading: Icon(
+                    Icons.home,
+                    color: ColorManager.primary,
+                  ),
+                  title: Text('Home'.tr),
+                  trailing: Text('Details'.tr),
+                  onTap: () {
+                    print('ontap');
+                    Navigator.pop(context);
+                  }),
+              const Divider(
+                height: FontManagerSize.s8,
+              ),
+              ListTile(
+                  leading: Icon(
+                    Icons.generating_tokens,
+                    color: ColorManager.primary,
+                  ),
+                  title: Text('GetX'.tr),
+                  trailing: Text('Getx'.tr),
+                  onTap: () {
+                    print('ontap');
+                    Get.to(() => GetxManagement());
+                  }),
+              const Divider(
+                height: FontManagerSize.s8,
+              ),
+              ListTile(
+                  leading: Icon(
+                    Icons.layers_outlined,
+                    color: ColorManager.primary,
+                  ),
+                  title: Text('Layout'.tr),
+                  trailing: Text('Layout'.tr),
+                  onTap: () {
+                    Get.to(() => GetLayoutBuilder());
+                  }),
+              const Divider(
+                height: FontManagerSize.s8,
+              ),
+            ],
+          ),
           ListTile(
-              leading: Icon(Icons.home,color: ColorManager.primary,),
+              leading: Icon(
+                Icons.home,
+                color: ColorManager.primary,
+              ),
               title: Text('Lang'.tr),
               trailing: Text('Lang'.tr),
               onTap: () {
-                if(localeController.currentLanguage == Locale('en') )
-                    localeController.changeLanguage(Locale('ar'));
+                if (localeController.currentLanguage == Locale('en'))
+                  localeController.changeLanguage(Locale('ar'));
                 else
                   localeController.changeLanguage(Locale('en'));
-
 
                 Navigator.pop(context);
               }),

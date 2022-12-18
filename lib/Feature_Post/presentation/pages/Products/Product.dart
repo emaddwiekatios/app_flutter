@@ -124,7 +124,7 @@ class _ProductDetailsState extends State<ProductDetails> {
               ),
               Positioned(
                 top: AppSize.s20,
-                right: get_width(context)- / FontManagerSize.s2,
+                right: get_width(context) / FontManagerSize.s2,
                 child: Text(
                   'T-shirt',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),

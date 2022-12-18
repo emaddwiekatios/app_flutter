@@ -1,7 +1,5 @@
 import 'package:clean_arch_app/core/resource/ColorManger.dart';
 import 'package:flutter/material.dart';
-import 'dart:ui';
-import 'dart:math';
 
 class template extends StatefulWidget {
   @override
@@ -22,12 +20,12 @@ class _templateState extends State<template> {
 
   ////  add  keyboard action
 
-  final FocusNode _nodeText1 = FocusNode();
-  final FocusNode _nodeText2 = FocusNode();
-  final FocusNode _nodeText3 = FocusNode();
-  final FocusNode _nodeText4 = FocusNode();
-  final FocusNode _nodeText5 = FocusNode();
-  final FocusNode _nodeText6 = FocusNode();
+  // final FocusNode _nodeText1 = FocusNode();
+  // final FocusNode _nodeText2 = FocusNode();
+  // final FocusNode _nodeText3 = FocusNode();
+  // final FocusNode _nodeText4 = FocusNode();
+  // final FocusNode _nodeText5 = FocusNode();
+  // final FocusNode _nodeText6 = FocusNode();
 
   /// Creates the [KeyboardActionsConfig] to hook up the fields
   /// and their focus nodes to our [FormKeyboardActions].
@@ -137,10 +135,9 @@ class _templateState extends State<template> {
     return Scaffold(
       key: _scaffoldKey,
       // drawer: Appdrawer(),
-      body:
-      GestureDetector(
-        onTap: (){
-          print('ontap');
+      body: GestureDetector(
+        onTap: () {
+          //  print('ontap');
           FocusScopeNode currentFocus = FocusScope.of(context);
 
           if (!currentFocus.hasPrimaryFocus) {
@@ -154,18 +151,12 @@ class _templateState extends State<template> {
               top: 0,
               left: 0,
               child: Container(
-                height: MediaQuery
-                    .of(context)
-                    .size
-                    .height / 4,
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width,
-                decoration: BoxDecoration(
-                  //borderRadius: BorderRadius.circular(200),
-                  //  color: Colors.amber,
-                ),
+                height: MediaQuery.of(context).size.height / 4,
+                width: MediaQuery.of(context).size.width,
+                decoration: const BoxDecoration(
+                    //borderRadius: BorderRadius.circular(200),
+                    //  color: Colors.amber,
+                    ),
                 child: CustomPaint(
                   child: Container(
                     height: 400.0,
@@ -225,12 +216,12 @@ class _templateState extends State<template> {
             ),
             //menu
             Positioned(
-              top: pheight/25,
-              left: pwidth/20,
+              top: pheight / 25,
+              left: pwidth / 20,
               child: IconButton(
                 icon: Icon(Icons.menu),
                 onPressed: () {
-                  print('inside button');
+                  // print('inside button');
                   // _scaffoldKey.currentState.openDrawer();
 
                   Navigator.pushReplacementNamed(context, "/ProductsMain");
@@ -238,12 +229,12 @@ class _templateState extends State<template> {
               ),
             ),
             Positioned(
-              top: pheight/25,
-              right: pwidth/20,
+              top: pheight / 25,
+              right: pwidth / 20,
               child: IconButton(
-                icon: Icon(Icons.arrow_back),
+                icon: const Icon(Icons.arrow_back),
                 onPressed: () {
-                  print('inside button');
+                  //print('inside button');
                   // FirebaseAuth.instance.signOut();
                   Navigator.pop(context);
                   //  Navigator.popAndPushNamed(context, "/SignIn");
@@ -254,10 +245,10 @@ class _templateState extends State<template> {
             ),
             //body
             Positioned(
-              top: pheight/10,
+              top: pheight / 10,
               right: 0,
               bottom: 20,
-              child: Container(
+              child: SizedBox(
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height >= 775.0
                       ? MediaQuery.of(context).size.height
@@ -277,7 +268,7 @@ class _templateState extends State<template> {
                             tileMode: TileMode.clamp),
                       ),
 */
-                  child:Center(child: Text('Welcome'))
+                  child: const Center(child: Text('Welcome'))
 /*
 FutureBuilder<List<UserModel>>(
 future: db.getUserModelData(),
@@ -285,31 +276,24 @@ builder: (context, snapshot) {
 if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
 */
 
-
-              ),
+                  ),
             ),
             //header title
             Positioned(
               top: MediaQuery.of(context).size.height / 18,
               left: MediaQuery.of(context).size.width / 2 - 50,
-              child: Text('Details'
+              child: const Text(
+                'Details'
                 //AppLocalizations.of(context).translate('Details'),
-                ,style: TextStyle(fontSize: 29, fontWeight: FontWeight.bold),
+                ,
+                style: TextStyle(fontSize: 29, fontWeight: FontWeight.bold),
               ),
             ),
-
-
-
-
-
-
           ],
         ),
       ),
     );
-
   }
-
 }
 
 class _MyPainter extends CustomPainter {
@@ -323,7 +307,7 @@ class _MyPainter extends CustomPainter {
 
     path.moveTo(0, size.height * 0.5);
     path.quadraticBezierTo(
-        size.width /2, size.height / 1, size.width, size.height * 0.4);
+        size.width / 2, size.height / 1, size.width, size.height * 0.4);
     path.lineTo(size.width, 0);
     path.lineTo(0, 0);
 

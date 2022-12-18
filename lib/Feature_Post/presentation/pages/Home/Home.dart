@@ -26,7 +26,7 @@ LocaleController localeController = Get.put(LocaleController());
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return const SafeArea(
       child: Scaffold(
         // appBar: AppBar(
         //   backgroundColor: Colors.transparent,
@@ -75,7 +75,7 @@ Widget GetDrower(context) {
                   title: Text('Home'.tr),
                   trailing: Text('Details'.tr),
                   onTap: () {
-                    print('ontap');
+                    //print('ontap');
                     Navigator.pop(context);
                   }),
               const Divider(
@@ -89,7 +89,7 @@ Widget GetDrower(context) {
                   title: Text('GetX'.tr),
                   trailing: Text('Getx'.tr),
                   onTap: () {
-                    print('ontap');
+                    // print('ontap');
                     Get.to(() => GetxManagement());
                   }),
               const Divider(
@@ -103,7 +103,7 @@ Widget GetDrower(context) {
                   title: Text('Layout'.tr),
                   trailing: Text('Layout'.tr),
                   onTap: () {
-                    Get.to(() => GetLayoutBuilder());
+                    Get.to(() => const GetLayoutBuilder());
                   }),
               const Divider(
                 height: FontManagerSize.s8,

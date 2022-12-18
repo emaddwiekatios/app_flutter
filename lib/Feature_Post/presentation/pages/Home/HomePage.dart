@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
 import '../../../../core/resource/StringManager.dart';
+import '../Products/Product.dart';
 import 'Home.dart';
 
 class HomePage extends StatefulWidget {
@@ -249,11 +250,12 @@ class WidgetCategory extends StatelessWidget {
                   BorderSide(color: ColorManager.primary, width: AppSize.s0_5),
               borderRadius: BorderRadius.circular(270)),
           child: const CircleAvatar(
+            foregroundImage: ExactAssetImage(AssetManager.mancat3),
             radius: AppSize.s40,
-            backgroundImage: ExactAssetImage(AssetManager.splash3),
+            //   backgroundImage: ExactAssetImage(AssetManager.mancat3),
           ),
         ),
-        const Text('Mad')
+        const Text('Man')
         //  backgroundImage:  (AssetManager.onBoarding3,fit: BoxFit.cover))
       ],
     );
@@ -382,49 +384,81 @@ class GetPortraitOrient extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Container(
-                decoration: const BoxDecoration(),
-                width: get_width(context), //FontManagerSize.s3,
-                //color:Colors.blue,
+                decoration: const BoxDecoration(
+                    //color: Colors.blue,
+                    ),
+                width: get_width(context),
+                height: get_height(context), //FontManagerSize.s3,
+
                 child: GridView.builder(
                   itemBuilder: (context, int index) {
-                    return Card(
-                      elevation: 10,
-                      shape: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: ColorManager.primary, width: AppSize.s0_5),
-                          borderRadius: const BorderRadius.all(
-                              Radius.circular(AppSize.s8))),
+                    return InkWell(
+                      onTap: () {
+                        //(index);
 
-                      //borderOnForeground: true,
+                        Get.to(() => const ProductDetails());
+                      },
                       child: Column(
                         children: [
-                          Container(
-                            height: 80,
-                            width: 80,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              image: const DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: AssetImage(
-                                    AssetManager.splash2,
-                                  )),
-                              color: Colors.limeAccent,
+                          Card(
+                            elevation: 0,
+                            shape: const OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Colors.transparent,
+                                  width: AppSize.s0_5),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(AppSize.s8),
+                              ),
+                            ),
+                            child: Stack(
+                              children: [
+                                Positioned(
+                                  child: Container(
+                                    height: 90,
+                                    //width: 80,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      image: const DecorationImage(
+                                          fit: BoxFit.fill,
+                                          image: AssetImage(
+                                            AssetManager.mancat4,
+                                          )),
+                                      color: Colors.green,
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                    bottom: AppSize.s0,
+                                    left: AppSize.s0,
+                                    right: AppSize.s0,
+                                    child: Container(
+                                        height:
+                                            get_height(context) / AppSize.s40,
+                                        color: ColorManager.primary
+                                            .withOpacity(.4),
+                                        child: const Center(
+                                            child: Text('T-shirt')))),
+                                const Positioned(
+                                  right: AppSize.s4,
+                                  child: Icon(
+                                    Icons.favorite_border_outlined,
+                                    color: Colors.red,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-//                          CircleAvatar(
-//
-//                            backgroundImage: ExactAssetImage(AssetManager.splash2)
-//
-// ,radius: 50,
-//                          ),
-
-                          const Text('rrr'),
-                          const Text('hello')
+                          Column(
+                            children: [
+                              const Text('Price :50'),
+                            ],
+                          ),
+                          // Text('price : ${23}\$'),
                         ],
                       ),
                     );
                   },
-                  itemCount: 10,
+                  itemCount: 5,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3,
                   ),

@@ -33,14 +33,14 @@ class _loginState extends State<login> {
 
   @override
   void initState() {
-    _bind(); // TODO: implement initState
+    _bind();
     super.initState();
   }
 
   @override
   void dispose() {
     FocusScope.of(context).requestFocus(FocusNode());
-    // TODO: implement dispose
+
     super.dispose();
   }
 
@@ -56,7 +56,9 @@ class _loginState extends State<login> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image.asset(AssetManager.onBoardLogo),
-          SizedBox(height: get_height(context)/15,),
+          SizedBox(
+            height: get_height(context) / 15,
+          ),
           Text(
             StringManager.login.tr,
             style: getBoldStyle(color: ColorManager.primary),
@@ -75,13 +77,13 @@ class _loginState extends State<login> {
                         label: Text(StringManager.userName.tr),
                         hintText: StringManager.userNameHint.tr,
                         //  prefix: Text(StringManager.userName),
-                        prefixIcon: Icon(Icons.email),
+                        prefixIcon: const Icon(Icons.email),
                         errorText: (snapshot.data ?? true)
                             ? null
                             : StringManager.usernameError,
                         suffix: Text(StringManager.userName.tr),
                         //  suffixText: StringManager.userName,
-                        suffixIcon: Icon(Icons.remove_red_eye_outlined)),
+                        suffixIcon: const Icon(Icons.remove_red_eye_outlined)),
                   );
                 }),
           ),
@@ -100,20 +102,20 @@ class _loginState extends State<login> {
                         label: Text(StringManager.password.tr),
                         hintText: StringManager.password.tr,
                         //  prefix: Text(StringManager.userName),
-                        prefixIcon: Icon(Icons.password),
+                        prefixIcon: const Icon(Icons.password),
                         errorText: (snapshot.data ?? true)
                             ? null
                             : StringManager.passwordError.tr,
                         suffix: Text(StringManager.password.tr),
                         //  suffixText: StringManager.userName,
-                        suffixIcon: Icon(Icons.remove_red_eye_outlined)),
+                        suffixIcon: const Icon(Icons.remove_red_eye_outlined)),
                   );
                 }),
           ),
           Container(
             height: get_height(context) / 20,
             width: get_width(context),
-            margin: EdgeInsets.all(FontManagerSize.s8),
+            margin: const EdgeInsets.all(FontManagerSize.s8),
             child: StreamBuilder<bool>(
                 stream: loginViewModel1.getLoginViewModelOutLoginButton,
                 builder: (context, snapshot) {
@@ -121,15 +123,17 @@ class _loginState extends State<login> {
                     style: ButtonStyle(
                         elevation: MaterialStateProperty.all(0),
                         backgroundColor: MaterialStateProperty.all(
-                            (snapshot.data ?? false)? ColorManager.primary:ColorManager.grey
-                        )),
-                     onPressed: (snapshot.data ?? false)?
-                         () {
-                        Get.to(()=> const Home());
-                      //Get.off(()=>Home() );
-                    //    Navigator.pushReplacementNamed(context, RoutesManager.onBoardingRoute);
-                    } :null,
-                    child:  Text(
+                            (snapshot.data ?? false)
+                                ? ColorManager.primary
+                                : ColorManager.grey)),
+                    onPressed: (snapshot.data ?? false)
+                        ? () {
+                            Get.to(() => const Home());
+                            //Get.off(()=>Home() );
+                            //    Navigator.pushReplacementNamed(context, RoutesManager.onBoardingRoute);
+                          }
+                        : null,
+                    child: Text(
                       StringManager.login.tr,
                       style: const TextStyle(fontSize: FontManagerSize.s22),
                     ),

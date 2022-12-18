@@ -73,6 +73,11 @@ flutter:
     - images/onboard/prod.png
     - images/onboard/save.png
     - images/Splash/welcomepage.png
+    - images/category/man_cat.jpeg
+    - images/category/man_cat3.jpeg
+    - images/category/man_cat4.jpg
+    - images/category/young.png
+    - images/category/mam.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

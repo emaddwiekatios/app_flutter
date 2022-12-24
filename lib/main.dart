@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'Feature_Post/presentation/pages/Home/Home.dart';
+
 SharedPreferences? prefs;
 void main() async {
   // WidgetsFlutterBinding.ensureInitialized();
@@ -33,6 +35,9 @@ class MyApp extends StatelessWidget {
       locale: lang,
       translations: LocaleLang(),
       // home: const splash(),
+      routes: {
+        'Home': (context) => const Home(),
+      },
     );
   }
 }

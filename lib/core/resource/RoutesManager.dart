@@ -3,6 +3,9 @@ import 'package:clean_arch_app/Feature_Post/presentation/pages/Onbording/View_On
 import 'package:clean_arch_app/Feature_Post/presentation/pages/splash/splash.dart';
 import 'package:flutter/material.dart';
 
+import '../../Feature_Post/presentation/pages/GetxManagement/GetxMangment.dart';
+import '../../Feature_Post/presentation/pages/Home/Home.dart';
+import '../../Feature_Post/presentation/pages/LayoutBuilder/LayoutBuilder.dart';
 import 'StringManager.dart';
 
 class RoutesManager {
@@ -10,9 +13,9 @@ class RoutesManager {
   static const String onBoardingRoute = "/onBoarding";
   // static const String onBoarding2Route = "/onBoarding2";
   static const String loginRoute = "/login";
-  // static const String registerRoute = "/register";
-  // static const String forgotPasswordRoute = "/forgotPassword";
-  // static const String mainRoute = "/main";
+  static const String homeRoute = "/home";
+  static const String layoutbuilderRoute = "/layoutBuilder";
+  static const String getxbuilder = "/GetxManagement";
   // static const String storeDetailsRoute = "/storeDetails";
 }
 
@@ -26,12 +29,12 @@ class RouteGenerator {
       case RoutesManager.loginRoute:
         return MaterialPageRoute(builder: (_) => const login());
 
-      //case RoutesManager.registerRoute:
-      //   return MaterialPageRoute(builder: (_) => const RegisterView());
-      // case RoutesManager.forgotPasswordRoute:
-      //   return MaterialPageRoute(builder: (_) => const ForgotPasswordView());
-      // case RoutesManager.mainRoute:
-      //   return MaterialPageRoute(builder: (_) => const MainView());
+      case RoutesManager.homeRoute:
+        return MaterialPageRoute(builder: (_) => const Home());
+      case RoutesManager.layoutbuilderRoute:
+        return MaterialPageRoute(builder: (_) => const GetLayoutBuilder());
+      case RoutesManager.getxbuilder:
+        return MaterialPageRoute(builder: (_) => GetxManagement());
       // case RoutesManager.storeDetailsRoute:
       //   return MaterialPageRoute(builder: (_) => const StoreDetailsView());
       default:

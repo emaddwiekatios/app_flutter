@@ -6,6 +6,7 @@ import 'package:clean_arch_app/core/resource/AssetManager.dart';
 import 'package:clean_arch_app/core/resource/ColorManger.dart';
 import 'package:clean_arch_app/core/resource/FontManager.dart';
 import 'package:clean_arch_app/core/resource/MediaQuery.dart';
+import 'package:clean_arch_app/core/resource/RoutesManager.dart';
 import 'package:clean_arch_app/core/resource/ValueManger.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -90,7 +91,8 @@ Widget GetDrower(context) {
                   trailing: Text('Getx'.tr),
                   onTap: () {
                     // print('ontap');
-                    Get.to(() => GetxManagement());
+                    Get.toNamed(RoutesManager.getxbuilder);
+                    //  Get.to(() => GetxManagement());
                   }),
               const Divider(
                 height: FontManagerSize.s8,
@@ -103,7 +105,8 @@ Widget GetDrower(context) {
                   title: Text('Layout'.tr),
                   trailing: Text('Layout'.tr),
                   onTap: () {
-                    Get.to(() => const GetLayoutBuilder());
+                    Get.toNamed(RoutesManager.layoutbuilderRoute);
+                    // Get.to(() => RoutesManager.layoutbuilderRoute);
                   }),
               const Divider(
                 height: FontManagerSize.s8,

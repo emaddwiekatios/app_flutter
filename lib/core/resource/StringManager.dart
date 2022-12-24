@@ -1,7 +1,5 @@
 class StringManager {
- // class AppStrings {
-
-
+  // class AppStrings {
 
   static const String noRouteFound = "no_route_found";
   static const String onBoardingTitle1 = "on_boarding_title1";
@@ -15,22 +13,23 @@ class StringManager {
   static const String userNameHint = "UserName@gmail.com";
   static const String password = "PassWord";
 
+  static const String Confirmpassword = "Confirmpassword";
+  static const String Confirmpasswordhint = "Password";
 
   static const String search = "Search";
-
 
   static const String onBoardingSubTitle1 = "on_boarding_desc1";
   static const String onBoardingSubTitle2 = "on_boarding_desc2";
   static const String onBoardingSubTitle3 = "on_boarding_desc3";
   static const String onBoardingSubTitle4 = "on_boarding_desc4";
-  static const String onBoardingdetails1 = "High Quality Proiducts With T&C applies";
+  static const String onBoardingdetails1 =
+      "High Quality Proiducts With T&C applies";
 
+  static const String onBoardingdetails2 =
+      "EasyPayment methods with no hidden fee";
 
-
-  static const String onBoardingdetails2 = "EasyPayment methods with no hidden fee";
-
-  static const String onBoardingdetails3 = "Fast delivery to your home and where you are";
-
+  static const String onBoardingdetails3 =
+      "Fast delivery to your home and where you are";
 
   static const String skip = "skip";
   static const String onBoardStart = "Start";
@@ -39,6 +38,7 @@ class StringManager {
   static const String passwordError = "invalid_password";
 
   static const String login = "Login";
+  static const String signup = "signup";
   static const String forgetPassword = "forgot_password_text";
   static const String registerText = "register_text";
   static const String loading = "loading";
@@ -80,4 +80,4 @@ class StringManager {
   static const String defaultError = "default_error";
   static const String cacheError = "cache_error";
   static const String noInternetError = "no_internet_error";
-  }
+}

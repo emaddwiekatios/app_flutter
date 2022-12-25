@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
 import 'package:clean_arch_app/Feature_Post/presentation/pages/Home/Home.dart';
+import 'package:clean_arch_app/Feature_Post/presentation/pages/Login/view_login/Auth.dart';
 import 'package:clean_arch_app/core/resource/AssetManager.dart';
 import 'package:clean_arch_app/core/resource/ColorManger.dart';
 import 'package:clean_arch_app/core/resource/FontManager.dart';
@@ -11,6 +13,7 @@ import 'package:clean_arch_app/core/resource/StyleManger.dart';
 import 'package:clean_arch_app/core/resource/ValueManger.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../viewModel_login/viewmodel_login.dart';
 import 'package:http/http.dart' as http;
@@ -25,8 +28,7 @@ class login extends StatefulWidget {
 class _loginState extends State<login> {
   LoginViewModel loginViewModel1 = LoginViewModel();
 
-  bool isSignup = false;
-  String ererorMessage = '';
+  Auth _auth = Get.put(Auth());
 
   TextEditingController controllerLoginUserName = TextEditingController();
   TextEditingController controllerLoginPassword = TextEditingController();
@@ -67,7 +69,7 @@ class _loginState extends State<login> {
           Stack(
             children: [
               Container(
-                transform: Matrix4.rotationZ(-8 * pi / 180),
+                // transform: Matrix4.rotationZ(-8 * pi / 180),
                 height: get_height(context) / AppSize.s10,
                 width: get_width(context) / AppSize.s2,
                 decoration: BoxDecoration(
@@ -174,7 +176,7 @@ class _loginState extends State<login> {
                           );
                         }),
                   ),
-                  isSignup
+                  _auth.isSignup
                       ? Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: StreamBuilder<bool>(
@@ -206,7 +208,7 @@ class _loginState extends State<login> {
                               }),
                         )
                       : Container(),
-                  Text(ererorMessage),
+                  Text(_auth.errorMessage),
                   Container(
                     height: get_height(context) / 20,
                     width: get_width(context),
@@ -227,11 +229,20 @@ class _loginState extends State<login> {
                                         controllerLoginUserName.text.toString();
                                     String password =
                                         controllerLoginPassword.text.toString();
-                                    isSignup
-                                        ? signup(user, password)
-                                        : signin(user, password);
-
-                                    //Get.to(() => const Home());
+                                    _auth.isSignup
+                                        ? _auth.signup(user, password)
+                                        : _auth.signin(user, password);
+                                    print(_auth.userId);
+                                    print(_auth.isSignup);
+                                    if (_auth.userId.length > 3 &&
+                                        !_auth.isSignup) {
+                                      setState(() {
+                                        _auth.isSignup = false;
+                                      });
+                                    } else if (_auth.userId.length > 3 &&
+                                        _auth.isSignup == false) {
+                                      Get.to(() => const Home());
+                                    }
                                     //Get.off(()=>Home() );
                                     //    Navigator.pushReplacementNamed(context, RoutesManager.onBoardingRoute);
 
@@ -242,7 +253,7 @@ class _loginState extends State<login> {
                                   }
                                 : null,
                             child: Text(
-                              isSignup
+                              _auth.isSignup
                                   ? StringManager.signup
                                   : StringManager.login.tr,
                               style: const TextStyle(
@@ -251,11 +262,11 @@ class _loginState extends State<login> {
                           );
                         }),
                   ),
-                  !isSignup
+                  !_auth.isSignup
                       ? InkWell(
                           onTap: () {
                             setState(() {
-                              isSignup = true;
+                              _auth.isSignup = true;
                             });
                           },
                           child: Text(
@@ -269,7 +280,7 @@ class _loginState extends State<login> {
                       : InkWell(
                           onTap: () {
                             setState(() {
-                              isSignup = false;
+                              _auth.isSignup = false;
                             });
                           },
                           child: Text(
@@ -287,36 +298,5 @@ class _loginState extends State<login> {
         ],
       ),
     ));
-  }
-
-  void signin(String email, String password) {
-    _authenticate(email, password, 'signInWithPassword');
-  }
-
-  void signup(String email, String password) {
-    _authenticate(email, password, 'signUp');
-  }
-
-  Future<void> _authenticate(
-      String email, String password, String urlSegment) async {
-    final url =
-        'https://identitytoolkit.googleapis.com/v1/accounts:$urlSegment?key=AIzaSyAPb2LfILtCTM_kopIGMbmoJ6nYsBARRUg';
-    //signUp
-    //signInWithPassword
-    try {
-      Uri uri = Uri.parse(url);
-      final res = await http.post(uri,
-          body: json.encode({
-            'email': email,
-            'password': password,
-            'returnSecureTolken': true
-          }));
-      final responsedata = json.decode(res.body);
-      if (responsedata['error'] != null) {
-        print(responsedata['error']['message']);
-      }
-      print(responsedata['email']);
-      print(responsedata['localId']);
-    } catch (e) {}
   }
 }

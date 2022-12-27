@@ -1,3 +1,4 @@
+import 'package:get/state_manager.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
@@ -7,13 +8,31 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class Auth extends GetxController {
   bool isSignup = false;
-  String errorMessage = '';
+  String? errorMessage = '';
+
+  changeErrorMessage(String s) {
+    errorMessage = s;
+    update();
+  }
+
+  changeisSignup(bool s) {
+    isSignup = s;
+    update();
+  }
 
   ///
   late String _token;
-  late DateTime _expiryDate;
+
+  late DateTime _expiryDate = DateTime.now();
   String _userId = '';
   late Timer _authTime;
+
+  String? email;
+
+  void setemail(String _email) {
+    email = _email;
+    update();
+  }
 
   bool get isAuth {
     return token != null;
@@ -28,19 +47,19 @@ class Auth extends GetxController {
     return null;
   }
 
-  String get userId {
+  String? get userId {
     return _userId;
   }
 
   Future<void> signin(String email, String password) async {
-    _authenticate(email, password, 'signInWithPassword');
+    await _authenticate(email, password, 'signInWithPassword');
   }
 
   Future<void> signup(String email, String password) async {
-    _authenticate(email, password, 'signUp');
+    await _authenticate(email, password, 'signUp');
   }
 
-  Future<bool> tryAutoLogin(String email, String password) async {
+  Future<bool> tryAutoLogin() async {
     final prefs = await SharedPreferences.getInstance();
     if (!prefs.containsKey('userData')) return false;
     prefs.getString('userData');
@@ -53,7 +72,7 @@ class Auth extends GetxController {
     _token = extractedData['token'].toString();
     _userId = extractedData['userId'].toString();
     _expiryDate = expiryDate;
-    update();
+    // update();
     _autoLogout();
     return true;
   }
@@ -69,7 +88,7 @@ class Auth extends GetxController {
 
     final prefs = await SharedPreferences.getInstance();
     prefs.clear();
-    update();
+    //update();
   }
 
   void _autoLogout() {
@@ -78,51 +97,58 @@ class Auth extends GetxController {
     }
     final timeToExpiry = _expiryDate.difference(DateTime.now()).inSeconds;
     _authTime = Timer(Duration(seconds: timeToExpiry), logout);
-    update();
+    //update();
   }
 
   Future<void> _authenticate(
       String email, String password, String urlSegment) async {
-    // setState(() {
-    //   errorMessage = '';
-    // });
-
+    print(email);
+    print(urlSegment);
+    changeErrorMessage('');
+    print('responsedata0000');
     final url =
         'https://identitytoolkit.googleapis.com/v1/accounts:$urlSegment?key=AIzaSyAPb2LfILtCTM_kopIGMbmoJ6nYsBARRUg';
     //signUp
     //signInWithPassword
     try {
+      print('try');
       Uri uri = Uri.parse(url);
+      print(uri);
       final res = await http.post(uri,
           body: json.encode({
             'email': email,
             'password': password,
             'returnSecureTolken': true
           }));
+      print(res);
+      print('end try');
       final responsedata = json.decode(res.body);
+      print(json.decode(res.body));
       if (responsedata['error'] != null) {
-        // setState(() {
-        //   errorMessage = responsedata['error']['message'];
-        // });
+        changeErrorMessage(responsedata['error']['message'].toString());
+        // errorMessage = (responsedata['error']['message']).obs;
 
         print(responsedata['error']['message']);
       }
+      if (responsedata['idToken'].toString() != null) {
+        setemail(responsedata['email']);
+        print('responsedata[email]');
+        print(responsedata['email']);
 
-      _token = responsedata['idToken'];
-      _userId = responsedata['localId'];
-      _expiryDate = DateTime.now()
-          .add(Duration(seconds: int.parse(responsedata['expiresIn'])));
-      _autoLogout();
-      update();
-      final prefs = await SharedPreferences.getInstance();
-      String userData = json.encode(
-          {'token': _token, 'userId': _userId, 'expiryDate': _expiryDate});
-      prefs.setString('userData', userData);
-      print(responsedata['email']);
-      print(responsedata['localId']);
+        _token = responsedata['idToken'].toString();
+        _userId = responsedata['localId'].toString();
+        _expiryDate = DateTime.now()
+            .add(Duration(seconds: int.parse(responsedata['expiresIn'])));
+        _autoLogout();
+        update();
+        final prefs = await SharedPreferences.getInstance();
+        String userData = json.encode(
+            {'token': _token, 'userId': _userId, 'expiryDate': _expiryDate});
+        prefs.setString('userData', userData);
+      }
     } catch (e) {
-      //throw e;
-      print(e);
+      // throw e;
+
     }
   }
 }

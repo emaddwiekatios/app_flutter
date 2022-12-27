@@ -28,7 +28,9 @@ class login extends StatefulWidget {
 class _loginState extends State<login> {
   LoginViewModel loginViewModel1 = LoginViewModel();
 
-  Auth _auth = Get.put(Auth());
+  // final Auth _auth = Get.put(Auth(), permanent: true);
+
+  GlobalKey<FormState> formkey = GlobalKey();
 
   TextEditingController controllerLoginUserName = TextEditingController();
   TextEditingController controllerLoginPassword = TextEditingController();
@@ -50,7 +52,7 @@ class _loginState extends State<login> {
 
   @override
   void dispose() {
-    FocusScope.of(context).requestFocus(FocusNode());
+    //FocusScope.of(context).requestFocus(FocusNode());
 
     super.dispose();
   }
@@ -113,71 +115,57 @@ class _loginState extends State<login> {
           SizedBox(
             height: get_height(context) / 15,
           ),
-          Card(
-            elevation: 30,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(AppSize.s20)),
-            margin: EdgeInsets.all(AppSize.s10),
-            child: Padding(
-              padding: const EdgeInsets.all(AppSize.s28),
-              child: Column(
-                children: [
-                  Text(
-                    StringManager.login.tr,
-                    style: getBoldStyle(color: ColorManager.primary),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: StreamBuilder<bool>(
-                        stream: loginViewModel1.getLoginViewModelOutUserName,
-                        builder: (context, snapshot) {
-                          return TextFormField(
-                            showCursor: true,
-                            // readOnly: true,
-                            controller: controllerLoginUserName,
-                            decoration: InputDecoration(
-                                label: Text(StringManager.userName.tr),
-                                hintText: StringManager.userNameHint.tr,
-                                //  prefix: Text(StringManager.userName),
-                                prefixIcon: const Icon(Icons.email),
-                                errorText: (snapshot.data ?? true)
-                                    ? null
-                                    : StringManager.usernameError,
-                                suffix: Text(StringManager.userName.tr),
-                                //  suffixText: StringManager.userName,
-                                suffixIcon:
-                                    const Icon(Icons.remove_red_eye_outlined)),
-                          );
-                        }),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: StreamBuilder<bool>(
-                        stream: loginViewModel1.getLoginViewModelOutPassword,
-                        builder: (context, snapshot) {
-                          return TextFormField(
-                            keyboardType: TextInputType.text,
-                            obscureText: true,
-                            showCursor: true,
-                            // readOnly: true,
-                            controller: controllerLoginPassword,
-                            decoration: InputDecoration(
-                                label: Text(StringManager.password.tr),
-                                hintText: StringManager.password.tr,
-                                //  prefix: Text(StringManager.userName),
-                                prefixIcon: const Icon(Icons.password),
-                                errorText: (snapshot.data ?? true)
-                                    ? null
-                                    : StringManager.passwordError.tr,
-                                suffix: Text(StringManager.password.tr),
-                                //  suffixText: StringManager.userName,
-                                suffixIcon:
-                                    const Icon(Icons.remove_red_eye_outlined)),
-                          );
-                        }),
-                  ),
-                  _auth.isSignup
-                      ? Padding(
+          GetBuilder<Auth>(
+            init: Auth(),
+            builder: ((controller) {
+              return Form(
+                key: formkey,
+                child: Card(
+                  elevation: 30,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(AppSize.s20)),
+                  margin: EdgeInsets.all(AppSize.s10),
+                  child: Padding(
+                    padding: const EdgeInsets.all(AppSize.s28),
+                    child: Column(
+                      children: [
+                        Text(
+                          StringManager.login.tr,
+                          style: getBoldStyle(color: ColorManager.primary),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: StreamBuilder<bool>(
+                              stream:
+                                  loginViewModel1.getLoginViewModelOutUserName,
+                              builder: (context, snapshot) {
+                                return TextFormField(
+                                  showCursor: true,
+                                  // readOnly: true,
+                                  controller: controllerLoginUserName,
+                                  decoration: InputDecoration(
+                                      label: Text(StringManager.userName.tr),
+                                      hintText: StringManager.userNameHint.tr,
+                                      //  prefix: Text(StringManager.userName),
+                                      prefixIcon: const Icon(Icons.email),
+                                      errorText: (snapshot.data ?? true)
+                                          ? null
+                                          : StringManager.usernameError,
+                                      suffix: Text(StringManager.userName.tr),
+                                      //  suffixText: StringManager.userName,
+                                      suffixIcon: const Icon(
+                                          Icons.remove_red_eye_outlined)),
+                                  validator: (value) {
+                                    if (value!.isEmpty ||
+                                        !value.contains('@')) {
+                                      return 'Invalid Username';
+                                    }
+                                    return null;
+                                  },
+                                );
+                              }),
+                        ),
+                        Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: StreamBuilder<bool>(
                               stream:
@@ -188,112 +176,215 @@ class _loginState extends State<login> {
                                   obscureText: true,
                                   showCursor: true,
                                   // readOnly: true,
-                                  controller: controllerLoginPasswordconfirm,
+                                  controller: controllerLoginPassword,
                                   decoration: InputDecoration(
-                                      label: Text(
-                                          StringManager.Confirmpassword.tr),
-                                      hintText:
-                                          StringManager.Confirmpassword.tr,
+                                      label: Text(StringManager.password.tr),
+                                      hintText: StringManager.password.tr,
                                       //  prefix: Text(StringManager.userName),
                                       prefixIcon: const Icon(Icons.password),
                                       errorText: (snapshot.data ?? true)
                                           ? null
                                           : StringManager.passwordError.tr,
-                                      suffix: Text(
-                                          StringManager.Confirmpassword.tr),
+                                      suffix: Text(StringManager.password.tr),
                                       //  suffixText: StringManager.userName,
                                       suffixIcon: const Icon(
                                           Icons.remove_red_eye_outlined)),
                                 );
                               }),
-                        )
-                      : Container(),
-                  Text(_auth.errorMessage),
-                  Container(
-                    height: get_height(context) / 20,
-                    width: get_width(context),
-                    margin: const EdgeInsets.all(FontManagerSize.s8),
-                    child: StreamBuilder<bool>(
-                        stream: loginViewModel1.getLoginViewModelOutLoginButton,
-                        builder: (context, snapshot) {
-                          return ElevatedButton(
-                            style: ButtonStyle(
-                                elevation: MaterialStateProperty.all(0),
-                                backgroundColor: MaterialStateProperty.all(
-                                    (snapshot.data ?? false)
-                                        ? ColorManager.primary
-                                        : ColorManager.grey)),
-                            onPressed: (snapshot.data ?? false)
-                                ? () {
-                                    String user =
-                                        controllerLoginUserName.text.toString();
-                                    String password =
-                                        controllerLoginPassword.text.toString();
-                                    _auth.isSignup
-                                        ? _auth.signup(user, password)
-                                        : _auth.signin(user, password);
-                                    print(_auth.userId);
-                                    print(_auth.isSignup);
-                                    if (_auth.userId.length > 3 &&
-                                        !_auth.isSignup) {
-                                      setState(() {
-                                        _auth.isSignup = false;
-                                      });
-                                    } else if (_auth.userId.length > 3 &&
-                                        _auth.isSignup == false) {
-                                      Get.to(() => const Home());
-                                    }
-                                    //Get.off(()=>Home() );
-                                    //    Navigator.pushReplacementNamed(context, RoutesManager.onBoardingRoute);
+                        ),
+                        controller.isSignup
+                            ? Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: StreamBuilder<bool>(
+                                    stream: loginViewModel1
+                                        .getLoginViewModelOutPassword,
+                                    builder: (context, snapshot) {
+                                      return TextFormField(
+                                        keyboardType: TextInputType.text,
+                                        obscureText: true,
+                                        showCursor: true,
+                                        // readOnly: true,
+                                        controller:
+                                            controllerLoginPasswordconfirm,
+                                        decoration: InputDecoration(
+                                            label: Text(StringManager
+                                                .Confirmpassword.tr),
+                                            hintText: StringManager
+                                                .Confirmpassword.tr,
+                                            //  prefix: Text(StringManager.userName),
+                                            prefixIcon:
+                                                const Icon(Icons.password),
+                                            errorText: (snapshot.data ?? true)
+                                                ? null
+                                                : StringManager
+                                                    .passwordError.tr,
+                                            suffix: Text(StringManager
+                                                .Confirmpassword.tr),
+                                            //  suffixText: StringManager.userName,
+                                            suffixIcon: const Icon(
+                                                Icons.remove_red_eye_outlined)),
+                                      );
+                                    }),
+                              )
+                            : Container(),
+                        // Text('${controller.errorMessage}'),
+                        Container(
+                          height: get_height(context) / 20,
+                          width: get_width(context),
+                          margin: const EdgeInsets.all(FontManagerSize.s8),
+                          child: StreamBuilder<bool>(
+                            stream:
+                                loginViewModel1.getLoginViewModelOutLoginButton,
+                            builder: (context, snapshot) {
+                              return ElevatedButton(
+                                style: ButtonStyle(
+                                    elevation: MaterialStateProperty.all(0),
+                                    backgroundColor: MaterialStateProperty.all(
+                                        (snapshot.data ?? false)
+                                            ? ColorManager.primary
+                                            : ColorManager.grey)),
+                                onPressed: (snapshot.data ?? false)
+                                    ? () async {
+                                        print('insiude button');
+                                        String user = controllerLoginUserName
+                                            .text
+                                            .toString();
+                                        String password =
+                                            controllerLoginPassword.text
+                                                .toString();
+                                        controller.isSignup
+                                            ? controller.signup(user, password)
+                                            : controller.signin(user, password);
 
-                                    // Navigator.push(
-                                    //     context,
-                                    //     MaterialPageRoute(
-                                    //         builder: (_) => Home()));
-                                  }
-                                : null,
-                            child: Text(
-                              _auth.isSignup
-                                  ? StringManager.signup
-                                  : StringManager.login.tr,
-                              style: const TextStyle(
-                                  fontSize: FontManagerSize.s22),
-                            ),
-                          );
-                        }),
-                  ),
-                  !_auth.isSignup
-                      ? InkWell(
-                          onTap: () {
-                            setState(() {
-                              _auth.isSignup = true;
-                            });
-                          },
-                          child: Text(
-                            'You Dont Have Account Sign Up',
-                            style: TextStyle(
-                                fontSize: AppSize.s16,
-                                color: ColorManager.primary,
-                                fontWeight: FontWeight.w600),
-                          ),
-                        )
-                      : InkWell(
-                          onTap: () {
-                            setState(() {
-                              _auth.isSignup = false;
-                            });
-                          },
-                          child: Text(
-                            'You  Have Account Signin',
-                            style: TextStyle(
-                                fontSize: AppSize.s16,
-                                color: ColorManager.primary,
-                                fontWeight: FontWeight.w600),
+                                        if (controller.errorMessage!.length >
+                                            3) {
+                                          Get.defaultDialog(
+                                            title: 'The User Error',
+                                            content: Text(
+                                                '${controller.errorMessage}'),
+                                            // backgroundColor: ColorManager.grey,
+                                            cancel: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                ElevatedButton.icon(
+                                                  label: const Text('Ok'),
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                  icon: Icon(Icons.done),
+                                                ),
+                                                ElevatedButton.icon(
+                                                    label:
+                                                        const Text('Canceled'),
+                                                    onPressed: () {
+                                                      Navigator.pop(context);
+                                                    },
+                                                    icon: Icon(Icons.abc)),
+                                              ],
+                                            ),
+                                          );
+                                        } else if (controller
+                                                .userId!.isNotEmpty &&
+                                            controller.isSignup) {
+                                          Get.defaultDialog(
+                                            title: 'Create User',
+                                            content: Text(
+                                                'The user Created : ${controller.email}'),
+                                            confirm: ElevatedButton.icon(
+                                                label: const Text(
+                                                    'you can Login '),
+                                                onPressed: () {
+                                                  controller.changeisSignup(
+                                                      !controller.isSignup);
+                                                  controllerLoginPassword
+                                                      .clear();
+                                                  controllerLoginPasswordconfirm
+                                                      .clear();
+                                                  Navigator.pop(context);
+                                                },
+                                                icon: Icon(
+                                                    Icons.personal_injury)),
+                                          );
+                                        }
+
+                                        //   //Get.to(() => const Home());
+                                        // }
+
+                                        // String user =
+                                        //     controllerLoginUserName.text.toString();
+                                        // String password =
+                                        //     controllerLoginPassword.text.toString();
+                                        // _auth.isSignup
+                                        //     ? _auth.signup(user, password)
+                                        //     : _auth.signin(user, password);
+                                        // print(_auth.userId);
+                                        // print(_auth.isSignup);
+                                        // if (_auth.userId.length > 3 &&
+                                        //     !_auth.isSignup) {
+                                        //   setState(() {
+                                        //     _auth.isSignup = false;
+                                        //   });
+                                        // } else if (_auth.userId.length > 3 &&
+                                        //     _auth.isSignup == false) {
+                                        //   Get.to(() => const Home());
+                                        // }
+
+                                        //Get.off(()=>Home() );
+                                        //    Navigator.pushReplacementNamed(context, RoutesManager.onBoardingRoute);
+
+                                        // Navigator.push(
+                                        //     context,
+                                        //     MaterialPageRoute(
+                                        //         builder: (_) => Home()));
+                                      }
+                                    : null,
+                                child: Text(
+                                  controller.isSignup
+                                      ? StringManager.signup
+                                      : StringManager.login.tr,
+                                  style: const TextStyle(
+                                      fontSize: FontManagerSize.s22),
+                                ),
+                              );
+                            },
                           ),
                         ),
-                ],
-              ),
-            ),
+                        !controller.isSignup
+                            ? InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    controller.isSignup = true;
+                                  });
+                                },
+                                child: Text(
+                                  'You Dont Have Account Sign Up',
+                                  style: TextStyle(
+                                      fontSize: AppSize.s16,
+                                      color: ColorManager.primary,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                              )
+                            : InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    controller.isSignup = false;
+                                  });
+                                },
+                                child: Text(
+                                  'You  Have Account Signin',
+                                  style: TextStyle(
+                                      fontSize: AppSize.s16,
+                                      color: ColorManager.primary,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            }),
           ),
         ],
       ),

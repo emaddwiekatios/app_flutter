@@ -1,5 +1,6 @@
 import 'package:clean_arch_app/Feature_Post/domain/entities/Models.dart';
 import 'package:clean_arch_app/Feature_Post/presentation/manager/Language/LocaleController.dart';
+import 'package:clean_arch_app/Feature_Post/presentation/pages/Login/view_login/view_login.dart';
 import 'package:clean_arch_app/Feature_Post/presentation/pages/Onbording/ViewModel_Onbording/viewmodel_onboarding.dart';
 import 'package:clean_arch_app/core/resource/AssetManager.dart';
 import 'package:clean_arch_app/core/resource/ColorManger.dart';
@@ -116,8 +117,8 @@ class _OnBoardingState extends State<OnBoarding> {
                   shape: MaterialStateProperty.all(RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(350)))),
               onPressed: () {
-                Navigator.pushReplacementNamed(
-                    context, RoutesManager.loginRoute);
+               // Navigator.pushReplacementNamed(context, RoutesManager.loginRoute);
+                Get.to(()=>login());
               },
               child: Text(StringManager.onBoardSkip.tr)),
         ),

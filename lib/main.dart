@@ -54,6 +54,7 @@ class MyApp extends StatelessWidget {
             '/Home': (context) => const Home(),
             '/Splash': (context) => const Splash(),
             '/Onboarding': (context) => const OnBoarding(),
+            '/login': (context) => const login(),
           },
         );
       }),

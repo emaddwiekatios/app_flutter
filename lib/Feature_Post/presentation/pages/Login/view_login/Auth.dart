@@ -102,28 +102,24 @@ class Auth extends GetxController {
 
   Future<void> _authenticate(
       String email, String password, String urlSegment) async {
-    print(email);
-    print(urlSegment);
     changeErrorMessage('');
-    print('responsedata0000');
+
     final url =
         'https://identitytoolkit.googleapis.com/v1/accounts:$urlSegment?key=AIzaSyAPb2LfILtCTM_kopIGMbmoJ6nYsBARRUg';
     //signUp
     //signInWithPassword
     try {
-      print('try');
       Uri uri = Uri.parse(url);
-      print(uri);
+
       final res = await http.post(uri,
           body: json.encode({
             'email': email,
             'password': password,
             'returnSecureTolken': true
           }));
-      print(res);
-      print('end try');
+
       final responsedata = json.decode(res.body);
-      print(json.decode(res.body));
+
       if (responsedata['error'] != null) {
         changeErrorMessage(responsedata['error']['message'].toString());
         // errorMessage = (responsedata['error']['message']).obs;
@@ -132,8 +128,6 @@ class Auth extends GetxController {
       }
       if (responsedata['idToken'].toString() != null) {
         setemail(responsedata['email']);
-        print('responsedata[email]');
-        print(responsedata['email']);
 
         _token = responsedata['idToken'].toString();
         _userId = responsedata['localId'].toString();

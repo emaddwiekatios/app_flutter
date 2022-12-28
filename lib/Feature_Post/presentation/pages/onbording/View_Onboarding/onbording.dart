@@ -117,8 +117,8 @@ class _OnBoardingState extends State<OnBoarding> {
                   shape: MaterialStateProperty.all(RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(350)))),
               onPressed: () {
-               // Navigator.pushReplacementNamed(context, RoutesManager.loginRoute);
-                Get.to(()=>login());
+                // Navigator.pushReplacementNamed(context, RoutesManager.loginRoute);
+                Get.to(() => login());
               },
               child: Text(StringManager.onBoardSkip.tr)),
         ),

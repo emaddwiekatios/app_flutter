@@ -11,9 +11,8 @@ class ViewModelOnBording extends BaseViewModel
   late final List<OnBoardingClass> _list;
   int _currentIndex = 0;
 
-  //final StreamController<OnBoardingClassObject> _streamController= StreamController<OnBoardingClassObject>();
   final StreamController<OnBoardingClassObject> _streamControllerNew =
-      StreamController<OnBoardingClassObject>();
+      StreamController<OnBoardingClassObject>.broadcast();
 
   ///from base class
   @override

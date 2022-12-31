@@ -1,3 +1,5 @@
+
+//edit by mac
 import 'package:clean_arch_app/Feature_Post/presentation/manager/Language/Locale.dart';
 import 'package:clean_arch_app/Feature_Post/presentation/pages/Login/view_login/Auth.dart';
 import 'package:clean_arch_app/Feature_Post/presentation/pages/onbording/View_Onboarding/onbording.dart';
@@ -18,7 +20,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   prefs = await SharedPreferences.getInstance();
   //await GetStorage.init();
-  //emad  add commint
 
   runApp(const MyApp());
 }
@@ -32,51 +33,33 @@ class MyApp extends StatelessWidget {
     Locale lang = prefs!.getString('Lang') == 'ar'
         ? const Locale('ar')
         : const Locale('en');
-    return GetMaterialApp(
-      title: 'Flutter Demo',
-      theme: getApplicationTheme(),
-      // onGenerateRoute: RouteGenerator.getRoute,
-      // initialRoute: RoutesManager.splashRoute,
-      locale: lang,
-      translations: LocaleLang(),
-      home: const login(),
-      routes: {
-        '/Home': (context) => const Home(),
-        '/Splash': (context) => const Splash(),
-        '/Onboarding': (context) => const OnBoarding(),
-        '/login': (context) => const login(),
-      },
+    return GetBuilder<Auth>(
+      init: Auth(),
+      builder: ((controller) {
+        return GetMaterialApp(
+          title: 'Flutter Demo',
+          theme: getApplicationTheme(),
+          // onGenerateRoute: RouteGenerator.getRoute,
+          // initialRoute: RoutesManager.splashRoute,
+          locale: lang,
+          translations: LocaleLang(),
+          //home: Splash(),
+          home: controller.isAuth
+              ? Home()
+              : FutureBuilder(
+                  future: controller.tryAutoLogin(),
+                  builder: (context, authsnapshot) =>
+                      authsnapshot.connectionState == ConnectionState.waiting
+                          ? Splash()
+                          : login()),
+          routes: {
+            '/Home': (context) => const Home(),
+            '/Splash': (context) => const Splash(),
+            '/Onboarding': (context) => const OnBoarding(),
+            '/login': (context) => const login(),
+          },
+        );
+      }),
     );
   }
-}      
-    
-    // return GetBuilder<Auth>(
-    //   init: Auth(),
-    //   builder: ((controller) {
-    //     return GetMaterialApp(
-    //       title: 'Flutter Demo',
-    //       theme: getApplicationTheme(),
-    //       onGenerateRoute: RouteGenerator.getRoute,
-    //       initialRoute: RoutesManager.splashRoute,
-    //       locale: lang,
-    //       translations: LocaleLang(),
-    //       //home: Splash(),
-    //       // home: controller.isAuth
-    //       //     ? const Home()
-    //       //     : FutureBuilder(
-    //       //         future: controller.tryAutoLogin(),
-    //       //         builder: (context, authsnapshot) =>
-    //       //             authsnapshot.connectionState == ConnectionState.waiting
-    //       //                 ? const Splash()
-    //       //                 : const login()),
-    //       routes: {
-    //         '/Home': (context) => const Home(),
-    //         '/Splash': (context) => const Splash(),
-    //         '/Onboarding': (context) => const OnBoarding(),
-    //         '/login': (context) => const login(),
-    //       },
-    //     );
-    //   }),
-    // );
- 
-
+}

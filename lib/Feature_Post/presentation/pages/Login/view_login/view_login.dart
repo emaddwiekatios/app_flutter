@@ -245,6 +245,7 @@ class _loginState extends State<login> {
                                             : ColorManager.grey)),
                                 onPressed: (snapshot.data ?? false)
                                     ? () async {
+                                        print('insiude button');
                                         String user = controllerLoginUserName
                                             .text
                                             .toString();
@@ -252,16 +253,8 @@ class _loginState extends State<login> {
                                             controllerLoginPassword.text
                                                 .toString();
                                         controller.isSignup
-                                            ? await controller.signup(
-                                                user, password)
-                                            : await controller.signin(
-                                                user, password);
-
-                                        // print('controller.errorMessage=');
-                                        // print(controller.errorMessage);
-
-                                        // print('controller.userId!');
-                                        // print(controller.userId);
+                                            ? controller.signup(user, password)
+                                            : controller.signin(user, password);
 
                                         if (controller.errorMessage!.length >
                                             3) {
@@ -291,39 +284,28 @@ class _loginState extends State<login> {
                                               ],
                                             ),
                                           );
-                                        }
-
-                                        //Signup
-                                        if (controller.isSignup) {
-                                          if (controller.userId!.isNotEmpty &&
-                                              controller.isSignup) {
-                                            Get.defaultDialog(
-                                              title: 'Create User',
-                                              content: Text(
-                                                  'The user Created : ${controller.email}'),
-                                              confirm: ElevatedButton.icon(
-                                                  label: const Text(
-                                                      'you can Login '),
-                                                  onPressed: () {
-                                                    controller.changeisSignup(
-                                                        !controller.isSignup);
-                                                    controllerLoginPassword
-                                                        .clear();
-                                                    controllerLoginPasswordconfirm
-                                                        .clear();
-                                                    Navigator.pop(context);
-                                                  },
-                                                  icon: Icon(
-                                                      Icons.personal_injury)),
-                                            );
-                                          }
-                                        }
-                                        //sign in
-                                        if (!controller.isSignup) {
-                                          if (controller.userId!.isNotEmpty &&
-                                              !controller.isSignup) {
-                                            Get.to(() => const Home());
-                                          }
+                                        } else if (controller
+                                                .userId!.isNotEmpty &&
+                                            controller.isSignup) {
+                                          Get.defaultDialog(
+                                            title: 'Create User',
+                                            content: Text(
+                                                'The user Created : ${controller.email}'),
+                                            confirm: ElevatedButton.icon(
+                                                label: const Text(
+                                                    'you can Login '),
+                                                onPressed: () {
+                                                  controller.changeisSignup(
+                                                      !controller.isSignup);
+                                                  controllerLoginPassword
+                                                      .clear();
+                                                  controllerLoginPasswordconfirm
+                                                      .clear();
+                                                  Navigator.pop(context);
+                                                },
+                                                icon: Icon(
+                                                    Icons.personal_injury)),
+                                          );
                                         }
 
                                         //   //Get.to(() => const Home());

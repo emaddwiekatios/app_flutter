@@ -253,11 +253,11 @@ class _loginState extends State<login> {
                                             controllerLoginPassword.text
                                                 .toString();
                                         controller.isSignup
-                                            ? controller.signup(user, password)
-                                            : controller.signin(user, password);
+                                            ? await controller.signup(user, password)
+                                            : await controller.signin(user, password);
 
-                                        if (controller.errorMessage!.length >
-                                            3) {
+                                        if (controller.errorMessage!.length > 3) {
+                                          print('inside error button');
                                           Get.defaultDialog(
                                             title: 'The User Error',
                                             content: Text(
@@ -284,9 +284,8 @@ class _loginState extends State<login> {
                                               ],
                                             ),
                                           );
-                                        } else if (controller
-                                                .userId!.isNotEmpty &&
-                                            controller.isSignup) {
+                                        }
+                                        else if (controller.userId!.isNotEmpty &&controller.isSignup) {
                                           Get.defaultDialog(
                                             title: 'Create User',
                                             content: Text(
@@ -307,6 +306,10 @@ class _loginState extends State<login> {
                                                     Icons.personal_injury)),
                                           );
                                         }
+                                        else if (controller.userId!.isNotEmpty &&!controller.isSignup)
+                                          {
+                                            Get.to(() => const Home());
+                                          }
 
                                         //   //Get.to(() => const Home());
                                         // }

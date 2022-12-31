@@ -128,7 +128,7 @@ class Auth extends GetxController {
       }
       if (responsedata['idToken'].toString() != null) {
         setemail(responsedata['email']);
-
+   print(responsedata['email']);
         _token = responsedata['idToken'].toString();
         _userId = responsedata['localId'].toString();
         _expiryDate = DateTime.now()

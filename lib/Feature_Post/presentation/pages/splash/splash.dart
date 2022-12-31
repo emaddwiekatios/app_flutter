@@ -18,7 +18,8 @@ Timer? _timer;
 
 starttimer(BuildContext context) {
   _timer = Timer(const Duration(seconds: 5), () {
-    Get.to(()=>OnBoarding());
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=>OnBoarding(),),);
+   // Get.to(()=>OnBoarding());
     // Navigator.pushReplacementNamed(context, '/Onboarding');
     // Navigator.pushReplacementNamed(context, RoutesManager.onBoardingRoute);
   });

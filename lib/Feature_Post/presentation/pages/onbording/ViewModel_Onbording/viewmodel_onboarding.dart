@@ -12,7 +12,7 @@ class ViewModelOnBording extends BaseViewModel
   int _currentIndex = 0;
 
   final StreamController<OnBoardingClassObject> _streamControllerNew =
-      StreamController<OnBoardingClassObject>.broadcast();
+      StreamController<OnBoardingClassObject>();
 
   ///from base class
   @override

@@ -43,15 +43,15 @@ class MyApp extends StatelessWidget {
           // initialRoute: RoutesManager.splashRoute,
           locale: lang,
           translations: LocaleLang(),
-          //home: Splash(),
-          home: controller.isAuth
-              ? Home()
-              : FutureBuilder(
-                  future: controller.tryAutoLogin(),
-                  builder: (context, authsnapshot) =>
-                      authsnapshot.connectionState == ConnectionState.waiting
-                          ? Splash()
-                          : login()),
+          home: Splash(),
+          // home: controller.isAuth
+          //     ? Home()
+          //     : FutureBuilder(
+          //         future: controller.tryAutoLogin(),
+          //         builder: (context, authsnapshot) =>
+          //             authsnapshot.connectionState == ConnectionState.waiting
+          //                 ? Splash()
+          //                 : login()),
           routes: {
             '/Home': (context) => const Home(),
             '/Splash': (context) => const Splash(),

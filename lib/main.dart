@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
- /// android studio pc new   main  macbranch
+ /// android studio pc new   main  macbranch new
   @override
   Widget build(BuildContext context) {
     Locale lang = prefs!.getString('Lang') == 'ar'

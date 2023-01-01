@@ -26,6 +26,7 @@ class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
+  //myappp  new  one
   @override
   Widget build(BuildContext context) {
     Locale lang = prefs!.getString('Lang') == 'ar'

@@ -1,5 +1,3 @@
-
-//edit by mac
 import 'package:clean_arch_app/Feature_Post/presentation/manager/Language/Locale.dart';
 import 'package:clean_arch_app/Feature_Post/presentation/pages/Login/view_login/Auth.dart';
 import 'package:clean_arch_app/Feature_Post/presentation/pages/onbording/View_Onboarding/onbording.dart';
@@ -28,7 +26,6 @@ class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
- /// android studio pc new   main  macbranch new
   @override
   Widget build(BuildContext context) {
     Locale lang = prefs!.getString('Lang') == 'ar'
@@ -44,7 +41,7 @@ class MyApp extends StatelessWidget {
           // initialRoute: RoutesManager.splashRoute,
           locale: lang,
           translations: LocaleLang(),
-          // home: Splash(),
+          //home: Splash(),
           home: controller.isAuth
               ? Home()
               : FutureBuilder(

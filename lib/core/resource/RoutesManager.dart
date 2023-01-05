@@ -7,7 +7,7 @@ import '../../Feature_Post/presentation/pages/GetxManagement/GetxMangment.dart';
 import '../../Feature_Post/presentation/pages/Home/Home.dart';
 import '../../Feature_Post/presentation/pages/LayoutBuilder/LayoutBuilder.dart';
 import 'StringManager.dart';
-
+/*
 class RoutesManager {
   static const String splashRoute = "/";
   static const String onBoardingRoute = "/onBoarding";
@@ -54,3 +54,4 @@ class RouteGenerator {
             ));
   }
 }
+*/

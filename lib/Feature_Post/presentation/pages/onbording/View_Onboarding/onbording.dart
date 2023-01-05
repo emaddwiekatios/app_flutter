@@ -54,19 +54,23 @@ class _OnBoardingState extends State<OnBoarding> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorManager.white,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(
-            height: get_height(context),
-            child: StreamBuilder<OnBoardingClassObject>(
-                stream:
-                    _viewModelOnBording.get_onbordoutbut, //<SliderViewObject>,
-                builder: (context, snapShot) {
-                  return _getContentWidget(snapShot.data);
-                }),
-          ),
-        ],
+      body: Container(
+        height: get_height(context),
+        width: get_width(context),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: get_height(context),
+              child: StreamBuilder<OnBoardingClassObject>(
+                  stream:
+                      _viewModelOnBording.get_onbordoutbut, //<SliderViewObject>,
+                  builder: (context, snapShot) {
+                    return _getContentWidget(snapShot.data);
+                  }),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -118,7 +122,8 @@ class _OnBoardingState extends State<OnBoarding> {
                       borderRadius: BorderRadius.circular(350)))),
               onPressed: () {
                 // Navigator.pushReplacementNamed(context, RoutesManager.loginRoute);
-                Get.to(() => login());
+                Navigator.pushReplacementNamed(
+                    context, '/login');
               },
               child: Text(StringManager.onBoardSkip.tr)),
         ),
@@ -155,7 +160,7 @@ class _OnBoardingState extends State<OnBoarding> {
                     if (onBoardingClassObject.currentIndex >=
                         onBoardingClassObject.noOfItem - 1) {
                       Navigator.pushReplacementNamed(
-                          context, RoutesManager.loginRoute);
+                          context, '/login');
                     }
                   },
                   child: Text(StringManager.onBoardStart.tr)),

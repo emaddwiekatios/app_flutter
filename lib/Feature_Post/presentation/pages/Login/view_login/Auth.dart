@@ -1,3 +1,4 @@
+import 'package:clean_arch_app/Feature_Post/presentation/pages/Login/view_login/Info.dart';
 import 'package:get/state_manager.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
@@ -20,6 +21,20 @@ class Auth extends GetxController {
     update();
   }
 
+  changeistoken(String s) {
+    _token = s;
+    update();
+  }
+  changeisuserId(String s) {
+    _userId = s;
+    update();
+  }
+
+  changeExpiryDate(DateTime s) {
+    _expiryDate = s;
+    update();
+  }
+
   ///
   late String _token;
 
@@ -39,9 +54,11 @@ class Auth extends GetxController {
   }
 
   String? get token {
+   // print('inside token get func0');
     if (_expiryDate != null &&
         _expiryDate.isAfter(DateTime.now()) &&
         _token != null) {
+   //   print('inside token get func');
       return _token;
     }
     return null;
@@ -61,49 +78,36 @@ class Auth extends GetxController {
 
   Future<bool> tryAutoLogin() async {
     final prefs = await SharedPreferences.getInstance();
-    if (!prefs.containsKey('userData')) return false;
-    prefs.getString('userData');
-    final Map<String, Object> extractedData =
-        json.decode(prefs.getString('userData')!) as Map<String, Object>;
+    print('inside tryautlogin ==${prefs.containsKey('userData')}');
 
-    final expiryDate = DateTime.parse(extractedData['expiryDate'].toString());
-    if (expiryDate.isBefore(DateTime.now())) return false;
+    if (!prefs.containsKey('userData')) {
+      print('inside userdata');
+      return false;
+    }
+    getUserInfo();
+    // Info userinfo=getUserInfo() as Info;
+    // print('the retrive token form shared is ');
+    // print(userinfo.token);
+    // changeistoken(userinfo.token.toString());
+    // changeisuserId(userinfo.userId.toString());
+    // changeExpiryDate(DateTime.parse(userinfo.expiryDate));
 
-    _token = extractedData['token'].toString();
-    _userId = extractedData['userId'].toString();
-    _expiryDate = expiryDate;
+    // final Map<String, Object> extractedData =
+    //     json.decode(prefs.getString('userData')!) as Map<String, Object>;
+    // final expiryDate = DateTime.parse(extractedData['expiryDate'].toString());
+    if (_expiryDate.isBefore(DateTime.now())) return false;
+
+
     // update();
     _autoLogout();
     return true;
   }
 
-  Future<void> logout() async {
-    _token = '';
-    _userId = '';
-    _expiryDate = '' as DateTime;
-    if (_authTime != null) {
-      _authTime.cancel();
-      _authTime = '' as Timer;
-    }
-
-    final prefs = await SharedPreferences.getInstance();
-    prefs.clear();
-    //update();
-  }
-
-  void _autoLogout() {
-    if (_authTime != null) {
-      _authTime.cancel();
-    }
-    final timeToExpiry = _expiryDate.difference(DateTime.now()).inSeconds;
-    _authTime = Timer(Duration(seconds: timeToExpiry), logout);
-    //update();
-  }
 
   Future<void> _authenticate(
       String email, String password, String urlSegment) async {
     changeErrorMessage('');
-
+//print('inside auth func');
     final url =
         'https://identitytoolkit.googleapis.com/v1/accounts:$urlSegment?key=AIzaSyAPb2LfILtCTM_kopIGMbmoJ6nYsBARRUg';
     //signUp
@@ -126,23 +130,78 @@ class Auth extends GetxController {
 
         print(responsedata['error']['message']);
       }
-      if (responsedata['idToken'].toString() != null) {
         setemail(responsedata['email']);
-   print(responsedata['email']);
-        _token = responsedata['idToken'].toString();
-        _userId = responsedata['localId'].toString();
-        _expiryDate = DateTime.now()
-            .add(Duration(seconds: int.parse(responsedata['expiresIn'])));
-        _autoLogout();
-        update();
-        final prefs = await SharedPreferences.getInstance();
-        String userData = json.encode(
-            {'token': _token, 'userId': _userId, 'expiryDate': _expiryDate});
-        prefs.setString('userData', userData);
-      }
+      changeistoken(responsedata['idToken'].toString());
+      changeisuserId(responsedata['localId'].toString());
+        changeExpiryDate(DateTime.now().add(Duration(seconds: 3600))); //int.parse(responsedata['expiresIn']))));
+
+
+        saveUserInfo(_token,_userId,_expiryDate.toString());
+
+
+     _autoLogout();
+
+
+
+
     } catch (e) {
       // throw e;
 
     }
   }
+
+
+  Future<Info> getUserInfo() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    Map<String, dynamic> userMap = {};
+    final String? userStr = prefs.getString('userData');
+    if (userStr != null) {
+      userMap = jsonDecode(userStr) as Map<String, dynamic>;
+    }
+    final Info info = Info.fromJson(userMap);
+
+changeistoken(info.token.toString());
+    changeisuserId(info.userId.toString());
+    changeExpiryDate(DateTime.parse(info.expiryDate));
+   // print(info);
+    return info;
+  }
+
+  Future<void> saveUserInfo(String token,String userId,String expiryDate ) async {
+    final Info info = Info.fromJson({
+
+        'token':token,
+        'userId': userId,
+        'expiryDate': expiryDate
+    });
+
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool result = await prefs.setString('userData', jsonEncode(info));
+    print('the save shared=$result');
+  }
+
+  Future<void> logout() async {
+    _token = '';
+    _userId = '';
+    _expiryDate = DateTime.now().add(Duration(seconds: -2000));
+
+    if (_authTime != null) {
+      _authTime.cancel();
+      _authTime = '' as Timer;
+    }
+
+    final prefs = await SharedPreferences.getInstance();
+    prefs.clear();
+    update();
+  }
+
+  void _autoLogout() {
+    if (_authTime != null) {
+      _authTime.cancel();
+    }
+    final timeToExpiry = _expiryDate.difference(DateTime.now()).inSeconds;
+    _authTime = Timer(Duration(seconds: timeToExpiry), logout);
+    update();
+  }
+
 }

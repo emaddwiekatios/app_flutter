@@ -228,136 +228,214 @@ class _loginState extends State<login> {
                               )
                             : Container(),
                         // Text('${controller.errorMessage}'),
-                        Container(
-                          height: get_height(context) / 20,
-                          width: get_width(context),
-                          margin: const EdgeInsets.all(FontManagerSize.s8),
-                          child: StreamBuilder<bool>(
-                            stream:
-                                loginViewModel1.getLoginViewModelOutLoginButton,
-                            builder: (context, snapshot) {
-                              return ElevatedButton(
-                                style: ButtonStyle(
-                                    elevation: MaterialStateProperty.all(0),
-                                    backgroundColor: MaterialStateProperty.all(
-                                        (snapshot.data ?? false)
-                                            ? ColorManager.primary
-                                            : ColorManager.grey)),
-                                onPressed: (snapshot.data ?? false)
-                                    ? () async {
-                                        print('insiude button');
-                                        String user = controllerLoginUserName
-                                            .text
-                                            .toString();
-                                        String password =
-                                            controllerLoginPassword.text
-                                                .toString();
+                        controller.isSignup
+                            ? Container(
+                                height: get_height(context) / 20,
+                                width: get_width(context),
+                                margin:
+                                    const EdgeInsets.all(FontManagerSize.s8),
+                                child: StreamBuilder<bool>(
+                                  stream: loginViewModel1
+                                      .getLoginViewModelOutLoginButton,
+                                  builder: (context, snapshot) {
+                                    return ElevatedButton(
+                                      style: ButtonStyle(
+                                          elevation:
+                                              MaterialStateProperty.all(0),
+                                          backgroundColor:
+                                              MaterialStateProperty.all(
+                                                  (snapshot.data ?? false)
+                                                      ? ColorManager.primary
+                                                      : ColorManager.grey)),
+                                      onPressed: (snapshot.data ?? false)
+                                          ? () async {
+                                              print('insiude button');
+                                              String user =
+                                                  controllerLoginUserName.text
+                                                      .toString();
+                                              String password =
+                                                  controllerLoginPassword.text
+                                                      .toString();
+
+                                              await controller.signup(
+                                                  user, password);
+
+                                              if (controller
+                                                      .errorMessage!.length >
+                                                  3) {
+                                                print('inside error button');
+                                                Get.defaultDialog(
+                                                  title: 'The User Error',
+                                                  content: Text(
+                                                      '${controller.errorMessage}'),
+                                                  // backgroundColor: ColorManager.grey,
+                                                  cancel: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      ElevatedButton.icon(
+                                                        label: const Text('Ok'),
+                                                        onPressed: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        icon: Icon(Icons.done),
+                                                      ),
+                                                      ElevatedButton.icon(
+                                                          label: const Text(
+                                                              'Canceled'),
+                                                          onPressed: () {
+                                                            Navigator.pop(
+                                                                context);
+                                                          },
+                                                          icon:
+                                                              Icon(Icons.abc)),
+                                                    ],
+                                                  ),
+                                                );
+                                              }
+
+
+                                              else if (controller.userId!.isNotEmpty &&!controller.isSignup)
+                                                {
+                                                  // print('inside go to home ');
+                                                  // print(controller.userId);
+                                                  // print(    !controller.isSignup);
+
+
+                                                  Get.to(() => const Home());
+                                                }
+
+                                              // print(' after if 3');
+                                            }
+                                          : null,
+                                      child: Text(
                                         controller.isSignup
-                                            ? await controller.signup(user, password)
-                                            : await controller.signin(user, password);
-
-                                        if (controller.errorMessage!.length > 3) {
-                                          print('inside error button');
-                                          Get.defaultDialog(
-                                            title: 'The User Error',
-                                            content: Text(
-                                                '${controller.errorMessage}'),
-                                            // backgroundColor: ColorManager.grey,
-                                            cancel: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                ElevatedButton.icon(
-                                                  label: const Text('Ok'),
-                                                  onPressed: () {
-                                                    Navigator.pop(context);
-                                                  },
-                                                  icon: Icon(Icons.done),
-                                                ),
-                                                ElevatedButton.icon(
-                                                    label:
-                                                        const Text('Canceled'),
-                                                    onPressed: () {
-                                                      Navigator.pop(context);
-                                                    },
-                                                    icon: Icon(Icons.abc)),
-                                              ],
-                                            ),
-                                          );
-                                        }
-                                        else if (controller.userId!.isNotEmpty &&controller.isSignup) {
-                                          Get.defaultDialog(
-                                            title: 'Create User',
-                                            content: Text(
-                                                'The user Created : ${controller.email}'),
-                                            confirm: ElevatedButton.icon(
-                                                label: const Text(
-                                                    'you can Login '),
-                                                onPressed: () {
-                                                  controller.changeisSignup(
-                                                      !controller.isSignup);
-                                                  controllerLoginPassword
-                                                      .clear();
-                                                  controllerLoginPasswordconfirm
-                                                      .clear();
-                                                  Navigator.pop(context);
-                                                },
-                                                icon: Icon(
-                                                    Icons.personal_injury)),
-                                          );
-                                        }
-                                        else if (controller.userId!.isNotEmpty &&!controller.isSignup)
-                                          {
-                                            Get.to(() => const Home());
-                                          }
-
-                                        //   //Get.to(() => const Home());
-                                        // }
-
-                                        // String user =
-                                        //     controllerLoginUserName.text.toString();
-                                        // String password =
-                                        //     controllerLoginPassword.text.toString();
-                                        // _auth.isSignup
-                                        //     ? _auth.signup(user, password)
-                                        //     : _auth.signin(user, password);
-                                        // print(_auth.userId);
-                                        // print(_auth.isSignup);
-                                        // if (_auth.userId.length > 3 &&
-                                        //     !_auth.isSignup) {
-                                        //   setState(() {
-                                        //     _auth.isSignup = false;
-                                        //   });
-                                        // } else if (_auth.userId.length > 3 &&
-                                        //     _auth.isSignup == false) {
-                                        //   Get.to(() => const Home());
-                                        // }
-
-                                        //Get.off(()=>Home() );
-                                        //    Navigator.pushReplacementNamed(context, RoutesManager.onBoardingRoute);
-
-                                        // Navigator.push(
-                                        //     context,
-                                        //     MaterialPageRoute(
-                                        //         builder: (_) => Home()));
-                                      }
-                                    : null,
-                                child: Text(
-                                  controller.isSignup
-                                      ? StringManager.signup
-                                      : StringManager.login.tr,
-                                  style: const TextStyle(
-                                      fontSize: FontManagerSize.s22),
+                                            ? StringManager.signup
+                                            : StringManager.login.tr,
+                                        style: const TextStyle(
+                                            fontSize: FontManagerSize.s22),
+                                      ),
+                                    );
+                                  },
                                 ),
-                              );
-                            },
-                          ),
-                        ),
+                              )
+                            : Container(
+                                height: get_height(context) / 20,
+                                width: get_width(context),
+                                margin:
+                                    const EdgeInsets.all(FontManagerSize.s8),
+                                child: StreamBuilder<bool>(
+                                  stream: loginViewModel1
+                                      .getLoginViewModelOutLoginButton,
+                                  builder: (context, snapshot) {
+                                    return ElevatedButton(
+                                      style: ButtonStyle(
+                                          elevation:
+                                              MaterialStateProperty.all(0),
+                                          backgroundColor:
+                                              MaterialStateProperty.all(
+                                                  (snapshot.data ?? false)
+                                                      ? ColorManager.primary
+                                                      : ColorManager.grey)),
+                                      onPressed: (snapshot.data ?? false)
+                                          ? () async {
+                                            //  print('insiude button sign in');
+                                              String user =
+                                                  controllerLoginUserName.text
+                                                      .toString();
+                                              String password =
+                                                  controllerLoginPassword.text
+                                                      .toString();
+                                             // print(user);
+                                             // print(password);
+                                              await controller.signin(
+                                                  user, password);
+
+                                              if (controller
+                                                      .errorMessage!.length >
+                                                  3) {
+                                                print('inside error button');
+                                                Get.defaultDialog(
+                                                  title: 'The User Error',
+                                                  content: Text(
+                                                      '${controller.errorMessage}'),
+                                                  // backgroundColor: ColorManager.grey,
+                                                  cancel: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      ElevatedButton.icon(
+                                                        label: const Text('Ok'),
+                                                        onPressed: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        icon: Icon(Icons.done),
+                                                      ),
+                                                      ElevatedButton.icon(
+                                                          label: const Text(
+                                                              'Canceled'),
+                                                          onPressed: () {
+                                                            Navigator.pop(
+                                                                context);
+                                                          },
+                                                          icon:
+                                                              Icon(Icons.abc)),
+                                                    ],
+                                                  ),
+                                                );
+                                              } else if (controller
+                                                      .userId!.isNotEmpty &&
+                                                  controller.isSignup) {
+                                                Get.defaultDialog(
+                                                  title: 'Create User',
+                                                  content: Text(
+                                                      'The user Created : ${controller.email}'),
+                                                  confirm: ElevatedButton.icon(
+                                                      label: const Text(
+                                                          'you can Login '),
+                                                      onPressed: () {
+                                                        // controller.changeisSignup(!controller.isSignup);
+                                                        // controllerLoginPassword.clear();
+                                                        // controllerLoginPasswordconfirm.clear();
+                                                        Navigator.pop(context);
+                                                      },
+                                                      icon: Icon(Icons
+                                                          .personal_injury)),
+                                                );
+                                              }
+                                              else if (controller.userId!.isNotEmpty &&!controller.isSignup)
+                                                {
+                                                  // print('inside go to home ');
+                                                  // print(controller.userId);
+                                                  // print(    !controller.isSignup);
+
+
+                                                  //Get.to(() => const Home());
+                                                }
+
+                                            //  print(' after if 3');
+                                            }
+                                          : null,
+                                      child: Text(
+                                        controller.isSignup
+                                            ? StringManager.signup
+                                            : StringManager.login.tr,
+                                        style: const TextStyle(
+                                            fontSize: FontManagerSize.s22),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
                         !controller.isSignup
                             ? InkWell(
                                 onTap: () {
                                   setState(() {
-                                    controller.isSignup = true;
+                                    controller.isSignup = !controller.isSignup;
                                   });
                                 },
                                 child: Text(

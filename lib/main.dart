@@ -35,6 +35,9 @@ class MyApp extends StatelessWidget {
     return GetBuilder<Auth>(
       init: Auth(),
       builder: ((controller) {
+
+        print('controller=');
+        print(controller.isAuth);
         return GetMaterialApp(
           title: 'Flutter Demo',
           theme: getApplicationTheme(),
@@ -42,15 +45,22 @@ class MyApp extends StatelessWidget {
           // initialRoute: RoutesManager.splashRoute,
           locale: lang,
           translations: LocaleLang(),
-          //home: Splash(),
+          //home: login(),
           home: controller.isAuth
-              ? Home()
+              ? const Home()
               : FutureBuilder(
                   future: controller.tryAutoLogin(),
-                  builder: (context, authsnapshot) =>
-                      authsnapshot.connectionState == ConnectionState.waiting
-                          ? Splash()
-                          : login()),
+                  builder: (context, authsnapshot)
+              {
+                print('authsnapshot.connectionState');
+                print(authsnapshot.connectionState);
+                 return  authsnapshot.connectionState == ConnectionState.waiting
+                          ? login()
+                           : Splash();
+
+                         // : login();
+              }
+          ),
           routes: {
             '/Home': (context) => const Home(),
             '/Splash': (context) => const Splash(),

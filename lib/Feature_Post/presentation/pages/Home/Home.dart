@@ -2,6 +2,7 @@ import 'package:clean_arch_app/Feature_Post/presentation/manager/Language/Locale
 import 'package:clean_arch_app/Feature_Post/presentation/pages/GetxManagement/GetxMangment.dart';
 import 'package:clean_arch_app/Feature_Post/presentation/pages/Home/HomePage.dart';
 import 'package:clean_arch_app/Feature_Post/presentation/pages/LayoutBuilder/LayoutBuilder.dart';
+import 'package:clean_arch_app/Feature_Post/presentation/pages/Login/view_login/Auth.dart';
 import 'package:clean_arch_app/core/resource/AssetManager.dart';
 import 'package:clean_arch_app/core/resource/ColorManger.dart';
 import 'package:clean_arch_app/core/resource/FontManager.dart';
@@ -23,7 +24,7 @@ class Home extends StatefulWidget {
 }
 
 LocaleController localeController = Get.put(LocaleController());
-
+Auth _authlogout =Get.put(Auth());
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
@@ -91,7 +92,7 @@ Widget GetDrower(context) {
                   trailing: Text('Getx'.tr),
                   onTap: () {
                     // print('ontap');
-                    Get.toNamed(RoutesManager.getxbuilder);
+                   // Get.toNamed(RoutesManager.getxbuilder);
                     //  Get.to(() => GetxManagement());
                   }),
               const Divider(
@@ -105,7 +106,7 @@ Widget GetDrower(context) {
                   title: Text('Layout'.tr),
                   trailing: Text('Layout'.tr),
                   onTap: () {
-                    Get.toNamed(RoutesManager.layoutbuilderRoute);
+                    //Get.toNamed(RoutesManager.layoutbuilderRoute);
                     // Get.to(() => RoutesManager.layoutbuilderRoute);
                   }),
               const Divider(
@@ -127,6 +128,21 @@ Widget GetDrower(context) {
                   localeController.changeLanguage(Locale('en'));
 
                 Navigator.pop(context);
+              }),
+          const Divider(
+            height: FontManagerSize.s8,
+          ),
+
+          ListTile(
+              leading: Icon(
+                Icons.logout,
+                color: ColorManager.primary,
+              ),
+              title: Text('Logout'.tr),
+              trailing: Text('Logout'.tr),
+              onTap: () {
+                _authlogout.logout();
+
               }),
           const Divider(
             height: FontManagerSize.s8,

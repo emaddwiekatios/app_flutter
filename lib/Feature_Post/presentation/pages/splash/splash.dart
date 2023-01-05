@@ -14,16 +14,27 @@ class Splash extends StatefulWidget {
   State<Splash> createState() => _SplashState();
 }
 
+
+
 Timer? _timer;
 
 starttimer(BuildContext context) {
-  _timer = Timer(const Duration(seconds: 5), () {
-    //Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=>OnBoarding(),),);
-   // Get.to(()=>OnBoarding());
-    Navigator.pushNamed(context, '/Onboarding');
-    // Navigator.pushReplacementNamed(context, '/Onboarding');
-    // Navigator.pushReplacementNamed(context, RoutesManager.onBoardingRoute);
-  });
+  _timer = Timer(const Duration(seconds: 5),
+      () => Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const OnBoarding(),
+      ))
+
+  //         () {
+  //  // Navigator?.pushReplacement(context, MaterialPageRoute(builder: (_)=>const OnBoarding(),),);
+  //   //Get.to(()=>OnBoarding());
+  //  //Navigator.pushNamed(context, '/Onboarding');
+  //    Navigator.pushReplacementNamed(context, '/Onboarding');
+  //   // Navigator.pushReplacementNamed(context, RoutesManager.onBoardingRoute);
+  // }
+
+  );
 }
 
 class _SplashState extends State<Splash> {
@@ -32,6 +43,13 @@ class _SplashState extends State<Splash> {
     starttimer(context);
 
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    _timer?.cancel();
   }
 
   @override

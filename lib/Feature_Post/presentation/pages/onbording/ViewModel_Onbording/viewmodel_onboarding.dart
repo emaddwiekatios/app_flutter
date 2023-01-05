@@ -8,18 +8,18 @@ import '../../../base/BaseViewModel.dart';
 
 class ViewModelOnBording extends BaseViewModel
     with onBoardViewModelInput, onboardVMoutput1 {
-  late final List<OnBoardingClass> _list;
+   late List<OnBoardingClass> _list;
   int _currentIndex = 0;
-
-  final StreamController<OnBoardingClassObject> _streamControllerNew =
+  //final  _streamControllerNew =StreamController<OnBoardingClassObject>();
+   final StreamController<OnBoardingClassObject> _streamControllerNew =
       StreamController<OnBoardingClassObject>();
 
   ///from base class
   @override
   void dispose() {
-    if (_streamControllerNew.hasListener) {
-      _streamControllerNew.close();
-    }
+   // if (_streamControllerNew.hasListener) {
+   //   _streamControllerNew.close();
+   // }
     _streamControllerNew.close();
     _list.clear();
   }
@@ -38,8 +38,10 @@ class ViewModelOnBording extends BaseViewModel
   }
 
   void savedatatoview() {
-    getOnBoardingInput.add(OnBoardingClassObject(
-        _list[_currentIndex], _list.length, _currentIndex));
+    if(!_streamControllerNew.isClosed) {
+      getOnBoardingInput.add(OnBoardingClassObject(
+          _list[_currentIndex], _list.length, _currentIndex));
+    }
   }
 
   // private onborad  func
@@ -63,7 +65,8 @@ class ViewModelOnBording extends BaseViewModel
       ];
 
   @override
-  Sink get getOnBoardingInput => _streamControllerNew.sink;
+
+  Sink get getOnBoardingInput =>  _streamControllerNew.sink;
 
   @override
   Stream<OnBoardingClassObject> get get_onbordoutbut =>
@@ -95,3 +98,5 @@ abstract class onBoardViewModelInput {
 abstract class onboardVMoutput1 {
   Stream<OnBoardingClassObject> get get_onbordoutbut;
 }
+
+

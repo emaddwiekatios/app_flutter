@@ -189,7 +189,7 @@ changeistoken(info.token.toString());
       _authTime.cancel();
       _authTime = '' as Timer;
     }
-
+//dddddddd
     final prefs = await SharedPreferences.getInstance();
     prefs.clear();
     update();

@@ -54,9 +54,10 @@ class MyApp extends StatelessWidget {
               {
                 print('authsnapshot.connectionState');
                 print(authsnapshot.connectionState);
+                print(controller.token);
                  return  authsnapshot.connectionState == ConnectionState.waiting
-                          ? login()
-                           : Splash();
+                          ? Splash()
+                           : login();
 
                          // : login();
               }

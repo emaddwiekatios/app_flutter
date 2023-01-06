@@ -36,11 +36,17 @@ class Auth extends GetxController {
   }
 
   ///
-  late String _token;
+   String? _token;
 
-  late DateTime _expiryDate = DateTime.now();
+  late DateTime _expiryDate = DateTime.now().add(Duration(seconds: 2500));
   String _userId = '';
-  late Timer _authTime;
+   Timer _authTime =Timer(
+     const Duration(seconds: 0),
+         () {
+       // Navigate to your favorite place
+     },
+
+   );
 
   String? email;
 
@@ -50,15 +56,17 @@ class Auth extends GetxController {
   }
 
   bool get isAuth {
+    print('inside auth ${token?.length}');
+    print('inside auth ${token != null}');
     return token != null;
+   // return token!.isEmpty ?  false:true ;
   }
 
   String? get token {
-   // print('inside token get func0');
+
     if (_expiryDate != null &&
         _expiryDate.isAfter(DateTime.now()) &&
         _token != null) {
-   //   print('inside token get func');
       return _token;
     }
     return null;
@@ -78,26 +86,11 @@ class Auth extends GetxController {
 
   Future<bool> tryAutoLogin() async {
     final prefs = await SharedPreferences.getInstance();
-    print('inside tryautlogin ==${prefs.containsKey('userData')}');
-
-    if (!prefs.containsKey('userData')) {
-      print('inside userdata');
+     if (!prefs.containsKey('userData')) {
       return false;
     }
     getUserInfo();
-    // Info userinfo=getUserInfo() as Info;
-    // print('the retrive token form shared is ');
-    // print(userinfo.token);
-    // changeistoken(userinfo.token.toString());
-    // changeisuserId(userinfo.userId.toString());
-    // changeExpiryDate(DateTime.parse(userinfo.expiryDate));
-
-    // final Map<String, Object> extractedData =
-    //     json.decode(prefs.getString('userData')!) as Map<String, Object>;
-    // final expiryDate = DateTime.parse(extractedData['expiryDate'].toString());
-    if (_expiryDate.isBefore(DateTime.now())) return false;
-
-
+     if (_expiryDate.isBefore(DateTime.now())) return false;
     // update();
     _autoLogout();
     return true;
@@ -107,7 +100,7 @@ class Auth extends GetxController {
   Future<void> _authenticate(
       String email, String password, String urlSegment) async {
     changeErrorMessage('');
-//print('inside auth func');
+print('inside auth func');
     final url =
         'https://identitytoolkit.googleapis.com/v1/accounts:$urlSegment?key=AIzaSyAPb2LfILtCTM_kopIGMbmoJ6nYsBARRUg';
     //signUp
@@ -121,7 +114,7 @@ class Auth extends GetxController {
             'password': password,
             'returnSecureTolken': true
           }));
-
+      print('responsedata00000000000000000');
       final responsedata = json.decode(res.body);
 
       if (responsedata['error'] != null) {
@@ -130,16 +123,21 @@ class Auth extends GetxController {
 
         print(responsedata['error']['message']);
       }
+
+      print('responsedata[email]');
+      print(responsedata['email']);
         setemail(responsedata['email']);
       changeistoken(responsedata['idToken'].toString());
       changeisuserId(responsedata['localId'].toString());
         changeExpiryDate(DateTime.now().add(Duration(seconds: 3600))); //int.parse(responsedata['expiresIn']))));
 
+   print(_userId);
+        saveUserInfo(_token!,_userId,_expiryDate.toString());
 
-        saveUserInfo(_token,_userId,_expiryDate.toString());
 
+      _autoLogout();
 
-     _autoLogout();
+      update();
 
 
 
@@ -152,6 +150,7 @@ class Auth extends GetxController {
 
 
   Future<Info> getUserInfo() async {
+    print(' getUserInfo() ');
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     Map<String, dynamic> userMap = {};
     final String? userStr = prefs.getString('userData');
@@ -181,14 +180,23 @@ changeistoken(info.token.toString());
   }
 
   Future<void> logout() async {
-    _token = '';
-    _userId = '';
-    _expiryDate = DateTime.now().add(Duration(seconds: -2000));
+ _token=null;
+  //  changeistoken();
+    changeisuserId('');
+    print('token=$_token');
+    changeExpiryDate(DateTime.now().add(Duration(seconds: -2000),),);
+  //  _expiryDate = DateTime.now().add(Duration(seconds: -2000));
 
-    if (_authTime != null) {
+    //if (_authTime != null) {
       _authTime.cancel();
-      _authTime = '' as Timer;
-    }
+      _authTime = Timer(
+        const Duration(seconds: 0),
+            () {
+          // Navigate to your favorite place
+        },
+
+      );
+    //}
 //dddddddd   fdcccc vcvfvfv
     final prefs = await SharedPreferences.getInstance();
     prefs.clear();

@@ -79,8 +79,30 @@ flutter:
     - images/category/man_cat4.jpg
     - images/category/young.png
     - images/category/mam.png
+    - images/category/socks.png
+    - images/category/bag.png
+    - images/category/shopping-backage.png
+    - images/category/shop.png
+    - images/category/shopping.png
+    - images/category/shopaholic.png
+    - images/category/package.png
+    - images/category/home-address.png
+    - images/category/gift.png
+    - images/category/discount.png
+    - images/category/buying.png
+    - images/home/splash1.png
+    - images/home/splash2.png
+    - images/home/splash3.png
+    - images/home/splash4.png
+    - images/home/adv1.png
+    - images/home/adv2.png
+    - images/home/adv3.jfif
+    - images/home/adv4.jpg
+    - images/home/adv5.jpg
 
-  # An image asset can refer to one or more resolution-specific "variants", see
+
+
+        # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
   # For details regarding adding assets from package dependencies, see

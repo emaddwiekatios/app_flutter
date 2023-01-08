@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:clean_arch_app/Feature_Post/presentation/pages/Products/ProductsClass.dart';
 import 'package:clean_arch_app/core/resource/AssetManager.dart';
 import 'package:flutter/material.dart';
 
@@ -9,11 +10,13 @@ import '../../../../core/resource/MediaQuery.dart';
 import '../../../../core/resource/ValueManger.dart';
 
 class ProductDetails extends StatefulWidget {
-  const ProductDetails({Key? key}) : super(key: key);
-
+   ProductDetails({Key? key,required this.instProd}) : super(key: key);
+  ProductClass instProd ;
   @override
   State<ProductDetails> createState() => _ProductDetailsState();
 }
+
+
 
 class _ProductDetailsState extends State<ProductDetails> {
   @override
@@ -126,17 +129,12 @@ class _ProductDetailsState extends State<ProductDetails> {
                 top: AppSize.s20,
                 right: get_width(context) / FontManagerSize.s2,
                 child: Text(
-                  'T-shirt',
+                  widget.instProd.productName,
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
                 ),
               ),
 
-              //         },
-              //       ),
-              //     ],
-              //   ),
-              // ),
-              // //body
+
               Positioned(
                   top: get_height(context) / FontManagerSize.s14,
                   right: 0,
@@ -164,13 +162,35 @@ class _ProductDetailsState extends State<ProductDetails> {
     */
                       child: Column(
                         children: [
-                          Container(
-                            height: get_height(context) / FontManagerSize.s2_5,
-                            decoration: const BoxDecoration(
-                                color: Colors.tealAccent,
-                                image: DecorationImage(
-                                    fit: BoxFit.fill,
-                                    image: AssetImage(AssetManager.mancat4))),
+                          Card(
+                            
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(AppSize.s20)),
+                            //color: Colors.red,
+                            margin: EdgeInsets.all(AppSize.s6),
+                            elevation: 20,
+                            child: Hero(
+                              tag: widget.instProd.productId,
+                              child: Container(
+
+                                height: get_height(context) / FontManagerSize.s2_5,
+                                decoration:  BoxDecoration(
+                                  borderRadius: BorderRadius.circular(AppSize.s20),
+                                   // color: Colors.tealAccent,
+                                    image: DecorationImage(
+                                        fit: BoxFit.fill,
+                                       // image: AssetImage(AssetManager.mancat4)
+                                      image:AssetImage(widget.instProd.productImage)
+
+                                    )),
+                              ),
+                            ),
+                          )
+                          ,
+                          Row(
+                            children: [
+                              Text('Price')
+                            ],
                           )
                         ],
                       ))),

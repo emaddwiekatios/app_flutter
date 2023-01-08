@@ -1,6 +1,8 @@
 const String imagePath = "images";
 
 const String imagePathcat = "images/category";
+const String imagePathhome = "images/home";
+
 
 class AssetManager {
   static const String splashLogo = "$imagePath/Splash/splash.png";
@@ -19,4 +21,27 @@ class AssetManager {
 
   static const String mancat5 = "$imagePathcat/man_cat4.jpg";
   static const String mam = "$imagePathcat/mam.png";
+  static const String socks = "$imagePathcat/socks.png";
+  static const String bag = "$imagePathcat/bag.png";
+  static const String shoppingbackage = "$imagePathcat/shopping-backage.png";
+  static const String shop = "$imagePathcat/shop.png";
+  static const String shopping = "$imagePathcat/shopping.png";
+  static const String shopaholic = "$imagePathcat/shopaholic.png";
+  static const String package = "$imagePathcat/package.png";
+  static const String homeaddress = "$imagePathcat/home-address.png";
+  static const String gift = "$imagePathcat/gift.png";
+  static const String discount = "$imagePathcat/discount.png";
+  static const String buying = "$imagePathcat/discount.png";
+
+  static const String homeSplash1 = "$imagePathhome/splash1.png";
+  static const String homeSplash2 = "$imagePathhome/splash2.png";
+  static const String homeSplash3 = "$imagePathhome/splash3.png";
+  static const String homeSplash4 = "$imagePathhome/splash4.png";
+
+  static const String homeadv1 = "$imagePathhome/adv1.png";
+  static const String homeadv2 = "$imagePathhome/adv2.png";
+  static const String homeadv3 = "$imagePathhome/adv3.jfif";
+  static const String homeadv4 = "$imagePathhome/adv4.jpg";
+  static const String homeadv5 = "$imagePathhome/adv5.jpg";
 }
+

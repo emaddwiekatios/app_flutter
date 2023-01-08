@@ -47,7 +47,7 @@ class MyApp extends StatelessWidget {
           translations: LocaleLang(),
           //home: login(),
           home: controller.isAuth
-              ? const Home()
+              ?  Home()
               : FutureBuilder(
                   future: controller.tryAutoLogin(),
                   builder: (context, authsnapshot)

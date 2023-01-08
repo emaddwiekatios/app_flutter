@@ -56,8 +56,8 @@ class Auth extends GetxController {
   }
 
   bool get isAuth {
-    print('inside auth ${token?.length}');
-    print('inside auth ${token != null}');
+   // print('inside auth ${token?.length}');
+   // print('inside auth ${token != null}');
     return token != null;
    // return token!.isEmpty ?  false:true ;
   }
@@ -107,13 +107,14 @@ print('inside auth func');
     //signInWithPassword
     try {
       Uri uri = Uri.parse(url);
-
+    print(uri);
       final res = await http.post(uri,
           body: json.encode({
             'email': email,
             'password': password,
             'returnSecureTolken': true
           }));
+      print(res);
       print('responsedata00000000000000000');
       final responsedata = json.decode(res.body);
 

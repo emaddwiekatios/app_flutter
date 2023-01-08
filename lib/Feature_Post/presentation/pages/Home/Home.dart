@@ -11,6 +11,8 @@ import 'package:clean_arch_app/core/resource/RoutesManager.dart';
 import 'package:clean_arch_app/core/resource/ValueManger.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../Products/ProductsClass.dart';
+import 'HomePage.dart' as home;
 
 import '../../../../core/resource/template.dart';
 
@@ -26,10 +28,18 @@ class Home extends StatefulWidget {
 LocaleController localeController = Get.put(LocaleController());
 Auth _authlogout =Get.put(Auth());
 class _HomeState extends State<Home> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return const SafeArea(
       child: Scaffold(
+
         // appBar: AppBar(
         //   backgroundColor: Colors.transparent,
         //   title: Text('Home'.tr),)

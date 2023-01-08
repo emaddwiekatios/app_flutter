@@ -1,3 +1,4 @@
+import 'package:clean_arch_app/Feature_Post/presentation/pages/Products/CategoryClass.dart';
 import 'package:clean_arch_app/core/resource/AssetManager.dart';
 import 'package:clean_arch_app/core/resource/ColorManger.dart';
 import 'package:clean_arch_app/core/resource/FontManager.dart';
@@ -8,7 +9,8 @@ import 'package:get/get.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
 import '../../../../core/resource/StringManager.dart';
-import '../Products/Product.dart';
+import '../Products/ProductDetails.dart';
+import '../Products/ProductsClass.dart';
 import 'Home.dart';
 
 class HomePage extends StatefulWidget {
@@ -22,9 +24,104 @@ Color colorOne = Colors.amber;
 Color colorTwo = ColorManager.primary;
 Color colorThree = ColorManager.primary;
 
+
+late ProductClass instProd ;
+late List<ProductClass> instProdList=[];
+
+
+late CategoryClass instCat ;
+late List<CategoryClass> instCatList=[];
+
+
+
+void loadcategoryinit() {
+  instCatList.clear();
+  instCatList.add(
+      CategoryClass(
+          categoryId: 1,
+          categoryName: 'Socks',
+          categoryImage: AssetManager.socks,
+          categoryEntryDate: DateTime.now()));
+  instCatList.add(
+      CategoryClass(
+          categoryId: 2,
+          categoryName: 'Bag',
+          categoryImage: AssetManager.bag,
+          categoryEntryDate: DateTime.now()));
+  instCatList.add(
+      CategoryClass(
+          categoryId: 3,
+          categoryName: 'shop',
+          categoryImage: AssetManager.shop,
+          categoryEntryDate: DateTime.now()));
+  instCatList.add(
+      CategoryClass(
+          categoryId: 4,
+          categoryName: 'buying',
+          categoryImage: AssetManager.buying,
+          categoryEntryDate: DateTime.now()));
+  instCatList.add(
+      CategoryClass(
+          categoryId: 5,
+          categoryName: 'Bag',
+          categoryImage: AssetManager.gift,
+          categoryEntryDate: DateTime.now()));
+  instCatList.add(
+      CategoryClass(
+          categoryId: 6,
+          categoryName: 'discount',
+          categoryImage: AssetManager.discount,
+          categoryEntryDate: DateTime.now()));
+
+  instCatList.add(
+      CategoryClass(
+          categoryId: 2,
+          categoryName: 'shoppingbackage',
+          categoryImage: AssetManager.shoppingbackage,
+          categoryEntryDate: DateTime.now()));
+
+  instCatList.add(
+      CategoryClass(
+          categoryId: 2,
+          categoryName: 'shopaholic',
+          categoryImage: AssetManager.shopaholic,
+          categoryEntryDate: DateTime.now()));
+
+  instCatList.add(
+      CategoryClass(
+          categoryId: 2,
+          categoryName: 'homeaddress',
+          categoryImage: AssetManager.homeaddress,
+          categoryEntryDate: DateTime.now()));
+
+
+}
+
+void loadProductinit() {
+  instProdList.clear();
+  instProdList.add(ProductClass(productId: 1, productName: 'T-shirt', productImage: AssetManager.mancat, productPrice: 16, productCat: 'Clothes', productEntryDate: DateTime.now()));
+  instProdList.add(ProductClass(productId: 2, productName: 'Jaket', productImage: AssetManager.mancat3, productPrice: 50, productCat: 'Clothes', productEntryDate: DateTime.now()));
+  instProdList.add(ProductClass(productId: 3, productName: 'Jeans', productImage: AssetManager.mancat4, productPrice: 100, productCat: 'Clothes', productEntryDate: DateTime.now()));
+  instProdList.add(ProductClass(productId: 4, productName: 'Body', productImage: AssetManager.mancat5, productPrice: 400, productCat: 'Clothes', productEntryDate: DateTime.now()));
+  instProdList.add(ProductClass(productId: 5, productName: 'T-shttirt', productImage: AssetManager.mancat, productPrice: 616, productCat: 'Clothes', productEntryDate: DateTime.now()));
+  instProdList.add(ProductClass(productId: 6, productName: 'Jaketttt', productImage: AssetManager.mancat3, productPrice: 560, productCat: 'Clothes', productEntryDate: DateTime.now()));
+  instProdList.add(ProductClass(productId: 7, productName: 'Jeattns', productImage: AssetManager.mancat4, productPrice: 1600, productCat: 'Clothes', productEntryDate: DateTime.now()));
+  instProdList.add(ProductClass(productId: 8, productName: 'Bodtty', productImage: AssetManager.mancat5, productPrice: 4060, productCat: 'Clothes', productEntryDate: DateTime.now()));
+
+}
+
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
+
+  @override
+  void initState() {
+    // TODO: implement initState
+loadcategoryinit();
+    loadProductinit();
+
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,81 +137,9 @@ class _HomePageState extends State<HomePage> {
         },
         child: Stack(
           children: <Widget>[
-            //header shape
-            // Positioned(
-            //   top: 0,
-            //   left: 0,
-            //   child: Container(
-            //     height: MediaQuery
-            //         .of(context)
-            //         .size
-            //         .height / 4,
-            //     width: MediaQuery
-            //         .of(context)
-            //         .size
-            //         .width,
-            //     decoration: BoxDecoration(
-            //       //borderRadius: BorderRadius.circular(200),
-            //       //  color: Colors.amber,
-            //     ),
-            //     child: CustomPaint(
-            //       child: Container(
-            //         height: 400.0,
-            //       ),
-            //       painter: _MyPainter(),
-            //     ),
-            //   ),
-            // ),
-            /*
-            Positioned(
-              top: 125,
-              left: -150,
-              child: Container(
-                height: 450, //MediaQuery.of(context).size.height / 4,
-                width: 450, //MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(250),
-                  color: Colors.amber,
-                ),
-              ),
-            ),
-            Positioned(
-              top: 100,
-              left: 115,
-              child: Container(
-                height: 350, //MediaQuery.of(context).size.height / 4,
-                width: 350, //MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(200),
-                    color: Colors.amber),
-              ),
-            ),
-            */
-            //a
-            // Positioned(
-            //   bottom: -125,
-            //   left: -150,
-            //   child: Container(
-            //     height: 250, //MediaQuery.of(context).size.height / 4,
-            //     width: 250, //MediaQuery.of(context).size.width,
-            //     decoration: BoxDecoration(
-            //       borderRadius: BorderRadius.circular(250),
-            //       color: ColorManager.primary,
-            //     ),
-            //   ),
-            // ),
-            // Positioned(
-            //   bottom: -100,
-            //   right: -115,
-            //   child: Container(
-            //     height: 250, //MediaQuery.of(context).size.height / 4,
-            //     width: 250, //MediaQuery.of(context).size.width,
-            //     decoration: BoxDecoration(
-            //         borderRadius: BorderRadius.circular(200),
-            //         color: ColorManager.primary),
-            //   ),
-            // ),
-            //menu
+
+
+
             Positioned(
               top: AppSize.s4,
               left: -AppSize.s4,
@@ -176,28 +201,16 @@ class _HomePageState extends State<HomePage> {
                 height: MediaQuery.of(context).size.height >= 775.0
                     ? MediaQuery.of(context).size.height
                     : 775.0,
-                /* decoration: new BoxDecoration(
-                        gradient: new LinearGradient(
-                            colors: [
-                              Colors.red,
-                            Colors.orange
 
-                            //Color(getColorHexFromStr('#FDD100')),
-                             //Color(getColorHexFromStr('#FDD120'))
-                            ],
-                            begin: const FractionalOffset(0.0, 0.0),
-                            end: const FractionalOffset(1.0, 1.0),
-                            stops: [0.0, 1.0],
-                            tileMode: TileMode.clamp),
-                      ),
-*/
                 child:
-                    (MediaQuery.of(context).orientation == Orientation.portrait)
-                        ? const GetPortraitOrient()
-                        : const GetLandScapeOrient(),
+                   // (MediaQuery.of(context).orientation == Orientation.portrait)
+                      //  ?
+                  const GetPortraitOrient()
+                        //: const GetLandScapeOrient(),
               ),
             ),
             //header title
+            //header titleini
             // Positioned(
             //   top: MediaQuery.of(context).size.height / 18,
             //   left: MediaQuery.of(context).size.width / 2 - 50,
@@ -211,6 +224,8 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
+
 }
 
 class MyPainter extends CustomPainter {
@@ -237,27 +252,38 @@ class MyPainter extends CustomPainter {
   }
 }
 
-class WidgetCategory extends StatelessWidget {
-  const WidgetCategory({Key? key}) : super(key: key);
+class WidgetCategory extends StatefulWidget {
+   WidgetCategory({Key? key,required this.instCat}) : super(key: key);
+CategoryClass instCat;
 
   @override
+  State<WidgetCategory> createState() => _WidgetCategoryState();
+}
+
+class _WidgetCategoryState extends State<WidgetCategory> {
+  @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Card(
-          shape: RoundedRectangleBorder(
-              side:
-                  BorderSide(color: ColorManager.primary, width: AppSize.s0_5),
-              borderRadius: BorderRadius.circular(270)),
-          child: const CircleAvatar(
-            foregroundImage: ExactAssetImage(AssetManager.mancat3),
-            radius: AppSize.s40,
-            //   backgroundImage: ExactAssetImage(AssetManager.mancat3),
+
+    return Container(
+      height: get_height(context)/4,
+      child: Column(
+        children: [
+          Card(
+            elevation: 0,
+            shape: RoundedRectangleBorder(
+                //side: BorderSide(color: ColorManager.primary, width: AppSize.s0_5),
+                borderRadius: BorderRadius.circular(270)),
+            child:  CircleAvatar(
+              foregroundImage: ExactAssetImage(widget.instCat.categoryImage),
+              backgroundColor: ColorManager.primary.withOpacity(.2),
+              radius: AppSize.s40,
+                // backgroundImage: ExactAssetImage(AssetManager),
+            ),
           ),
-        ),
-        const Text('Man')
-        //  backgroundImage:  (AssetManager.onBoarding3,fit: BoxFit.cover))
-      ],
+           Text(widget.instCat.categoryName)
+          //  backgroundImage:  (AssetManager.onBoarding3,fit: BoxFit.cover))
+        ],
+      ),
     );
   }
 }
@@ -265,10 +291,15 @@ class WidgetCategory extends StatelessWidget {
 class GetCarouselSlider extends StatelessWidget {
   //class ImageSliderDemo extends StatelessWidget {
   final List<String> imgList = [
-    AssetManager.splash1,
-    AssetManager.splash2,
-    AssetManager.splash3,
-    AssetManager.splashLogo
+    AssetManager.homeadv1,
+    AssetManager.homeadv2,
+    AssetManager.homeadv3,
+    AssetManager.homeadv4
+
+    // AssetManager.splash1,
+    // AssetManager.splash2,
+    // AssetManager.splash3,
+    // AssetManager.splashLogo
   ];
 
   GetCarouselSlider({Key? key}) : super(key: key);
@@ -333,6 +364,7 @@ class GetPortraitOrient extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
+
         Padding(
           padding: const EdgeInsets.only(left: AppSize.s6, right: AppSize.s6),
           child: TextFormField(
@@ -354,24 +386,10 @@ class GetPortraitOrient extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.all(AppSize.s4),
-          child: SizedBox(
-            //  color: Colors.red,
-            height: get_height(context) / FontManagerSize.s7,
-            width: get_width(context),
-            child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: 10,
-                itemBuilder: (context, int index) {
-                  return const Center(child: WidgetCategory());
-                }),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(AppSize.s4),
           child: Container(
             margin: const EdgeInsets.all(AppSize.s0_5),
             decoration: BoxDecoration(
-                //color: Colors.red,
+              //color: Colors.red,
                 borderRadius: BorderRadius.circular(10)),
 
             height: get_height(context) / AppSize.s6,
@@ -380,12 +398,30 @@ class GetPortraitOrient extends StatelessWidget {
             //child:Cal
           ),
         ),
+        Padding(
+          padding: const EdgeInsets.all(AppSize.s4),
+          child: SizedBox(
+            //  color: Colors.red,
+            height: get_height(context) / FontManagerSize.s6,
+            width: get_width(context),
+            child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: instCatList.length,
+                itemBuilder: (context, int index) {
+                  return  Center(child: WidgetCategory( instCat: instCatList[index]));
+                }),
+          ),
+        ),
+
         Expanded(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Container(
-                decoration: const BoxDecoration(
-                    //color: Colors.blue,
+                decoration:  BoxDecoration(
+
+                    borderRadius: BorderRadius.circular(AppSize.s20),
+
+                   // color: Colors.blue,
                     ),
                 width: get_width(context),
                 height: get_height(context), //FontManagerSize.s3,
@@ -396,71 +432,139 @@ class GetPortraitOrient extends StatelessWidget {
                       onTap: () {
                         //(index);
 
-                        Get.to(() => const ProductDetails());
+                        Get.to(() =>  ProductDetails( instProd: instProdList[index]));
                       },
-                      child: Column(
+                      child: Stack(
                         children: [
-                          Card(
-                            elevation: 0,
-                            shape: const OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Colors.transparent,
-                                  width: AppSize.s0_5),
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(AppSize.s8),
+                      Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Hero(
+                              tag: instProdList[index].productId,
+                              child: Card(
+                                color: Colors.red,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(AppSize.s10)),
+                                child: GridTile(
+                                  header: Align(
+                                    alignment: Alignment.topLeft,
+                                    child:  Container(
+                                      decoration: BoxDecoration(
+                                        color: ColorManager.primary.withOpacity(.9),
+                                        borderRadius: BorderRadius.only(
+                                           // bottomLeft:Radius.circular(AppSize.s10),
+                                            topLeft:Radius.circular(AppSize.s10)
+                                        ),
+                                      ),
+                                      height: get_height(context)/AppSize.s40,
+
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(left:AppSize.s4),
+                                        child: Text(instProdList[index].productName),
+                                      )),),
+                                footer: Container(
+                                    decoration: BoxDecoration(
+                                      color: ColorManager.white.withOpacity(.6),
+                                      borderRadius: BorderRadius.only(
+                                        bottomLeft:Radius.circular(AppSize.s10),
+                                          bottomRight:Radius.circular(AppSize.s10)
+                                             ),
+                                    ),
+                                    height: get_height(context)/AppSize.s28,
+
+                                  child:Center(child:  Text('Price :${instProdList[index].productPrice}'),)
+                                ),
+
+                                child: Container(
+                                            height: get_height(context)/AppSize.s20,
+                                            //width: 80,
+                                            decoration: BoxDecoration(
+
+                                                borderRadius: BorderRadius.circular(AppSize.s10),
+
+                                              image:  DecorationImage(
+                                                  fit: BoxFit.fill,         image: AssetImage(//AssetManager.mancat
+                                                instProdList[index].productImage,
+                                                  )),
+                                              color: ColorManager.primary.withOpacity(.9),
+                                            ),)
+
+                                // Column(
+                                //   children: [
+                                //     Card(
+                                //       elevation: 0,
+                                //       shape: const OutlineInputBorder(
+                                //         borderSide: BorderSide(
+                                //             color: Colors.transparent,
+                                //             width: AppSize.s0_5),
+                                //         borderRadius: BorderRadius.all(
+                                //           Radius.circular(AppSize.s8),
+                                //         ),
+                                //       ),
+                                //       child: Stack(
+                                //         children: [
+                                //           Positioned(
+                                //             child: Container(
+                                //               height: 90,
+                                //               //width: 80,
+                                //               decoration: BoxDecoration(
+                                //                 borderRadius: BorderRadius.circular(5),
+                                //                 image: const DecorationImage(
+                                //                     fit: BoxFit.fill,
+                                //             ';]        image: AssetImage(
+                                //                       AssetManager.mancat4,
+                                //                     )),
+                                //                 color: Colors.green,
+                                //               ),
+                                //             ),
+                                //           ),
+                                //           Positioned(
+                                //               bottom: AppSize.s0,
+                                //               left: AppSize.s0,
+                                //               right: AppSize.s0,
+                                //               child: Container(
+                                //                   height:
+                                //                       get_height(context) / AppSize.s40,
+                                //                   color: ColorManager.primary
+                                //                       .withOpacity(.4),
+                                //                   child: const Center(
+                                //                       child: Text('T-shirt')))),
+                                //           const Positioned(
+                                //             right: AppSize.s4,
+                                //             child: Icon(
+                                //               Icons.favorite_border_outlined,
+                                //               color: Colors.red,
+                                //             ),
+                                //           ),
+                                //         ],
+                                //       ),
+                                //     ),
+                                //     Column(
+                                //       children: [
+                                //         const Text('Price :50'),
+                                //       ],
+                                //     ),
+                                //     // Text('price : ${23}\$'),
+                                //   ],
+                                // ),
+                    ),
                               ),
                             ),
-                            child: Stack(
-                              children: [
-                                Positioned(
-                                  child: Container(
-                                    height: 90,
-                                    //width: 80,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      image: const DecorationImage(
-                                          fit: BoxFit.fill,
-                                          image: AssetImage(
-                                            AssetManager.mancat4,
-                                          )),
-                                      color: Colors.green,
-                                    ),
-                                  ),
-                                ),
-                                Positioned(
-                                    bottom: AppSize.s0,
-                                    left: AppSize.s0,
-                                    right: AppSize.s0,
-                                    child: Container(
-                                        height:
-                                            get_height(context) / AppSize.s40,
-                                        color: ColorManager.primary
-                                            .withOpacity(.4),
-                                        child: const Center(
-                                            child: Text('T-shirt')))),
-                                const Positioned(
-                                  right: AppSize.s4,
-                                  child: Icon(
-                                    Icons.favorite_border_outlined,
-                                    color: Colors.red,
-                                  ),
-                                ),
-                              ],
-                            ),
                           ),
-                          Column(
-                            children: [
-                              const Text('Price :50'),
-                            ],
-                          ),
-                          // Text('price : ${23}\$'),
+                          Positioned(
+                              right:AppSize.s4 ,child:IconButton(onPressed: () {
+
+                            loadProductinit();
+
+                          },icon:Icon(Icons.heart_broken_rounded))
+
+                          )
                         ],
                       ),
                     );
                   },
-                  itemCount: 5,
+                  itemCount: instProdList.length,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
+                    crossAxisCount: 2,
                   ),
                 )),
           ),
@@ -470,74 +574,69 @@ class GetPortraitOrient extends StatelessWidget {
   }
 }
 
-class GetLandScapeOrient extends StatelessWidget {
-  const GetLandScapeOrient({Key? key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(
-              top: FontManagerSize.s12, left: AppSize.s6, right: AppSize.s6),
-          child: TextFormField(
-            showCursor: true,
-            // readOnly: true,
-            //controller: controllerLoginUserName,
-            decoration: InputDecoration(
-                label: Text(StringManager.search.tr),
-                hintText: StringManager.userNameHint.tr,
-                //  prefix: Text(StringManager.userName),
-                prefixIcon: const Icon(Icons.search),
-                // errorText: (snapshot.data ?? true)
-                //     ? null
-                //     : StringManager.usernameError,
-                suffix: Text(StringManager.userName.tr),
-                //  suffixText: StringManager.userName,
-                suffixIcon: const Icon(Icons.remove_red_eye_outlined)),
-          ),
-        ),
-        Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(AppSize.s4),
-              child: SizedBox(
-                //  color: Colors.red,
-                height: get_height(context) * .6,
-                width: get_width(context) * .25,
-                child: ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    itemCount: 10,
-                    itemBuilder: (context, int index) {
-                      return const Center(child: WidgetCategory());
-                    }),
-              ),
-            ),
-            Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(AppSize.s4),
-                  child: Container(
-                    margin: const EdgeInsets.all(AppSize.s0_5),
-                    decoration: BoxDecoration(
-                        //color: Colors.red,
-                        borderRadius: BorderRadius.circular(10)),
-
-                    height: get_height(context) * .25,
-                    width: get_width(context) * .7,
-                    child: GetCarouselSlider(),
-                    //child:Cal
-                  ),
-                ),
-                Container(
-                  height: get_height(context) * .35,
-                  width: get_width(context) * .7, //FontManagerSize.s3,
-                  color: Colors.blue,
-                ),
-              ],
-            ),
-          ],
-        )
-      ],
-    );
-  }
-}
+// class GetLandScapeOrient extends StatelessWidget {
+//   const GetLandScapeOrient({Key? key}) : super(key: key);
+//   @override
+//   Widget build(BuildContext context) {
+//     return Column(
+//       children: [
+//         Padding(
+//           padding: const EdgeInsets.only(
+//               top: FontManagerSize.s12, left: AppSize.s6, right: AppSize.s6),
+//           child: TextFormField(
+//             showCursor: true,
+//             // readOnly: true,
+//             //controller: controllerLoginUserName,
+//             decoration: InputDecoration(
+//                 label: Text(StringManager.search.tr),
+//                 hintText: StringManager.userNameHint.tr,
+//                 //  prefix: Text(StringManager.userName),
+//                 prefixIcon: const Icon(Icons.search),
+//                 // errorText: (snapshot.data ?? true)
+//                 //     ? null
+//                 //     : StringManager.usernameError,
+//                 suffix: Text(StringManager.userName.tr),
+//                 //  suffixText: StringManager.userName,
+//                 suffixIcon: const Icon(Icons.remove_red_eye_outlined)),
+//           ),
+//         ),
+//         Row(
+//           children: [
+//             Padding(
+//               padding: const EdgeInsets.all(AppSize.s4),
+//               child: ListView.builder(
+//                   scrollDirection: Axis.vertical,
+//                   itemCount: 10,
+//                   itemBuilder: (context, int index) {
+//                     return const Center(child: WidgetCategory());
+//                   }),
+//             ),
+//             Column(
+//               children: [
+//                 Padding(
+//                   padding: const EdgeInsets.all(AppSize.s4),
+//                   child: Container(
+//                     margin: const EdgeInsets.all(AppSize.s0_5),
+//                     decoration: BoxDecoration(
+//                         //color: Colors.red,
+//                         borderRadius: BorderRadius.circular(10)),
+//
+//                     height: get_height(context) * .25,
+//                     width: get_width(context) * .7,
+//                     child: GetCarouselSlider(),
+//                     //child:Cal
+//                   ),
+//                 ),
+//                 // Container(
+//                 //   height: get_height(context) * .35,
+//                 //   width: get_width(context) * .7, //FontManagerSize.s3,
+//                 //   color: Colors.blue,
+//                 // ),
+//               ],
+//             ),
+//           ],
+//         )
+//       ],
+//     );
+//   }
+// }

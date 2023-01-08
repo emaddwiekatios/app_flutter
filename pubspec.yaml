@@ -39,6 +39,7 @@ dependencies:
   get_storage:
   carousel_slider: ^4.2.0
   http: ^0.13.5
+  flutter_lorem: ^2.0.0
 
 dev_dependencies:
   flutter_test:

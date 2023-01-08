@@ -139,7 +139,14 @@ loadcategoryinit();
           children: <Widget>[
 
 
+            Positioned(
+              top:0,
+              left:0,right: 0,
 
+              child: Container(
+                  height: get_height(context)/FontManagerSize.s17,
+                  color:ColorManager.primary),
+            ),
             Positioned(
               top: AppSize.s4,
               left: -AppSize.s4,
@@ -156,6 +163,7 @@ loadcategoryinit();
                 },
               ),
             ),
+
             Positioned(
               top: AppSize.s4,
               right: -AppSize.s4,
@@ -190,9 +198,12 @@ loadcategoryinit();
                 ],
               ),
             ),
+
+
+
             //body
             Positioned(
-              top: get_height(context) / FontManagerSize.s14,
+              top: get_height(context) / FontManagerSize.s16,
               right: 0,
               bottom: 20,
               child: SizedBox(
@@ -265,19 +276,23 @@ class _WidgetCategoryState extends State<WidgetCategory> {
   Widget build(BuildContext context) {
 
     return Container(
-      height: get_height(context)/4,
+      //color: Colors.red,
+      height: get_height(context)/AppSize.s9,
       child: Column(
         children: [
-          Card(
-            elevation: 0,
-            shape: RoundedRectangleBorder(
-                //side: BorderSide(color: ColorManager.primary, width: AppSize.s0_5),
-                borderRadius: BorderRadius.circular(270)),
-            child:  CircleAvatar(
-              foregroundImage: ExactAssetImage(widget.instCat.categoryImage),
-              backgroundColor: ColorManager.primary.withOpacity(.2),
-              radius: AppSize.s40,
-                // backgroundImage: ExactAssetImage(AssetManager),
+          Padding(
+            padding: const EdgeInsets.only(left:AppSize.s8,right:AppSize.s8),
+            child: Card(
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                  //side: BorderSide(color: ColorManager.primary, width: AppSize.s0_5),
+                  borderRadius: BorderRadius.circular(270)),
+              child:  CircleAvatar(
+                foregroundImage: ExactAssetImage(widget.instCat.categoryImage),
+                backgroundColor: ColorManager.primary.withOpacity(.2),
+                radius: FontManagerSize.s30,
+                  // backgroundImage: ExactAssetImage(AssetManager),
+              ),
             ),
           ),
            Text(widget.instCat.categoryName)
@@ -313,15 +328,15 @@ class GetCarouselSlider extends StatelessWidget {
         ),
         //color: Colors.red,
         height: get_height(context) * .5,
-        width: get_width(context) * .95,
+        width: get_width(context) * .9999,
         child: CarouselSlider(
           items: imgList
               .map(
                 (p) => Card(
-                  shape: OutlineInputBorder(
-                    borderSide: BorderSide(
-                        color: ColorManager.primary, width: AppSize.s0_5),
-                  ),
+                  // shape: OutlineInputBorder(
+                  //   borderSide: BorderSide(
+                  //       color: ColorManager.primary, width: AppSize.s0_5),
+                  // ),
                   elevation: AppSize.s0,
                   child: Container(
                     decoration: BoxDecoration(
@@ -363,10 +378,12 @@ class GetPortraitOrient extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
 
         Padding(
-          padding: const EdgeInsets.only(left: AppSize.s6, right: AppSize.s6),
+          padding: const EdgeInsets.only(left:AppSize.s4,right: AppSize.s4),
           child: TextFormField(
             showCursor: true,
             // readOnly: true,
@@ -385,7 +402,7 @@ class GetPortraitOrient extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.all(AppSize.s4),
+          padding: const EdgeInsets.only(left:AppSize.s4,right: AppSize.s4),
           child: Container(
             margin: const EdgeInsets.all(AppSize.s0_5),
             decoration: BoxDecoration(
@@ -399,7 +416,7 @@ class GetPortraitOrient extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.all(AppSize.s4),
+          padding: const EdgeInsets.only(left:AppSize.s4,right: AppSize.s4),
           child: SizedBox(
             //  color: Colors.red,
             height: get_height(context) / FontManagerSize.s6,
@@ -412,16 +429,16 @@ class GetPortraitOrient extends StatelessWidget {
                 }),
           ),
         ),
-
+         //Text('Products'),
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.only(left:AppSize.s4,right: AppSize.s4),
             child: Container(
                 decoration:  BoxDecoration(
 
                     borderRadius: BorderRadius.circular(AppSize.s20),
 
-                   // color: Colors.blue,
+                   //color: Colors.blue,
                     ),
                 width: get_width(context),
                 height: get_height(context), //FontManagerSize.s3,

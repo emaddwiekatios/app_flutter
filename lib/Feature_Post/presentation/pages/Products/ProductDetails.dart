@@ -8,15 +8,17 @@ import '../../../../core/resource/ColorManger.dart';
 import '../../../../core/resource/FontManager.dart';
 import '../../../../core/resource/MediaQuery.dart';
 import '../../../../core/resource/ValueManger.dart';
+import 'package:flutter_lorem/flutter_lorem.dart';
 
 class ProductDetails extends StatefulWidget {
-   ProductDetails({Key? key,required this.instProd}) : super(key: key);
-  ProductClass instProd ;
+  ProductDetails({Key? key, required this.instProd}) : super(key: key);
+  ProductClass instProd;
   @override
   State<ProductDetails> createState() => _ProductDetailsState();
 }
 
 
+List<Color> colorList =[Colors.black,Colors.red,Colors.blue,Colors.yellow];
 
 class _ProductDetailsState extends State<ProductDetails> {
   @override
@@ -127,13 +129,12 @@ class _ProductDetailsState extends State<ProductDetails> {
               ),
               Positioned(
                 top: AppSize.s20,
-                right: get_width(context) / FontManagerSize.s2,
+                right: get_width(context) / FontManagerSize.s2_5,
                 child: Text(
                   widget.instProd.productName,
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
                 ),
               ),
-
 
               Positioned(
                   top: get_height(context) / FontManagerSize.s14,
@@ -150,7 +151,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                               colors: [
                                 Colors.red,
                               Colors.orange
-    
+
                               //Color(getColorHexFromStr('#FDD100')),
                                //Color(getColorHexFromStr('#FDD120'))
                               ],
@@ -163,35 +164,146 @@ class _ProductDetailsState extends State<ProductDetails> {
                       child: Column(
                         children: [
                           Card(
-                            
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(AppSize.s20)),
+                            // shape: RoundedRectangleBorder(
+                            //     borderRadius: BorderRadius.circular(AppSize.s20)),
                             //color: Colors.red,
                             margin: EdgeInsets.all(AppSize.s6),
-                            elevation: 20,
+                            //elevation: 20,
                             child: Hero(
                               tag: widget.instProd.productId,
                               child: Container(
-
-                                height: get_height(context) / FontManagerSize.s2_5,
-                                decoration:  BoxDecoration(
-                                  borderRadius: BorderRadius.circular(AppSize.s20),
-                                   // color: Colors.tealAccent,
+                                height:
+                                    get_height(context) / FontManagerSize.s2_5,
+                                decoration: BoxDecoration(
+                                    // borderRadius: BorderRadius.circular(AppSize.s20),
+                                    // color: Colors.tealAccent,
                                     image: DecorationImage(
                                         fit: BoxFit.fill,
-                                       // image: AssetImage(AssetManager.mancat4)
-                                      image:AssetImage(widget.instProd.productImage)
-
-                                    )),
+                                        // image: AssetImage(AssetManager.mancat4)
+                                        image: AssetImage(
+                                            widget.instProd.productImage))),
                               ),
                             ),
-                          )
-                          ,
-                          Row(
-                            children: [
-                              Text('Price')
-                            ],
-                          )
+                          ),
+                          SizedBox(
+                            height: get_height(context) / AppSize.s60,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: AppSize.s40, right: AppSize.s40),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  widget.instProd.productName,
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                Text(
+                                  '${widget.instProd.productPrice}\$',
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w500),
+                                )
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                top: AppSize.s4, left: AppSize.s28),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.star,
+                                  color: Colors.amberAccent,
+                                ),
+                                Text('   (${20}) Rieview'),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: AppSize.s12,
+                                top: AppSize.s4,
+                                right: AppSize.s8),
+                            child: Text(
+                              '${lorem(paragraphs: 1, words: 30)}',
+                              style: TextStyle(
+                                  fontSize: 12, fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: AppSize.s12,
+                                top: AppSize.s8,
+                                right: AppSize.s8),
+                            child: Align(
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                'Selected Color',
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w500,
+                                    color: ColorManager.primary),
+                              ),
+                            ),
+                          ),
+
+
+                          Padding(
+                            padding: const EdgeInsets.all(AppSize.s10),
+                            child: Align(
+                              alignment: Alignment.topLeft,
+                              child: Container(
+
+
+                                width: get_width(context)/FontManagerSize.s3,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  children: [
+                                    for (int i =0; i<colorList.length ;i++)
+                                         Container(
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(250),
+                                            border: Border.all(
+                                                color: Colors.black,
+                                                width: AppSize.s2)
+                                        ),
+                                        child: CircleAvatar(
+                                          backgroundColor: colorList[i],
+                                          radius: AppSize.s12,
+                                        ),
+                                      ),
+
+
+                                    ListView.builder(itemBuilder:(BuildContext context)
+
+                                    )
+
+
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: AppSize.s12,
+                                top: AppSize.s8,
+                                right: AppSize.s8),
+                            child: Align(
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                'Selected Sized',
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w500,
+                                    color: ColorManager.primary),
+                              ),
+                            ),
+                          ),
                         ],
                       ))),
               //header title

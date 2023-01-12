@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:clean_arch_app/Feature_Post/presentation/pages/Products/CategoryClass.dart';
 import 'package:clean_arch_app/core/resource/AssetManager.dart';
 import 'package:clean_arch_app/core/resource/ColorManger.dart';
@@ -26,11 +28,11 @@ Color colorThree = ColorManager.primary;
 
 
 late ProductClass instProd ;
-late List<ProductClass> instProdList=[];
+List<ProductClass> instProdList=[];
 
 
 late CategoryClass instCat ;
-late List<CategoryClass> instCatList=[];
+ List<CategoryClass> instCatList=[];
 
 
 
@@ -125,7 +127,7 @@ loadcategoryinit();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: GetDrower(context),
+      drawer: getDrawer(context),
       key: scaffoldKey,
       body: GestureDetector(
         onTap: () {
@@ -144,7 +146,7 @@ loadcategoryinit();
               left:0,right: 0,
 
               child: Container(
-                  height: get_height(context)/FontManagerSize.s17,
+                  height: getHeight(context)/FontManagerSize.s17,
                   color:ColorManager.primary),
             ),
             Positioned(
@@ -203,7 +205,7 @@ loadcategoryinit();
 
             //body
             Positioned(
-              top: get_height(context) / FontManagerSize.s16,
+              top: getHeight(context) / FontManagerSize.s16,
               right: 0,
               bottom: 20,
               child: SizedBox(
@@ -263,21 +265,21 @@ class MyPainter extends CustomPainter {
   }
 }
 
-class WidgetCategory extends StatefulWidget {
-   WidgetCategory({Key? key,required this.instCat}) : super(key: key);
+class widgetCategory extends StatefulWidget {
+   widgetCategory({Key? key,required this.instCat}) : super(key: key);
 CategoryClass instCat;
 
   @override
-  State<WidgetCategory> createState() => _WidgetCategoryState();
+  State<widgetCategory> createState() => _widgetCategoryState();
 }
 
-class _WidgetCategoryState extends State<WidgetCategory> {
+class _widgetCategoryState extends State<widgetCategory> {
   @override
   Widget build(BuildContext context) {
 
-    return Container(
+    return SizedBox(
       //color: Colors.red,
-      height: get_height(context)/AppSize.s9,
+      height: getHeight(context)/AppSize.s9,
       child: Column(
         children: [
           Padding(
@@ -327,8 +329,8 @@ class GetCarouselSlider extends StatelessWidget {
           color: Colors.transparent,
         ),
         //color: Colors.red,
-        height: get_height(context) * .5,
-        width: get_width(context) * .9999,
+        height: getHeight(context) * .5,
+        width: getWidth(context) * .9999,
         child: CarouselSlider(
           items: imgList
               .map(
@@ -409,8 +411,8 @@ class GetPortraitOrient extends StatelessWidget {
               //color: Colors.red,
                 borderRadius: BorderRadius.circular(10)),
 
-            height: get_height(context) / AppSize.s6,
-            width: get_width(context),
+            height: getHeight(context) / AppSize.s6,
+            width: getWidth(context),
             child: GetCarouselSlider(),
             //child:Cal
           ),
@@ -419,13 +421,13 @@ class GetPortraitOrient extends StatelessWidget {
           padding: const EdgeInsets.only(left:AppSize.s4,right: AppSize.s4),
           child: SizedBox(
             //  color: Colors.red,
-            height: get_height(context) / FontManagerSize.s6,
-            width: get_width(context),
+            height: getHeight(context) / FontManagerSize.s6,
+            width: getWidth(context),
             child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: instCatList.length,
                 itemBuilder: (context, int index) {
-                  return  Center(child: WidgetCategory( instCat: instCatList[index]));
+                  return  Center(child: widgetCategory( instCat: instCatList[index]));
                 }),
           ),
         ),
@@ -440,8 +442,8 @@ class GetPortraitOrient extends StatelessWidget {
 
                    //color: Colors.blue,
                     ),
-                width: get_width(context),
-                height: get_height(context), //FontManagerSize.s3,
+                width: getWidth(context),
+                height: getHeight(context), //FontManagerSize.s3,
 
                 child: GridView.builder(
                   itemBuilder: (context, int index) {
@@ -467,12 +469,12 @@ class GetPortraitOrient extends StatelessWidget {
                                     child:  Container(
                                       decoration: BoxDecoration(
                                         color: ColorManager.primary.withOpacity(.9),
-                                        borderRadius: BorderRadius.only(
+                                        borderRadius: const BorderRadius.only(
                                            // bottomLeft:Radius.circular(AppSize.s10),
                                             topLeft:Radius.circular(AppSize.s10)
                                         ),
                                       ),
-                                      height: get_height(context)/AppSize.s40,
+                                      height: getHeight(context)/AppSize.s40,
 
                                       child: Padding(
                                         padding: const EdgeInsets.only(left:AppSize.s4),
@@ -481,18 +483,18 @@ class GetPortraitOrient extends StatelessWidget {
                                 footer: Container(
                                     decoration: BoxDecoration(
                                       color: ColorManager.white.withOpacity(.6),
-                                      borderRadius: BorderRadius.only(
+                                      borderRadius:const  BorderRadius.only(
                                         bottomLeft:Radius.circular(AppSize.s10),
                                           bottomRight:Radius.circular(AppSize.s10)
                                              ),
                                     ),
-                                    height: get_height(context)/AppSize.s28,
+                                    height: getHeight(context)/AppSize.s28,
 
                                   child:Center(child:  Text('Price :${instProdList[index].productPrice}'),)
                                 ),
 
                                 child: Container(
-                                            height: get_height(context)/AppSize.s20,
+                                            height: getHeight(context)/AppSize.s20,
                                             //width: 80,
                                             decoration: BoxDecoration(
 
@@ -572,7 +574,7 @@ class GetPortraitOrient extends StatelessWidget {
 
                             loadProductinit();
 
-                          },icon:Icon(Icons.heart_broken_rounded))
+                          },icon:const Icon(Icons.heart_broken_rounded))
 
                           )
                         ],

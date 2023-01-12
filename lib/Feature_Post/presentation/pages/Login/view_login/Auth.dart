@@ -38,7 +38,7 @@ class Auth extends GetxController {
   ///
    String? _token;
 
-  late DateTime _expiryDate = DateTime.now().add(Duration(seconds: 2500));
+  late DateTime _expiryDate = DateTime.now().add(const Duration(seconds: 2500));
   String _userId = '';
    Timer _authTime =Timer(
      const Duration(seconds: 0),
@@ -50,8 +50,8 @@ class Auth extends GetxController {
 
   String? email;
 
-  void setemail(String _email) {
-    email = _email;
+  void setEmail(String email) {
+    email = email;
     update();
   }
 
@@ -100,39 +100,39 @@ class Auth extends GetxController {
   Future<void> _authenticate(
       String email, String password, String urlSegment) async {
     changeErrorMessage('');
-print('inside auth func');
+//print('inside auth func');
     final url =
         'https://identitytoolkit.googleapis.com/v1/accounts:$urlSegment?key=AIzaSyAPb2LfILtCTM_kopIGMbmoJ6nYsBARRUg';
     //signUp
     //signInWithPassword
     try {
       Uri uri = Uri.parse(url);
-    print(uri);
+    //print(uri);
       final res = await http.post(uri,
           body: json.encode({
             'email': email,
             'password': password,
             'returnSecureTolken': true
           }));
-      print(res);
-      print('responsedata00000000000000000');
+      //print(res);
+      //print('responsedata00000000000000000');
       final responsedata = json.decode(res.body);
 
       if (responsedata['error'] != null) {
         changeErrorMessage(responsedata['error']['message'].toString());
         // errorMessage = (responsedata['error']['message']).obs;
 
-        print(responsedata['error']['message']);
+       // print(responsedata['error']['message']);
       }
 
-      print('responsedata[email]');
-      print(responsedata['email']);
-        setemail(responsedata['email']);
+      //print('responsedata[email]');
+      //print(responsedata['email']);
+        setEmail(responsedata['email']);
       changeistoken(responsedata['idToken'].toString());
       changeisuserId(responsedata['localId'].toString());
-        changeExpiryDate(DateTime.now().add(Duration(seconds: 3600))); //int.parse(responsedata['expiresIn']))));
+        changeExpiryDate(DateTime.now().add(const Duration(seconds: 3600))); //int.parse(responsedata['expiresIn']))));
 
-   print(_userId);
+  // print(_userId);
         saveUserInfo(_token!,_userId,_expiryDate.toString());
 
 
@@ -151,7 +151,7 @@ print('inside auth func');
 
 
   Future<Info> getUserInfo() async {
-    print(' getUserInfo() ');
+    //print(' getUserInfo() ');
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     Map<String, dynamic> userMap = {};
     final String? userStr = prefs.getString('userData');
@@ -177,15 +177,15 @@ changeistoken(info.token.toString());
 
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     bool result = await prefs.setString('userData', jsonEncode(info));
-    print('the save shared=$result');
+    //print('the save shared=$result');
   }
 
   Future<void> logout() async {
  _token=null;
   //  changeistoken();
     changeisuserId('');
-    print('token=$_token');
-    changeExpiryDate(DateTime.now().add(Duration(seconds: -2000),),);
+    //print('token=$_token');
+    changeExpiryDate(DateTime.now().add(const Duration(seconds: -2000),),);
   //  _expiryDate = DateTime.now().add(Duration(seconds: -2000));
 
     //if (_authTime != null) {

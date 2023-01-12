@@ -1,7 +1,8 @@
-import 'dart:math';
+
 
 import 'package:clean_arch_app/Feature_Post/presentation/pages/Products/ProductsClass.dart';
-import 'package:clean_arch_app/core/resource/AssetManager.dart';
+
+import 'package:clean_arch_app/core/resource/Construct.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/resource/ColorManger.dart';
@@ -10,6 +11,7 @@ import '../../../../core/resource/MediaQuery.dart';
 import '../../../../core/resource/ValueManger.dart';
 import 'package:flutter_lorem/flutter_lorem.dart';
 
+// ignore: must_be_immutable
 class ProductDetails extends StatefulWidget {
   ProductDetails({Key? key, required this.instProd}) : super(key: key);
   ProductClass instProd;
@@ -17,10 +19,23 @@ class ProductDetails extends StatefulWidget {
   State<ProductDetails> createState() => _ProductDetailsState();
 }
 
-
-List<Color> colorList =[Colors.black,Colors.red,Colors.blue,Colors.yellow];
+List<Color> colorList = [Colors.black, Colors.red, Colors.blue, Colors.yellow];
+late int _selectedRadio;
+int _selectedSized = 0;
 
 class _ProductDetailsState extends State<ProductDetails> {
+  @override
+  void initState() {
+    super.initState();
+    _selectedRadio = 0;
+  }
+
+  setSelectedRadio(int val) {
+    setState(() {
+      _selectedRadio = val;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -129,15 +144,15 @@ class _ProductDetailsState extends State<ProductDetails> {
               ),
               Positioned(
                 top: AppSize.s20,
-                right: get_width(context) / FontManagerSize.s2_5,
+                right: getWidth(context) / FontManagerSize.s2_5,
                 child: Text(
                   widget.instProd.productName,
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
                 ),
               ),
 
               Positioned(
-                  top: get_height(context) / FontManagerSize.s14,
+                  top: getHeight(context) / FontManagerSize.s14,
                   right: 0,
                   bottom: 20,
                   child: SizedBox(
@@ -167,13 +182,13 @@ class _ProductDetailsState extends State<ProductDetails> {
                             // shape: RoundedRectangleBorder(
                             //     borderRadius: BorderRadius.circular(AppSize.s20)),
                             //color: Colors.red,
-                            margin: EdgeInsets.all(AppSize.s6),
+                            margin: const EdgeInsets.all(AppSize.s6),
                             //elevation: 20,
                             child: Hero(
                               tag: widget.instProd.productId,
                               child: Container(
                                 height:
-                                    get_height(context) / FontManagerSize.s2_5,
+                                    getHeight(context) / FontManagerSize.s2_5,
                                 decoration: BoxDecoration(
                                     // borderRadius: BorderRadius.circular(AppSize.s20),
                                     // color: Colors.tealAccent,
@@ -186,7 +201,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                             ),
                           ),
                           SizedBox(
-                            height: get_height(context) / AppSize.s60,
+                            height: getHeight(context) / AppSize.s60,
                           ),
                           Padding(
                             padding: const EdgeInsets.only(
@@ -196,13 +211,13 @@ class _ProductDetailsState extends State<ProductDetails> {
                               children: [
                                 Text(
                                   widget.instProd.productName,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.w500),
                                 ),
                                 Text(
                                   '${widget.instProd.productPrice}\$',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.w500),
                                 )
@@ -212,13 +227,13 @@ class _ProductDetailsState extends State<ProductDetails> {
                           Padding(
                             padding: const EdgeInsets.only(
                                 top: AppSize.s4, left: AppSize.s28),
-                            child: Row(
-                              children: [
-                                Icon(
+                            child:Row(
+                              children: const [
+                                   Icon(
                                   Icons.star,
                                   color: Colors.amberAccent,
                                 ),
-                                Text('   (${20}) Rieview'),
+                                 Text('   (${20}) Rieview'),
                               ],
                             ),
                           ),
@@ -228,8 +243,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                                 top: AppSize.s4,
                                 right: AppSize.s8),
                             child: Text(
-                              '${lorem(paragraphs: 1, words: 30)}',
-                              style: TextStyle(
+                              lorem(paragraphs: 1, words: 30),
+                              style: const TextStyle(
                                   fontSize: 12, fontWeight: FontWeight.w500),
                             ),
                           ),
@@ -249,45 +264,156 @@ class _ProductDetailsState extends State<ProductDetails> {
                               ),
                             ),
                           ),
-
-
-                          Padding(
-                            padding: const EdgeInsets.all(AppSize.s10),
-                            child: Align(
-                              alignment: Alignment.topLeft,
-                              child: Container(
-
-
-                                width: get_width(context)/FontManagerSize.s3,
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.all(AppSize.s4),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                  children: [
-                                    for (int i =0; i<colorList.length ;i++)
-                                         Container(
-                                        decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(250),
-                                            border: Border.all(
-                                                color: Colors.black,
-                                                width: AppSize.s2)
-                                        ),
-                                        child: CircleAvatar(
-                                          backgroundColor: colorList[i],
-                                          radius: AppSize.s12,
-                                        ),
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: const EdgeInsets.all(AppSize.s4),
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                            height: 30,
+                                            width: 30,
+                                            decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color: _selectedRadio == 0
+                                                        ? Colors.black
+                                                        : Colors.transparent,
+                                                    width: AppSize.s1),
+                                                borderRadius:
+                                                    BorderRadius.circular(200),
+                                                color: Colors.red),
+                                            child: Radio(
+                                              fillColor:
+                                                  MaterialStateProperty.all(
+                                                      Colors.red),
+                                              overlayColor:
+                                                  MaterialStateProperty.all(
+                                                      Colors.red),
+                                              focusColor: Colors.amberAccent,
+                                              hoverColor: Colors.grey,
+                                              splashRadius: 5,
+                                              value: 0,
+                                              groupValue: _selectedRadio,
+                                              onChanged: (val) {
+                                                setSelectedRadio(0);
+                                              },
+                                            ),
+                                          ),
+                                        ],
                                       ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(AppSize.s4),
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                            height: 30,
+                                            width: 30,
+                                            decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color: _selectedRadio == 1
+                                                        ? Colors.black
+                                                        : Colors.transparent,
+                                                    width: AppSize.s1),
+                                                borderRadius:
+                                                    BorderRadius.circular(200),
+                                                color: Colors.green),
+                                            child: Radio(
+                                              fillColor:
+                                                  MaterialStateProperty.all(
+                                                      Colors.green),
+                                              overlayColor:
+                                                  MaterialStateProperty.all(
+                                                      Colors.green),
+                                              splashRadius: 5,
+                                              value: 1,
+                                              groupValue: _selectedRadio,
+                                              onChanged: (val) {
+                                                setSelectedRadio(1);
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(AppSize.s4),
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                            height: 30,
+                                            width: 30,
+                                            decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color: _selectedRadio == 2
+                                                        ? Colors.black
+                                                        : Colors.transparent,
+                                                    width: AppSize.s1),
+                                                borderRadius:
+                                                    BorderRadius.circular(200),
+                                                color: Colors.yellow),
+                                            child: Radio(
+                                              fillColor:
+                                                  MaterialStateProperty.all(
+                                                      Colors.yellow),
+                                              //  overlayColor:MaterialStateProperty.all(Colors.green) ,
+                                              splashRadius: 5,
 
+                                              value: 2,
+                                              groupValue: _selectedRadio,
+                                              onChanged: (val) {
+                                                setSelectedRadio(2);
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(AppSize.s4),
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                            height: 30,
+                                            width: 30,
+                                            decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color: _selectedRadio == 3
+                                                        ? Colors.black
+                                                        : Colors.transparent,
+                                                    width: AppSize.s1),
+                                                borderRadius:
+                                                    BorderRadius.circular(200),
+                                                color: Colors.purple),
+                                            child: Radio(
+                                              fillColor:
+                                                  MaterialStateProperty.all(
+                                                      Colors.purple),
+                                              //  overlayColor:MaterialStateProperty.all(Colors.green) ,
+                                              splashRadius: 5,
 
-                                    ListView.builder(itemBuilder:(BuildContext context)
-
-                                    )
-
-
+                                              value: 3,
+                                              groupValue: _selectedRadio,
+                                              onChanged: (val) {
+                                                setSelectedRadio(3);
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ),
-                            ),
+                              // Text('Selected color: ${_selectedRadio == 0 ? 'Red' : _selectedRadio == 1 ? 'Green' : 'Blue'}'),
+                            ],
                           ),
-
                           Padding(
                             padding: const EdgeInsets.only(
                                 left: AppSize.s12,
@@ -304,6 +430,187 @@ class _ProductDetailsState extends State<ProductDetails> {
                               ),
                             ),
                           ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.all(AppSize.s4),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: const EdgeInsets.all(AppSize.s4),
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                              height: 30,
+                                              width: 30,
+                                              decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                      color: Colors.grey,
+                                                      width: AppSize.s1),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          AppSize.s10),
+                                                  color: _selectedSized == 0
+                                                      ? ColorManager.primary
+                                                      : Colors.white),
+                                              child: Center(
+                                                  child: InkWell(
+                                                      onTap: () {
+                                                        setState(() {
+                                                          _selectedSized = 0;
+                                                        });
+                                                      },
+                                                      child: const Text('M')))),
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(AppSize.s4),
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                              height: 30,
+                                              width: 30,
+                                              decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                      color: Colors.grey,
+                                                      width: AppSize.s1),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          AppSize.s10),
+                                                  color: _selectedSized == 1
+                                                      ? ColorManager.primary
+                                                      : Colors.white),
+                                              child: Center(
+                                                  child: InkWell(
+                                                      onTap: () {
+                                                        setState(() {
+                                                          _selectedSized = 1;
+                                                        });
+                                                      },
+                                                      child: const Text('S')))),
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(AppSize.s4),
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                              height: 30,
+                                              width: 30,
+                                              decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                      color: Colors.grey,
+                                                      width: AppSize.s1),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          AppSize.s10),
+                                                  color: _selectedSized == 2
+                                                      ? ColorManager.primary
+                                                      : Colors.white),
+                                              child: Center(
+                                                  child: InkWell(
+                                                      onTap: () {
+                                                        setState(() {
+                                                          _selectedSized = 2;
+                                                        });
+                                                      },
+                                                      child: const Text('L')))),
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(AppSize.s4),
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                              height: 30,
+                                              width: 30,
+                                              decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                      color: Colors.grey,
+                                                      width: AppSize.s1),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          AppSize.s10),
+                                                  color: _selectedSized == 3
+                                                      ? ColorManager.primary
+                                                      : Colors.white),
+                                              child: Center(
+                                                  child: InkWell(
+                                                      onTap: () {
+                                                        setState(() {
+                                                          _selectedSized = 3;
+                                                        });
+                                                      },
+                                                      child: const Text('XL')))),
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(AppSize.s4),
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                              height: 30,
+                                              width: 30,
+                                              decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                      color: Colors.grey,
+                                                      width: AppSize.s1),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          AppSize.s10),
+                                                  color: _selectedSized == 4
+                                                      ? ColorManager.primary
+                                                      : Colors.white),
+                                              child: Center(
+                                                  child: InkWell(
+                                                      onTap: () {
+                                                        setState(() {
+                                                          _selectedSized = 4;
+                                                        });
+                                                      },
+                                                      child: const Text('XXL')))),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              // Text('Selected color: ${_selectedRadio == 0 ? 'Red' : _selectedRadio == 1 ? 'Green' : 'Blue'}'),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: AppSize.s10,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              getElevationButton(
+
+                                parFontSize: 15,
+                                parBorderWidth: 1,
+                                 parBorderRadius: 10,
+                                parForegroundColor: ColorManager.primary,
+                                parBackGroundColor: Colors.white,
+                                onTabButton: () {},
+                                nameButton: 'ADD To Carts',
+                              ),
+                              getElevationButton(
+                                parFontSize: 15,
+                                parBorderWidth: 1,
+                                parBorderRadius: 10,
+                                parForegroundColor: Colors.white,
+                                parBackGroundColor: ColorManager.primary,
+                                onTabButton: () {},
+                                nameButton: 'Buy Now',
+                              )
+                            ],
+                          )
                         ],
                       ))),
               //header title
@@ -318,6 +625,29 @@ class _ProductDetailsState extends State<ProductDetails> {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+// ignore: camel_case_types, must_be_immutable
+class getChecked extends StatelessWidget {
+  // ignore: non_constant_identifier_names
+  getChecked({Key? key, required this.index_temp, required this.index})
+      : super(key: key);
+  // ignore: non_constant_identifier_names
+  int index, index_temp;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(250),
+          border: Border.all(
+              color: index == index_temp ? Colors.green : Colors.transparent,
+              width: AppSize.s2)),
+      child: CircleAvatar(
+        backgroundColor: colorList[index],
+        radius: AppSize.s12,
       ),
     );
   }

@@ -1,21 +1,24 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:clean_arch_app/core/resource/ColorManger.dart';
 import 'package:flutter/material.dart';
 
-class template extends StatefulWidget {
+class Template extends StatefulWidget {
+  const Template({super.key});
+
   @override
-  _templateState createState() => _templateState();
+  _TemplateState createState() => _TemplateState();
 }
 
-const CURVE_HEIGHT = 160.0;
-const AVATAR_RADIUS = CURVE_HEIGHT * 0.28;
-const AVATAR_DIAMETER = AVATAR_RADIUS * 2;
+const curveHeight = 160.0;
+const avatarRadius = curveHeight * 0.28;
+const avatarDiameter = avatarRadius * 2;
 Color colorOne = Colors.amber;
 Color colorTwo = ColorManager.primary;
 Color colorThree = ColorManager.primary;
 
-class _templateState extends State<template> {
-  @override
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+class _TemplateState extends State<Template> {
+  final GlobalKey<ScaffoldState> _scaffoldKey =  GlobalKey<ScaffoldState>();
   // Color pyellow = Color(Colors.amber);
 
   ////  add  keyboard action
@@ -126,18 +129,17 @@ class _templateState extends State<template> {
 
   ///// end add  keyboard action
 
+  @override
   Widget build(BuildContext context) {
-    var pheight = MediaQuery.of(context).size.height;
-    var pwidth = MediaQuery.of(context).size.width;
+    var pHeight = MediaQuery.of(context).size.height;
+    var pWidth = MediaQuery.of(context).size.width;
 
-    // var appLanguage = Provider.of<AppLanguage>(context);
 
     return Scaffold(
       key: _scaffoldKey,
-      // drawer: Appdrawer(),
+
       body: GestureDetector(
         onTap: () {
-          //  print('ontap');
           FocusScopeNode currentFocus = FocusScope.of(context);
 
           if (!currentFocus.hasPrimaryFocus) {
@@ -158,10 +160,10 @@ class _templateState extends State<template> {
                     //  color: Colors.amber,
                     ),
                 child: CustomPaint(
+                  painter: _MyPainter(),
                   child: Container(
                     height: 400.0,
                   ),
-                  painter: _MyPainter(),
                 ),
               ),
             ),
@@ -216,10 +218,10 @@ class _templateState extends State<template> {
             ),
             //menu
             Positioned(
-              top: pheight / 25,
-              left: pwidth / 20,
+              top: pHeight / 25,
+              left: pWidth / 20,
               child: IconButton(
-                icon: Icon(Icons.menu),
+                icon: const Icon(Icons.menu),
                 onPressed: () {
                   // print('inside button');
                   // _scaffoldKey.currentState.openDrawer();
@@ -229,8 +231,8 @@ class _templateState extends State<template> {
               ),
             ),
             Positioned(
-              top: pheight / 25,
-              right: pwidth / 20,
+              top: pHeight / 25,
+              right: pWidth / 20,
               child: IconButton(
                 icon: const Icon(Icons.arrow_back),
                 onPressed: () {
@@ -245,7 +247,7 @@ class _templateState extends State<template> {
             ),
             //body
             Positioned(
-              top: pheight / 10,
+              top: pHeight / 10,
               right: 0,
               bottom: 20,
               child: SizedBox(

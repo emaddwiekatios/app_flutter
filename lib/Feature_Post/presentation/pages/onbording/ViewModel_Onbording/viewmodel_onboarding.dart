@@ -7,7 +7,7 @@ import 'package:clean_arch_app/core/resource/StringManager.dart';
 import '../../../base/BaseViewModel.dart';
 
 class ViewModelOnBording extends BaseViewModel
-    with onBoardViewModelInput, onboardVMoutput1 {
+    with onBoardViewModelInput, onBoardVMoutput1 {
    late List<OnBoardingClass> _list;
   int _currentIndex = 0;
   //final  _streamControllerNew =StreamController<OnBoardingClassObject>();
@@ -48,20 +48,20 @@ class ViewModelOnBording extends BaseViewModel
 
   List<OnBoardingClass> _getSliderData() => [
         OnBoardingClass(
-            onboarding_id: 1,
-            onboarding_desc: 'Easy Shoping',
-            onboarding_image: AssetManager.onBoarding1,
-            onboarding_details: StringManager.onBoardingdetails1),
+            onBoardingId: 1,
+            onBoardingDesc: 'Easy Shoping',
+            onBoardingImage: AssetManager.onBoarding1,
+            onBoardingDetails: StringManager.onBoardingDetails1),
         OnBoardingClass(
-            onboarding_id: 1,
-            onboarding_desc: 'Secure Payment',
-            onboarding_image: AssetManager.onBoarding2,
-            onboarding_details: StringManager.onBoardingdetails2),
+            onBoardingId: 1,
+            onBoardingDesc: 'Secure Payment',
+            onBoardingImage: AssetManager.onBoarding2,
+            onBoardingDetails: StringManager.onBoardingdetails2),
         OnBoardingClass(
-            onboarding_id: 1,
-            onboarding_desc: 'Quick Delivery',
-            onboarding_image: AssetManager.onBoarding3,
-            onboarding_details: StringManager.onBoardingdetails3),
+            onBoardingId: 1,
+            onBoardingDesc: 'Quick Delivery',
+            onBoardingImage: AssetManager.onBoarding3,
+            onBoardingDetails: StringManager.onBoardingdetails3),
       ];
 
   @override
@@ -69,7 +69,7 @@ class ViewModelOnBording extends BaseViewModel
   Sink get getOnBoardingInput =>  _streamControllerNew.sink;
 
   @override
-  Stream<OnBoardingClassObject> get get_onbordoutbut =>
+  Stream<OnBoardingClassObject> get getOnbordingOutput =>
       _streamControllerNew.stream.map((slideViewObject) => slideViewObject);
   @override
   int goNext() {
@@ -95,8 +95,8 @@ abstract class onBoardViewModelInput {
   Sink get getOnBoardingInput;
 }
 
-abstract class onboardVMoutput1 {
-  Stream<OnBoardingClassObject> get get_onbordoutbut;
+abstract class onBoardVMoutput1 {
+  Stream<OnBoardingClassObject> get getOnbordingOutput;
 }
 
 

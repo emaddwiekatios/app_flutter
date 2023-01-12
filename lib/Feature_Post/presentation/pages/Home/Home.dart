@@ -1,20 +1,18 @@
-import 'package:clean_arch_app/Feature_Post/presentation/manager/Language/LocaleController.dart';
-import 'package:clean_arch_app/Feature_Post/presentation/pages/GetxManagement/GetxMangment.dart';
-import 'package:clean_arch_app/Feature_Post/presentation/pages/Home/HomePage.dart';
-import 'package:clean_arch_app/Feature_Post/presentation/pages/LayoutBuilder/LayoutBuilder.dart';
+//import 'package:clean_arch_app/Feature_Post/presentation/pages/Home/HomePage.dart';
 import 'package:clean_arch_app/Feature_Post/presentation/pages/Login/view_login/Auth.dart';
+import 'package:clean_arch_app/Feature_Post/presentation/pages/logingpt.dart';
 import 'package:clean_arch_app/core/resource/AssetManager.dart';
 import 'package:clean_arch_app/core/resource/ColorManger.dart';
 import 'package:clean_arch_app/core/resource/FontManager.dart';
 import 'package:clean_arch_app/core/resource/MediaQuery.dart';
-import 'package:clean_arch_app/core/resource/RoutesManager.dart';
-import 'package:clean_arch_app/core/resource/ValueManger.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../Products/ProductsClass.dart';
-import 'HomePage.dart' as home;
+import '../../manager/Language/LocaleController.dart';
+//import '../Products/ProductsClass.dart';
+//import 'HomePage.dart' as home;
 
-import '../../../../core/resource/template.dart';
+///import '../../../../core/resource/template.dart';
+import 'HomePage.dart';
 
 //emad add not  to test  add
 //add  new change
@@ -50,7 +48,7 @@ class _HomeState extends State<Home> {
   }
 }
 
-Widget GetDrower(context) {
+Widget getDrawer(context) {
   return Drawer(
       backgroundColor: Colors.white,
       child: ListView(
@@ -59,8 +57,8 @@ Widget GetDrower(context) {
             children: [
               UserAccountsDrawerHeader(
                 currentAccountPicture: Container(
-                  height: get_height(context) / 5,
-                  width: get_width(context) / 5,
+                  height: getHeight(context) / 5,
+                  width: getWidth(context) / 5,
                   clipBehavior: Clip.antiAlias,
                   decoration: const BoxDecoration(
                     shape: BoxShape.circle,
@@ -132,12 +130,28 @@ Widget GetDrower(context) {
               title: Text('Lang'.tr),
               trailing: Text('Lang'.tr),
               onTap: () {
-                if (localeController.currentLanguage == Locale('en'))
-                  localeController.changeLanguage(Locale('ar'));
-                else
-                  localeController.changeLanguage(Locale('en'));
+                if (localeController.currentLanguage == const Locale('en')) {
+                  localeController.changeLanguage(const Locale('ar'));
+                }
+                else {
+                  localeController.changeLanguage(const Locale('en'));
+                }
 
                 Navigator.pop(context);
+              }),
+          const Divider(
+            height: FontManagerSize.s8,
+          ),
+          ListTile(
+              leading: Icon(
+                Icons.home,
+                color: ColorManager.primary,
+              ),
+              title: Text('Lang'.tr),
+              trailing: Text('Lang'.tr),
+              onTap: () {
+
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=>const LoginPage()));
               }),
           const Divider(
             height: FontManagerSize.s8,

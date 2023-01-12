@@ -1,18 +1,15 @@
 import 'package:clean_arch_app/Feature_Post/domain/entities/Models.dart';
 import 'package:clean_arch_app/Feature_Post/presentation/manager/Language/LocaleController.dart';
-import 'package:clean_arch_app/Feature_Post/presentation/pages/Login/view_login/view_login.dart';
 import 'package:clean_arch_app/Feature_Post/presentation/pages/Onbording/ViewModel_Onbording/viewmodel_onboarding.dart';
 import 'package:clean_arch_app/core/resource/AssetManager.dart';
 import 'package:clean_arch_app/core/resource/ColorManger.dart';
 import 'package:clean_arch_app/core/resource/FontManager.dart';
 import 'package:clean_arch_app/core/resource/MediaQuery.dart';
-import 'package:clean_arch_app/core/resource/RoutesManager.dart';
 import 'package:clean_arch_app/core/resource/StringManager.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../../core/resource/ValueManger.dart';
-import '../../../../domain/entities/Models.dart';
 
 class OnBoarding extends StatefulWidget {
   const OnBoarding({Key? key}) : super(key: key);
@@ -54,17 +51,16 @@ class _OnBoardingState extends State<OnBoarding> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorManager.white,
-      body: Container(
-        height: get_height(context),
-        width: get_width(context),
+      body: SizedBox(
+        height: getHeight(context),
+        width: getWidth(context),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(
-              height: get_height(context),
+              height: getHeight(context),
               child: StreamBuilder<OnBoardingClassObject>(
-                  stream:
-                      _viewModelOnBording.get_onbordoutbut, //<SliderViewObject>,
+                  stream:_viewModelOnBording.get_onbordoutbut, //<SliderViewObject>,
                   builder: (context, snapShot) {
                     return _getContentWidget(snapShot.data);
                   }),
@@ -80,23 +76,23 @@ class _OnBoardingState extends State<OnBoarding> {
       return Container();
     } else {
       return SizedBox(
-        height: get_height(context) / 1.2,
-        width: get_width(context),
+        height: getHeight(context) / 1.2,
+        width: getWidth(context),
         //color:Colors.green,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Expanded(
               child: SizedBox(
-                height: get_height(context) / 2,
-                width: get_width(context),
-                child: PageView.builder(
+                height: getHeight(context) / 2,
+                width: getWidth(context),
+       child: PageView.builder(
                     controller: _pageController,
                     itemCount: onBoardingClassObject.noOfItem,
                     onPageChanged: (index) {
                       _viewModelOnBording.onPageChange(index);
                     },
-                    itemBuilder: (context, index) {
+           itemBuilder: (context, index) {
                       return OnBoardingPage(
                           onBoardingClassObject.onBoardingClass);
                     }),
@@ -138,7 +134,7 @@ class _OnBoardingState extends State<OnBoarding> {
                 },
                 icon: const Icon(Icons.arrow_back_ios)),
             SizedBox(
-              height: get_height(context) / FontManagerSize.s30,
+              height: getHeight(context) / FontManagerSize.s30,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -176,7 +172,7 @@ class _OnBoardingState extends State<OnBoarding> {
     //print('index====$index');
     if (i == index) {
       return Padding(
-        padding: EdgeInsets.all(FontManagerSize.s2),
+        padding: const EdgeInsets.all(FontManagerSize.s2),
         child: CircleAvatar(radius: 5, backgroundColor: ColorManager.primary),
       );
     } else {
@@ -224,12 +220,12 @@ class OnBoardingPage extends StatelessWidget {
           // ),ol2woplew
 
           Image.asset(AssetManager.onBoardLogo),
-          Image.asset(_sliderObject.onboarding_image!),
+          Image.asset(_sliderObject.onBoardingImage!),
           const SizedBox(height: AppSize.s20),
           Padding(
             padding: const EdgeInsets.all(AppPadding.p8),
             child: Text(
-              '${_sliderObject.onboarding_desc}',
+              '${_sliderObject.onBoardingDesc}',
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.headline1,
             ),
@@ -237,7 +233,7 @@ class OnBoardingPage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(AppPadding.p8),
             child: Text(
-              '${_sliderObject.onboarding_details}',
+              '${_sliderObject.onBoardingDetails}',
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.subtitle1,
             ),

@@ -1,4 +1,4 @@
-import 'package:clean_arch_app/Feature_Post/presentation/pages/Login/view_login/view_login.dart';
+/*import 'package:clean_arch_app/Feature_Post/presentation/pages/Login/view_login/view_login.dart';
 import 'package:clean_arch_app/Feature_Post/presentation/pages/Onbording/View_Onboarding/onbording.dart';
 import 'package:clean_arch_app/Feature_Post/presentation/pages/splash/splash.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +7,7 @@ import '../../Feature_Post/presentation/pages/GetxManagement/GetxMangment.dart';
 import '../../Feature_Post/presentation/pages/Home/Home.dart';
 import '../../Feature_Post/presentation/pages/LayoutBuilder/LayoutBuilder.dart';
 import 'StringManager.dart';
-/*
+
 class RoutesManager {
   static const String splashRoute = "/";
   static const String onBoardingRoute = "/onBoarding";

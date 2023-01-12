@@ -1,13 +1,11 @@
-import 'package:clean_arch_app/Feature_Post/presentation/pages/splash/splash.dart';
-
 
 class OnBoardingClass {
-  int? onboarding_id ;
-  String? onboarding_desc;
-  String? onboarding_details;
-  String? onboarding_image;
+  int? onBoardingId ;
+  String? onBoardingDesc;
+  String? onBoardingDetails;
+  String? onBoardingImage;
   OnBoardingClass(
-  {this.onboarding_id,this.onboarding_desc,this.onboarding_image,this.onboarding_details}
+  {this.onBoardingId,this.onBoardingDesc,this.onBoardingImage,this.onBoardingDetails}
       );
 }
 

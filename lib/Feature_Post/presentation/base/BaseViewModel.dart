@@ -1,5 +1,4 @@
 
-
 abstract class  BaseViewModel extends   BaseViewModelInput with   BaseViewModelOutput1
 {
 

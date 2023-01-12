@@ -3,7 +3,6 @@ import 'package:clean_arch_app/Feature_Post/presentation/pages/Login/view_login/
 import 'package:clean_arch_app/Feature_Post/presentation/pages/onbording/View_Onboarding/onbording.dart';
 import 'package:clean_arch_app/Feature_Post/presentation/pages/splash/splash.dart';
 
-import 'package:clean_arch_app/core/resource/RoutesManager.dart';
 import 'package:clean_arch_app/core/resource/ThemeManger.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -36,8 +35,8 @@ class MyApp extends StatelessWidget {
       init: Auth(),
       builder: ((controller) {
 
-        print('controller=');
-        print(controller.isAuth);
+        //print('controller=');
+        //print(controller.isAuth);
         return GetMaterialApp(
           title: 'Flutter Demo',
           theme: getApplicationTheme(),
@@ -47,17 +46,17 @@ class MyApp extends StatelessWidget {
           translations: LocaleLang(),
           //home: login(),
           home: controller.isAuth
-              ?  Home()
+              ?  const Home()
               : FutureBuilder(
                   future: controller.tryAutoLogin(),
                   builder: (context, authsnapshot)
               {
-                print('authsnapshot.connectionState');
-                print(authsnapshot.connectionState);
-                print(controller.token);
+               // print('authsnapshot.connectionState');
+               // print(authsnapshot.connectionState);
+              //  print(controller.token);
                  return  authsnapshot.connectionState == ConnectionState.waiting
-                          ? Splash()
-                           : login();
+                          ?const  Splash()
+                           : const login();
 
                          // : login();
               }

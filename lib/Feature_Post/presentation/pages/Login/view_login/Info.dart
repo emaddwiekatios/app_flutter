@@ -14,10 +14,10 @@ class Info {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['token'] = this.token;
-    data['userId'] = this.userId;
-    data['expiryDate'] = this.expiryDate;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['token'] = token;
+    data['userId'] = userId;
+    data['expiryDate'] = expiryDate;
     return data;
   }
 

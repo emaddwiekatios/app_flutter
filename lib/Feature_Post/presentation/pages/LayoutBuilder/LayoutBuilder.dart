@@ -33,7 +33,7 @@ class _GetLayoutBuilderState extends State<GetLayoutBuilder> {
                       ),
                     ),
                     Expanded(
-                      child: Container(
+                      child: SizedBox(
                           height: double.infinity,
                           //    width: get_width(context)/2,
                           //  color:Colors.transparent
@@ -93,9 +93,9 @@ class _GetLayoutBuilderState extends State<GetLayoutBuilder> {
                                       //Get.off(()=>Home() );
                                       //    Navigator.pushReplacementNamed(context, RoutesManager.onBoardingRoute);
                                     },
-                                    child: Text(
+                                    child: const Text(
                                       'Register',
-                                      style: const TextStyle(
+                                      style:  TextStyle(
                                           fontSize: FontManagerSize.s14),
                                     ),
                                   ),

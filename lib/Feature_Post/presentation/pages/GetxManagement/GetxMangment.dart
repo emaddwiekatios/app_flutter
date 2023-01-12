@@ -4,12 +4,11 @@ import 'package:clean_arch_app/core/resource/StringManager.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class GetxManagement extends StatelessWidget {
-  GetxManagement({Key? key}) : super(key: key);
+class getManagement extends StatelessWidget {
+  getManagement({Key? key}) : super(key: key);
   final HomeController _homeController =
       Get.put(HomeController(), permanent: true);
-  final HomeController _homeController2 =
-      Get.put(HomeController(), permanent: true);
+  //final HomeController _homeController2 =Get.put(HomeController(), permanent: true);
 TextEditingController contName =TextEditingController();
   TextEditingController contAge =TextEditingController();
   @override
@@ -20,7 +19,7 @@ TextEditingController contName =TextEditingController();
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('OBx'),
+            const Text('OBx'),
             Obx(() {
               return Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -46,7 +45,7 @@ TextEditingController contName =TextEditingController();
             }),
             const Text('GetBuilder'),
             // GetBuilder<HomeController()>(
-            Text('GetX'),
+            const Text('GetX'),
             GetX<HomeController>(
               init: HomeController(),
               builder: ((controller) {
@@ -73,7 +72,7 @@ TextEditingController contName =TextEditingController();
                 );
               }),
             ),
-            Text('GetBuilder'),
+            const Text('GetBuilder'),
             GetBuilder<HomeControllerGetBuilder>(
               init: HomeControllerGetBuilder(),
               builder: ((controller) {
@@ -115,26 +114,26 @@ TextEditingController contName =TextEditingController();
                         borderRadius:70,
                         borderWidth: 5);
                     },
-                    child: Text(' Show Snakbar')),
+                    child: const Text(' Show Snakbar')),
                 ElevatedButton(
                     onPressed: () {
                       Get.defaultDialog(title: 'Home'.tr,
                        // backgroundColor: Colors.tealAccent,
-                      cancel: Text('Candceled '),
+                      cancel: const Text('Candceled '),
                       onCancel: ()
                           {
-                            print('canceled');
+                            //print('canceled');
                             Navigator.pop(context);
                           },
                       onConfirm: ()
                           {
-                            print('ok');
+                         //   print('ok');
                           },
-                      confirm: Text('confirm')
+                      confirm: const Text('confirm')
                           );
 
                     },
-                    child: Text(' Show Delog')),
+                    child:const  Text(' Show Delog')),
               ],
             ),
           TextFormField(
@@ -143,7 +142,7 @@ TextEditingController contName =TextEditingController();
             showCursor: true,
             // readOnly: true,
             controller: contName,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
                 label: Text(StringManager.password),
                 hintText: StringManager.password,
                 //  prefix: Text(StringManager.userName),
@@ -159,7 +158,7 @@ TextEditingController contName =TextEditingController();
               showCursor: true,
               // readOnly: true,
               controller: contAge,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                   label: Text(StringManager.password),
                   hintText: StringManager.password,
                   //  prefix: Text(StringManager.userName),
@@ -172,12 +171,12 @@ TextEditingController contName =TextEditingController();
 
             ElevatedButton(
                 onPressed: () {
-                  Get.to(()=>Second(),arguments: {
+                  Get.to(()=> const Second(),arguments: {
                     "name":contName.text,
                     "age":contAge.text
                   });
                 },
-                child: Text('Go to next Page'))
+                child: const Text('Go to next Page'))
           ],
         ),
       ),

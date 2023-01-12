@@ -13,8 +13,8 @@ class StringManager {
   static const String userNameHint = "UserName@gmail.com";
   static const String password = "PassWord";
 
-  static const String Confirmpassword = "Confirmpassword";
-  static const String Confirmpasswordhint = "Password";
+  static const String confirmPassword = "Confirmpassword";
+  static const String confirmPasswordHint = "Password";
 
   static const String search = "Search";
 
@@ -22,7 +22,7 @@ class StringManager {
   static const String onBoardingSubTitle2 = "on_boarding_desc2";
   static const String onBoardingSubTitle3 = "on_boarding_desc3";
   static const String onBoardingSubTitle4 = "on_boarding_desc4";
-  static const String onBoardingdetails1 =
+  static const String onBoardingDetails1 =
       "High Quality Proiducts With T&C applies";
 
   static const String onBoardingdetails2 =
@@ -42,7 +42,7 @@ class StringManager {
   static const String forgetPassword = "forgot_password_text";
   static const String registerText = "register_text";
   static const String loading = "loading";
-  static const String retry_again = "retry_again";
+  static const String retryAgain = "retry_again";
   static const String ok = "ok";
   static const String emailHint = 'email_hint';
   static const String invalidEmail = "invalid_email";

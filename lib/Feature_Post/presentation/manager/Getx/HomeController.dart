@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 //GetX OBX
 class HomeController extends GetxController
 {
-  RxInt counter = 0.obs as RxInt;
+  RxInt counter = 0.obs ;
   void increase()
   {
     counter++;

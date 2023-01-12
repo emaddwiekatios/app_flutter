@@ -1,10 +1,6 @@
-import 'dart:async';
-import 'dart:convert';
-import 'dart:math';
 
 import 'package:clean_arch_app/Feature_Post/presentation/pages/Home/Home.dart';
 import 'package:clean_arch_app/Feature_Post/presentation/pages/Login/view_login/Auth.dart';
-import 'package:clean_arch_app/core/resource/AssetManager.dart';
 import 'package:clean_arch_app/core/resource/ColorManger.dart';
 import 'package:clean_arch_app/core/resource/FontManager.dart';
 import 'package:clean_arch_app/core/resource/MediaQuery.dart';
@@ -13,10 +9,9 @@ import 'package:clean_arch_app/core/resource/StyleManger.dart';
 import 'package:clean_arch_app/core/resource/ValueManger.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../viewModel_login/viewmodel_login.dart';
-import 'package:http/http.dart' as http;
+//import 'package:http/http.dart' as http;
 
 class login extends StatefulWidget {
   const login({Key? key}) : super(key: key);
@@ -72,10 +67,10 @@ class _loginState extends State<login> {
             children: [
               Container(
                 // transform: Matrix4.rotationZ(-8 * pi / 180),
-                height: get_height(context) / AppSize.s10,
-                width: get_width(context) / AppSize.s2,
+                height: getHeight(context) / AppSize.s10,
+                width: getWidth(context) / AppSize.s2,
                 decoration: BoxDecoration(
-                    gradient: LinearGradient(
+                    gradient: const LinearGradient(
                         colors: [Colors.yellow, Colors.orange],
                         begin: Alignment.topRight,
                         end: Alignment.topLeft),
@@ -93,12 +88,12 @@ class _loginState extends State<login> {
               Positioned(
                 top: 10,
                 child: Row(
-                  children: [
+                  children: const [
                     CircleAvatar(
                       radius: 10,
                       backgroundColor: Colors.blue,
                     ),
-                    CircleAvatar(
+                     CircleAvatar(
                       radius: 8,
                       backgroundColor: Colors.blue,
                     ),
@@ -113,7 +108,7 @@ class _loginState extends State<login> {
           ),
           // Image.asset(AssetManager.onBoardLogo),
           SizedBox(
-            height: get_height(context) / 15,
+            height: getHeight(context) / 15,
           ),
           GetBuilder<Auth>(
             init: Auth(),
@@ -124,7 +119,7 @@ class _loginState extends State<login> {
                   elevation: 30,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(AppSize.s20)),
-                  margin: EdgeInsets.all(AppSize.s10),
+                  margin: const EdgeInsets.all(AppSize.s10),
                   child: Padding(
                     padding: const EdgeInsets.all(AppSize.s28),
                     child: Column(
@@ -208,9 +203,9 @@ class _loginState extends State<login> {
                                             controllerLoginPasswordconfirm,
                                         decoration: InputDecoration(
                                             label: Text(StringManager
-                                                .Confirmpassword.tr),
+                                                .confirmPassword.tr),
                                             hintText: StringManager
-                                                .Confirmpassword.tr,
+                                                .confirmPassword.tr,
                                             //  prefix: Text(StringManager.userName),
                                             prefixIcon:
                                                 const Icon(Icons.password),
@@ -219,7 +214,7 @@ class _loginState extends State<login> {
                                                 : StringManager
                                                     .passwordError.tr,
                                             suffix: Text(StringManager
-                                                .Confirmpassword.tr),
+                                                .confirmPassword.tr),
                                             //  suffixText: StringManager.userName,
                                             suffixIcon: const Icon(
                                                 Icons.remove_red_eye_outlined)),
@@ -230,8 +225,8 @@ class _loginState extends State<login> {
                         // Text('${controller.errorMessage}'),
                         controller.isSignup
                             ? Container(
-                                height: get_height(context) / 20,
-                                width: get_width(context),
+                                height: getHeight(context) / 20,
+                                width: getWidth(context),
                                 margin:
                                     const EdgeInsets.all(FontManagerSize.s8),
                                 child: StreamBuilder<bool>(
@@ -249,7 +244,7 @@ class _loginState extends State<login> {
                                                       : ColorManager.grey)),
                                       onPressed: (snapshot.data ?? false)
                                           ? () async {
-                                              print('insiude button');
+                                              //print('insiude button');
                                               String user =
                                                   controllerLoginUserName.text
                                                       .toString();
@@ -263,7 +258,7 @@ class _loginState extends State<login> {
                                               if (controller
                                                       .errorMessage!.length >
                                                   3) {
-                                                print('inside error button');
+                                                //print('inside error button');
                                                 Get.defaultDialog(
                                                   title: 'The User Error',
                                                   content: Text(
@@ -280,7 +275,7 @@ class _loginState extends State<login> {
                                                           Navigator.pop(
                                                               context);
                                                         },
-                                                        icon: Icon(Icons.done),
+                                                        icon: const Icon(Icons.done),
                                                       ),
                                                       ElevatedButton.icon(
                                                           label: const Text(
@@ -290,7 +285,7 @@ class _loginState extends State<login> {
                                                                 context);
                                                           },
                                                           icon:
-                                                              Icon(Icons.abc)),
+                                                              const Icon(Icons.abc)),
                                                     ],
                                                   ),
                                                 );
@@ -322,8 +317,8 @@ class _loginState extends State<login> {
                                 ),
                               )
                             : Container(
-                                height: get_height(context) / 20,
-                                width: get_width(context),
+                                height: getHeight(context) / 20,
+                                width: getWidth(context),
                                 margin:
                                     const EdgeInsets.all(FontManagerSize.s8),
                                 child: StreamBuilder<bool>(
@@ -341,7 +336,7 @@ class _loginState extends State<login> {
                                                       : ColorManager.grey)),
                                       onPressed: (snapshot.data ?? false)
                                           ? () async {
-                                              print('insiude button sign in');
+                                            //  print('insiude button sign in');
                                               String user =
                                                   controllerLoginUserName.text
                                                       .toString();
@@ -356,7 +351,7 @@ class _loginState extends State<login> {
                                               if (controller
                                                       .errorMessage!.length >
                                                   3) {
-                                                print('inside error button');
+                                                //print('inside error button');
                                                 Get.defaultDialog(
                                                   title: 'The User Error',
                                                   content: Text(
@@ -373,7 +368,7 @@ class _loginState extends State<login> {
                                                           Navigator.pop(
                                                               context);
                                                         },
-                                                        icon: Icon(Icons.done),
+                                                        icon: const Icon(Icons.done),
                                                       ),
                                                       ElevatedButton.icon(
                                                           label: const Text(
@@ -383,7 +378,7 @@ class _loginState extends State<login> {
                                                                 context);
                                                           },
                                                           icon:
-                                                              Icon(Icons.abc)),
+                                                              const Icon(Icons.abc)),
                                                     ],
                                                   ),
                                                 );
@@ -403,7 +398,7 @@ class _loginState extends State<login> {
                                                         // controllerLoginPasswordconfirm.clear();
                                                         Navigator.pop(context);
                                                       },
-                                                      icon: Icon(Icons
+                                                      icon: const Icon(Icons
                                                           .personal_injury)),
                                                 );
                                               }

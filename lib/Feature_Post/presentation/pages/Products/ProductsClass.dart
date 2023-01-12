@@ -22,7 +22,7 @@ class ProductClass {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['productId'] = productId;
     data['productName'] = productName;
     data['productImage']= productImage;

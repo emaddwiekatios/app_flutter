@@ -1,4 +1,7 @@
+
+
 import 'package:clean_arch_app/Feature_Post/presentation/pages/Login/view_login/Info.dart';
+import 'package:get/get.dart';
 import 'package:get/state_manager.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
@@ -6,6 +9,8 @@ import 'dart:convert';
 
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../splash/splash.dart';
 
 class Auth extends GetxController {
   bool isSignup = false;
@@ -193,7 +198,7 @@ changeistoken(info.token.toString());
       _authTime = Timer(
         const Duration(seconds: 0),
             () {
-          // Navigate to your favorite place
+            //  Get.to(()=>Splash());
         },
 
       );

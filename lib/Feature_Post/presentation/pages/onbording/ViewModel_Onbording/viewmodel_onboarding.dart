@@ -7,7 +7,7 @@ import 'package:clean_arch_app/core/resource/StringManager.dart';
 import '../../../base/BaseViewModel.dart';
 
 class ViewModelOnBording extends BaseViewModel
-    with onBoardViewModelInput, onBoardVMoutput1 {
+    with onBoardViewModelInput, onboardVMoutput1 {
    late List<OnBoardingClass> _list;
   int _currentIndex = 0;
   //final  _streamControllerNew =StreamController<OnBoardingClassObject>();
@@ -69,7 +69,7 @@ class ViewModelOnBording extends BaseViewModel
   Sink get getOnBoardingInput =>  _streamControllerNew.sink;
 
   @override
-  Stream<OnBoardingClassObject> get getOnbordingOutput =>
+  Stream<OnBoardingClassObject> get get_onbordoutbut =>
       _streamControllerNew.stream.map((slideViewObject) => slideViewObject);
   @override
   int goNext() {
@@ -95,8 +95,8 @@ abstract class onBoardViewModelInput {
   Sink get getOnBoardingInput;
 }
 
-abstract class onBoardVMoutput1 {
-  Stream<OnBoardingClassObject> get getOnbordingOutput;
+abstract class onboardVMoutput1 {
+  Stream<OnBoardingClassObject> get get_onbordoutbut;
 }
 
 

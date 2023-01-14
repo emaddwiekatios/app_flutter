@@ -6,6 +6,7 @@ import 'package:clean_arch_app/core/resource/ColorManger.dart';
 import 'package:clean_arch_app/core/resource/FontManager.dart';
 import 'package:clean_arch_app/core/resource/MediaQuery.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import '../../manager/Language/LocaleController.dart';
 //import '../Products/ProductsClass.dart';
@@ -165,7 +166,10 @@ Widget getDrawer(context) {
               title: Text('Logout'.tr),
               trailing: Text('Logout'.tr),
               onTap: () {
-                _authlogout.logout();
+
+                Navigator.of(context).pop();
+              //  Navigator.pushReplacementNamed(context,'/');
+                 _authlogout.logout();
 
               }),
           const Divider(

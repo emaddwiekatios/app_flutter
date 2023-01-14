@@ -60,7 +60,8 @@ class _OnBoardingState extends State<OnBoarding> {
             SizedBox(
               height: getHeight(context),
               child: StreamBuilder<OnBoardingClassObject>(
-                  stream:_viewModelOnBording.get_onbordoutbut, //<SliderViewObject>,
+                  stream:
+             _viewModelOnBording.get_onbordoutbut,///.get_onbordoutbut, //<SliderViewObject>,
                   builder: (context, snapShot) {
                     return _getContentWidget(snapShot.data);
                   }),

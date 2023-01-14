@@ -3,6 +3,7 @@ const  String imagePath = "images";
 const String imagePathCat = "images/category";
 const String imagePathHome = "images/home";
 
+const String imagePathlogin = "images/login";
 
 class AssetManager {
   static const String splashLogo = "$imagePath/Splash/splash.png";
@@ -43,5 +44,7 @@ class AssetManager {
   static const String homeadv3 = "$imagePathHome/adv3.jfif";
   static const String homeadv4 = "$imagePathHome/adv4.jpg";
   static const String homeadv5 = "$imagePathHome/adv5.jpg";
+
+  static const String login = "$imagePathlogin/login.png";
 }
 

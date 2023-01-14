@@ -1,3 +1,5 @@
+//import 'dart:html';
+
 import 'package:clean_arch_app/Feature_Post/presentation/manager/Language/Locale.dart';
 import 'package:clean_arch_app/Feature_Post/presentation/pages/Login/view_login/Auth.dart';
 import 'package:clean_arch_app/Feature_Post/presentation/pages/onbording/View_Onboarding/onbording.dart';
@@ -9,6 +11,7 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Feature_Post/presentation/pages/Home/Home.dart';
+import 'Feature_Post/presentation/pages/Home/PreHome.dart';
 import 'Feature_Post/presentation/pages/Login/view_login/view_login.dart';
 
 SharedPreferences? prefs;
@@ -46,26 +49,28 @@ class MyApp extends StatelessWidget {
           translations: LocaleLang(),
           //home: login(),
           home: controller.isAuth
-              ?  const Home()
-              : FutureBuilder(
+              ?   PreHome():
+               FutureBuilder(
                   future: controller.tryAutoLogin(),
                   builder: (context, authsnapshot)
-              {
-               // print('authsnapshot.connectionState');
-               // print(authsnapshot.connectionState);
-              //  print(controller.token);
-                 return  authsnapshot.connectionState == ConnectionState.waiting
-                          ?const  Splash()
-                           : const login();
+               {print(' controller.isAuth=${ controller.isAuth}');
+                print('authsnapshot connectionState${authsnapshot.connectionState}');
+                 return
 
+                   authsnapshot.connectionState ==  ConnectionState.waiting
+                          ? const Splash()
+                          : const login();
                          // : login();
               }
           ),
+
           routes: {
+
             '/Home': (context) => const Home(),
             '/Splash': (context) => const Splash(),
             '/Onboarding': (context) => const OnBoarding(),
             '/login': (context) => const login(),
+
           },
         );
       }),

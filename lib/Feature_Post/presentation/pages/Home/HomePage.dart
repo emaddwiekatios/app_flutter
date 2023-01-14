@@ -11,6 +11,7 @@ import 'package:get/get.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
 import '../../../../core/resource/StringManager.dart';
+import '../Login/view_login/Auth.dart';
 import '../Products/ProductDetails.dart';
 import '../Products/ProductsClass.dart';
 import 'Home.dart';
@@ -26,7 +27,7 @@ Color colorOne = Colors.amber;
 Color colorTwo = ColorManager.primary;
 Color colorThree = ColorManager.primary;
 
-
+Auth _auth =Get.put(Auth());
 late ProductClass instProd ;
 List<ProductClass> instProdList=[];
 
@@ -141,14 +142,14 @@ loadcategoryinit();
           children: <Widget>[
 
 
-            Positioned(
-              top:0,
-              left:0,right: 0,
-
-              child: Container(
-                  height: getHeight(context)/FontManagerSize.s17,
-                  color:ColorManager.primary),
-            ),
+            // Positioned(
+            //   top:0,
+            //   left:0,right: 0,
+            //
+            //   child: Container(
+            //       height: getHeight(context)/FontManagerSize.s17,
+            //       color:ColorManager.primary),
+            // ),
             Positioned(
               top: AppSize.s4,
               left: -AppSize.s4,
@@ -189,9 +190,10 @@ loadcategoryinit();
                       color: ColorManager.grey2,
                     ),
                     onPressed: () {
+
                       //print('inside button');
                       // FirebaseAuth.instance.signOut();
-                      Navigator.pop(context);
+                    //  Navigator.pop(context);
                       //  Navigator.popAndPushNamed(context, "/SignIn");
 
                       //Navigator.pushReplacementNamed(context, "/SignIn");
@@ -385,7 +387,7 @@ class GetPortraitOrient extends StatelessWidget {
       children: [
 
         Padding(
-          padding: const EdgeInsets.only(left:AppSize.s4,right: AppSize.s4),
+          padding: const EdgeInsets.only(left:AppSize.s8,right: AppSize.s8),
           child: TextFormField(
             showCursor: true,
             // readOnly: true,
@@ -404,7 +406,7 @@ class GetPortraitOrient extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(left:AppSize.s4,right: AppSize.s4),
+          padding: const EdgeInsets.only(left:AppSize.s8,right: AppSize.s8),
           child: Container(
             margin: const EdgeInsets.all(AppSize.s0_5),
             decoration: BoxDecoration(
@@ -574,7 +576,7 @@ class GetPortraitOrient extends StatelessWidget {
 
                             loadProductinit();
 
-                          },icon:const Icon(Icons.heart_broken_rounded))
+                          },icon:const Icon(Icons.add))
 
                           )
                         ],

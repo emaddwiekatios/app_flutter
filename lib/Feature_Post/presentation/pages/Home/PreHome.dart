@@ -25,8 +25,9 @@ class _PreHomeState extends State<PreHome> {
 
       ][ _currentIndex],
       bottomNavigationBar:
-      SizedBox(height:FontManagerSize.s50, child:BottomNavigationBar(
-
+      SizedBox(height:FontManagerSize.s40, child:BottomNavigationBar(
+        selectedFontSize: AppSize.s10,
+        unselectedFontSize: AppSize.s10,
 
           currentIndex: _currentIndex,
           onTap: (int index) {
@@ -58,7 +59,9 @@ class _PreHomeState extends State<PreHome> {
               icon: const Icon(Icons.favorite_border,color: Colors.black,size: AppSize.s18,),
               label: 'Favorite',
             ),
-            BottomNavigationBarItem( activeIcon:  const Icon(Icons.search,color: Colors.white,size: AppSize.s14,),
+            BottomNavigationBarItem(
+
+              activeIcon:  const Icon(Icons.search,color: Colors.white,size: AppSize.s14,),
 
               backgroundColor: ColorManager.primary,
               icon: Icon(Icons.search,color: Colors.black,size: AppSize.s18,),

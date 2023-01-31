@@ -279,9 +279,9 @@ class _widgetCategoryState extends State<widgetCategory> {
   @override
   Widget build(BuildContext context) {
 
-    return SizedBox(
-      //color: Colors.red,
-      height: getHeight(context)/AppSize.s9,
+    return Container(
+    //  color: Colors.red,
+      height: getHeight(context)/FontManagerSize.s7,
       child: Column(
         children: [
           Padding(
@@ -423,7 +423,7 @@ class GetPortraitOrient extends StatelessWidget {
           padding: const EdgeInsets.only(left:AppSize.s4,right: AppSize.s4),
           child: SizedBox(
             //  color: Colors.red,
-            height: getHeight(context) / FontManagerSize.s6,
+            height: getHeight(context) / FontManagerSize.s7,
             width: getWidth(context),
             child: ListView.builder(
                 scrollDirection: Axis.horizontal,
@@ -433,19 +433,23 @@ class GetPortraitOrient extends StatelessWidget {
                 }),
           ),
         ),
-         //Text('Products'),
+         const Padding(
+           padding: EdgeInsets.only(left:AppSize.s12,right: AppSize.s4),
+           child:  Text('Products'),
+         ),
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.only(left:AppSize.s4,right: AppSize.s4),
+            padding: const EdgeInsets.only(left:AppSize.s0,right: AppSize.s0),
             child: Container(
+              //margin: EdgeInsets.zero,
                 decoration:  BoxDecoration(
 
                     borderRadius: BorderRadius.circular(AppSize.s20),
 
-                   //color: Colors.blue,
+                  //s color: Colors.blue,
                     ),
                 width: getWidth(context),
-                height: getHeight(context), //FontManagerSize.s3,
+                height: getHeight(context)/FontManagerSize.s2,
 
                 child: GridView.builder(
                   itemBuilder: (context, int index) {
@@ -458,7 +462,7 @@ class GetPortraitOrient extends StatelessWidget {
                       child: Stack(
                         children: [
                       Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.all(AppSize.s2),
                             child: Hero(
                               tag: instProdList[index].productId,
                               child: Card(

@@ -258,8 +258,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                               child: Text(
                                 'Selected Color',
                                 style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w500,
+                                    fontSize: AppSize.s16,
+                                    fontWeight: FontWeight.w400,
                                     color: ColorManager.primary),
                               ),
                             ),
@@ -417,15 +417,15 @@ class _ProductDetailsState extends State<ProductDetails> {
                           Padding(
                             padding: const EdgeInsets.only(
                                 left: AppSize.s12,
-                                top: AppSize.s8,
+                                top: AppSize.s4,
                                 right: AppSize.s8),
                             child: Align(
                               alignment: Alignment.topLeft,
                               child: Text(
                                 'Selected Sized',
                                 style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w500,
+                                    fontSize: AppSize.s16,
+                                    fontWeight: FontWeight.w400,
                                     color: ColorManager.primary),
                               ),
                             ),
@@ -434,7 +434,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: <Widget>[
                               Padding(
-                                padding: const EdgeInsets.all(AppSize.s4),
+                                padding: const EdgeInsets.only(left: AppSize.s4),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: <Widget>[
@@ -585,25 +585,25 @@ class _ProductDetailsState extends State<ProductDetails> {
                             ],
                           ),
                           const SizedBox(
-                            height: AppSize.s10,
+                            height: AppSize.s6,
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               getElevationButton(
 
-                                parFontSize: 15,
+                                parFontSize: FontManagerSize.s14,
                                 parBorderWidth: 1,
-                                 parBorderRadius: 10,
+                                 parBorderRadius: AppSize.s10,
                                 parForegroundColor: ColorManager.primary,
                                 parBackGroundColor: Colors.white,
-                                onTabButton: () {},
+                                onTabButton: () {print('add');},
                                 nameButton: 'ADD To Carts',
                               ),
                               getElevationButton(
-                                parFontSize: 15,
+                                parFontSize: FontManagerSize.s14,
                                 parBorderWidth: 1,
-                                parBorderRadius: 10,
+                                parBorderRadius: AppSize.s10,
                                 parForegroundColor: Colors.white,
                                 parBackGroundColor: ColorManager.primary,
                                 onTabButton: () {},

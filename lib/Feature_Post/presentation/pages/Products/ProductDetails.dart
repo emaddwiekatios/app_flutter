@@ -585,7 +585,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                             ],
                           ),
                           const SizedBox(
-                            height: AppSize.s6,
+                            height: AppSize.s4,
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,

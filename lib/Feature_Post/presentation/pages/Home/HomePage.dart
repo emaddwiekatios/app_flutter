@@ -122,6 +122,7 @@ void loadProductinit() {
   instProdList.add(ProductClass(productId: 8, productName: 'Bodtty', productImage: AssetManager.mancat5, productPrice: 4060, productCat: 'Clothes', productEntryDate: DateTime.now()));
  //emad dupitems
  //fffffffff
+ // emad   nbjnj
   duplicateItems = instProdList;
 }
 

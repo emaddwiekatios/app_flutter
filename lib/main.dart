@@ -1,4 +1,5 @@
 //import 'dart:html';
+import 'package:device_preview/device_preview.dart';
 
 import 'package:clean_arch_app/Feature_Post/presentation/manager/Language/Locale.dart';
 import 'package:clean_arch_app/Feature_Post/presentation/pages/Login/view_login/Auth.dart';
@@ -20,8 +21,21 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   prefs = await SharedPreferences.getInstance();
   //await GetStorage.init();
-
+/////fdfdfdfdfdfdfd
+  ////updaedddddd
   runApp(const MyApp());
+     //emad 15/2/2023
+  //   runApp(
+  //     DevicePreview(
+  //       enabled: true,
+  //       tools: [
+  //         ...DevicePreview.defaultTools,
+  //        // const CustomPlugin(),
+  //       ],
+  //       builder: (context) => const MyApp(),
+  //     ),
+  //   );
+
 }
 
 class MyApp extends StatelessWidget {

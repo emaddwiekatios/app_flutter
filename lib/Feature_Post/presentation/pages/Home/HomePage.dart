@@ -29,13 +29,23 @@ Color colorThree = ColorManager.primary;
 
 Auth _auth =Get.put(Auth());
 late ProductClass instProd ;
-List<ProductClass> instProdList=[];
+
 
 
 late CategoryClass instCat ;
  List<CategoryClass> instCatList=[];
 
 
+
+List<ProductClass> instProdList=[];
+//List<ProductClass> Shackslist = <ProductClass>[];
+//List<ProductClass> listtemp;
+List<ProductClass> dummyListData =  <ProductClass>[];
+List<ProductClass> duplicateItems2 =  <ProductClass>[];
+List<ProductClass> duplicateItems =  <ProductClass>[];
+List<ProductClass> dummySearchList =  <ProductClass>[];
+
+TextEditingController controllerSearch =TextEditingController();
 
 void loadcategoryinit() {
   instCatList.clear();
@@ -110,7 +120,7 @@ void loadProductinit() {
   instProdList.add(ProductClass(productId: 6, productName: 'Jaketttt', productImage: AssetManager.mancat3, productPrice: 560, productCat: 'Clothes', productEntryDate: DateTime.now()));
   instProdList.add(ProductClass(productId: 7, productName: 'Jeattns', productImage: AssetManager.mancat4, productPrice: 1600, productCat: 'Clothes', productEntryDate: DateTime.now()));
   instProdList.add(ProductClass(productId: 8, productName: 'Bodtty', productImage: AssetManager.mancat5, productPrice: 4060, productCat: 'Clothes', productEntryDate: DateTime.now()));
-
+  duplicateItems = instProdList;
 }
 
 class _HomePageState extends State<HomePage> {
@@ -307,7 +317,15 @@ class _widgetCategoryState extends State<widgetCategory> {
   }
 }
 
-class GetCarouselSlider extends StatelessWidget {
+class GetCarouselSlider extends StatefulWidget {
+
+  GetCarouselSlider({Key? key}) : super(key: key);
+
+  @override
+  State<GetCarouselSlider> createState() => _GetCarouselSliderState();
+}
+
+class _GetCarouselSliderState extends State<GetCarouselSlider> {
   //class ImageSliderDemo extends StatelessWidget {
   final List<String> imgList = [
     AssetManager.homeadv1,
@@ -321,7 +339,6 @@ class GetCarouselSlider extends StatelessWidget {
     // AssetManager.splashLogo
   ];
 
-  GetCarouselSlider({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -376,9 +393,48 @@ class GetCarouselSlider extends StatelessWidget {
   }
 }
 
-class GetPortraitOrient extends StatelessWidget {
+class GetPortraitOrient extends StatefulWidget {
   const GetPortraitOrient({Key? key}) : super(key: key);
 
+  @override
+  State<GetPortraitOrient> createState() => _GetPortraitOrientState();
+}
+
+class _GetPortraitOrientState extends State<GetPortraitOrient> {
+
+  void filterSearchResults(String query) {
+    print(query);
+    print(duplicateItems);
+
+    dummySearchList = duplicateItems;
+    if (query.isNotEmpty) {
+      print('inside if');
+      dummyListData.clear();
+      // List<Clients> dummyListData = List<Clients>();
+      dummySearchList.forEach((item) {
+        //print(item['Payment_name']);
+        if (item.productName.toUpperCase().contains(query.toUpperCase()) ||
+            item.productName.contains(query)) {
+          // print('inside if ${item['Payment_name']}');
+          dummyListData.add(item);
+        }
+      });
+      setState(() {
+        //  Shackslist=null;
+        instProdList = dummyListData;
+      });
+      print('the list search${instProdList}');
+      return;
+    } else {
+      setState(() {
+        //Shackslist.clear();
+        instProdList = duplicateItems;
+      });
+    }
+
+    print('the list search${instProdList}');
+  }
+//eeeeeeeeeee//////
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -389,18 +445,24 @@ class GetPortraitOrient extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(left:AppSize.s8,right: AppSize.s8),
           child: TextFormField(
+            onChanged: (value) {
+              print('inside change$value');
+              filterSearchResults(value);
+
+            },
             showCursor: true,
             // readOnly: true,
-            //controller: controllerLoginUserName,
+            controller: controllerSearch,
             decoration: InputDecoration(
                 label: Text(StringManager.search.tr),
-                hintText: StringManager.userNameHint.tr,
+                hintText: StringManager.search.tr,
                 //  prefix: Text(StringManager.userName),
-                prefixIcon: const Icon(Icons.search),
+                prefixIcon:  IconButton(
+                  icon  :Icon(Icons.search), onPressed: ()=>filterSearchResults(controllerSearch.text),),
                 // errorText: (snapshot.data ?? true)
                 //     ? null
                 //     : StringManager.usernameError,
-                suffix: Text(StringManager.userName.tr),
+                suffix: Text(StringManager.search.tr),
                 //  suffixText: StringManager.userName,
                 suffixIcon: const Icon(Icons.remove_red_eye_outlined)),
           ),

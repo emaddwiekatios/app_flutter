@@ -292,9 +292,9 @@ class _widgetCategoryState extends State<widgetCategory> {
   @override
   Widget build(BuildContext context) {
 
-    return Container(
-    //  color: Colors.red,
-      height: getHeight(context)/FontManagerSize.s7,
+    return SizedBox(
+      //color: Colors.red,
+      height: getHeight(context)/AppSize.s9,
       child: Column(
         children: [
           Padding(
@@ -467,8 +467,15 @@ class _GetPortraitOrientState extends State<GetPortraitOrient> {
                 //     : StringManager.usernameError,
                 suffix: Text(StringManager.search.tr),
                 //  suffixText: StringManager.userName,
-                suffixIcon: const Icon(Icons.remove_red_eye_outlined)),
+                suffixIcon: IconButton(
+                icon  :const Icon(Icons.cancel), onPressed: (){
+                  print(controllerSearch.text);
+                  controllerSearch.clear();
+                  filterSearchResults(controllerSearch.text);
+                  print(controllerSearch.text);
+                }),
           ),
+        ),
         ),
         Padding(
           padding: const EdgeInsets.only(left:AppSize.s8,right: AppSize.s8),
@@ -488,7 +495,7 @@ class _GetPortraitOrientState extends State<GetPortraitOrient> {
           padding: const EdgeInsets.only(left:AppSize.s4,right: AppSize.s4),
           child: SizedBox(
             //  color: Colors.red,
-            height: getHeight(context) / FontManagerSize.s7,
+            height: getHeight(context) / FontManagerSize.s6,
             width: getWidth(context),
             child: ListView.builder(
                 scrollDirection: Axis.horizontal,
@@ -498,23 +505,19 @@ class _GetPortraitOrientState extends State<GetPortraitOrient> {
                 }),
           ),
         ),
-         const Padding(
-           padding: EdgeInsets.only(left:AppSize.s12,right: AppSize.s4),
-           child:  Text('Products'),
-         ),
+         //Text('Products'),
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.only(left:AppSize.s0,right: AppSize.s0),
+            padding: const EdgeInsets.only(left:AppSize.s4,right: AppSize.s4),
             child: Container(
-              //margin: EdgeInsets.zero,
                 decoration:  BoxDecoration(
 
                     borderRadius: BorderRadius.circular(AppSize.s20),
 
-                  //s color: Colors.blue,
+                   //color: Colors.blue,
                     ),
                 width: getWidth(context),
-                height: getHeight(context)/FontManagerSize.s2,
+                height: getHeight(context), //FontManagerSize.s3,
 
                 child: GridView.builder(
                   itemBuilder: (context, int index) {
@@ -527,7 +530,7 @@ class _GetPortraitOrientState extends State<GetPortraitOrient> {
                       child: Stack(
                         children: [
                       Padding(
-                            padding: const EdgeInsets.all(AppSize.s2),
+                            padding: const EdgeInsets.all(8.0),
                             child: Hero(
                               tag: instProdList[index].productId,
                               child: Card(

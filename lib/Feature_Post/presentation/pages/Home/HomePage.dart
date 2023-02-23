@@ -46,6 +46,10 @@ List<ProductClass> dummySearchList =  <ProductClass>[];
 TextEditingController controllerSearch =TextEditingController();
 bool isViewAll=true;
 String viewall='View All';
+String titlePage='Home';
+
+int? indexParameter;
+
 void loadcategoryinit() {
   instCatList.clear();
   instCatList.add(
@@ -249,9 +253,9 @@ loadcategoryinit();
               top: MediaQuery.of(context).size.height /FontManagerSize.s50
               ,
               left: MediaQuery.of(context).size.width / 2 - 50,
-              child: Text('Home'.tr
+              child: Text(titlePage,
                 //AppLocalizations.of(context).translate('Details'),
-                ,style:const TextStyle(fontSize: FontManagerSize.s24, fontWeight: FontWeight.bold),
+                style:const TextStyle(fontSize: FontManagerSize.s24, fontWeight: FontWeight.bold),
               ),
             ),
           ],
@@ -287,59 +291,59 @@ class MyPainter extends CustomPainter {
   }
 }
 
-class widgetCategory extends StatefulWidget {
-   widgetCategory({Key? key,required this.instCat}) : super(key: key);
-CategoryClass instCat;
-
-  @override
-  State<widgetCategory> createState() => _widgetCategoryState();
-}
-
-class _widgetCategoryState extends State<widgetCategory> {
-
-
-  @override
-  Widget build(BuildContext context) {
-
-    return SizedBox(
-
-      height: getHeight(context)/AppSize.s9,
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left:AppSize.s8,right:AppSize.s8),
-            child: GestureDetector(
-              onTap: ()
-              {
-
-
-
-
-              },
-              child: Card(
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                    //side: BorderSide(color: ColorManager.primary, width: AppSize.s0_5),
-                    borderRadius: BorderRadius.circular(270)),
-                child:  CircleAvatar(
-                  foregroundImage: ExactAssetImage(widget.instCat.categoryImage),
-                  backgroundColor: ColorManager.primary.withOpacity(.2),
-                  radius: FontManagerSize.s30,
-                    // backgroundImage: ExactAssetImage(AssetManager),
-                ),
-              ),
-            ),
-          ),
-           Text(widget.instCat.categoryName)
-          //  backgroundImage:  (AssetManager.onBoarding3,fit: BoxFit.cover))
-        ],
-      ),
-    );
-  }
-
-
-
-}
+// class widgetCategory extends StatefulWidget {
+//    widgetCategory({Key? key,required this.instCat}) : super(key: key);
+// CategoryClass instCat;
+//
+//   @override
+//   State<widgetCategory> createState() => _widgetCategoryState();
+// }
+//
+// class _widgetCategoryState extends State<widgetCategory> {
+//
+//
+//   @override
+//   Widget build(BuildContext context) {
+//
+//     return SizedBox(
+//
+//       height: getHeight(context)/AppSize.s9,
+//       child: Column(
+//         children: [
+//           Padding(
+//             padding: const EdgeInsets.only(left:AppSize.s8,right:AppSize.s8),
+//             child: GestureDetector(
+//               onTap: ()
+//               {
+//
+//
+//
+//
+//               },
+//               child: Card(
+//                 elevation: 0,
+//                 shape: RoundedRectangleBorder(
+//                     //side: BorderSide(color: ColorManager.primary, width: AppSize.s0_5),
+//                     borderRadius: BorderRadius.circular(270)),
+//                 child:  CircleAvatar(
+//                   foregroundImage: ExactAssetImage(widget.instCat.categoryImage),
+//                   backgroundColor: ColorManager.primary.withOpacity(.2),
+//                   radius: FontManagerSize.s30,
+//                     // backgroundImage: ExactAssetImage(AssetManager),
+//                 ),
+//               ),
+//             ),
+//           ),
+//            Text(widget.instCat.categoryName)
+//           //  backgroundImage:  (AssetManager.onBoarding3,fit: BoxFit.cover))
+//         ],
+//       ),
+//     );
+//   }
+//
+//
+//
+// }
 
 class GetCarouselSlider extends StatefulWidget {
 
@@ -425,8 +429,9 @@ class GetPortraitOrient extends StatefulWidget {
 }
 
 class _GetPortraitOrientState extends State<GetPortraitOrient> {
-  void filterSearchResultsCat(String query) {
-    print(query);
+  void filterSearchResultsCat(String query)   {
+
+print('insdie filter');
     dummySearchList = duplicateItems;
     if (query.isNotEmpty) {
       dummyListData.clear();
@@ -439,18 +444,26 @@ class _GetPortraitOrientState extends State<GetPortraitOrient> {
         }
       });
       setState(() {
-        print('setState1');
+         titlePage=query;
         instProdList = dummyListData;
-        print(instProdList.length);
+
+        print('titlePage');
+        print(titlePage);
+
       });
       return;
     } else {
       setState(() {
+        titlePage=query;
         print('setState2');
         instProdList = duplicateItems;
-        print(instProdList.length);
+        indexParameter=null;
+
+
       });
     }
+
+
   }
   void filterSearchResults(String query) {
     dummySearchList = duplicateItems;
@@ -471,6 +484,7 @@ class _GetPortraitOrientState extends State<GetPortraitOrient> {
     } else {
       setState(() {
         instProdList = duplicateItems;
+        indexParameter=null;
       });
     }
   }
@@ -488,7 +502,6 @@ class _GetPortraitOrientState extends State<GetPortraitOrient> {
           padding: const EdgeInsets.only(left:AppSize.s8,right: AppSize.s8),
           child: TextFormField(
             onChanged: (value) {
-              print('inside change$value');
               filterSearchResults(value);
 
             },
@@ -508,10 +521,10 @@ class _GetPortraitOrientState extends State<GetPortraitOrient> {
                 //  suffixText: StringManager.userName,
                 suffixIcon: IconButton(
                 icon  :const Icon(Icons.cancel), onPressed: (){
-                  print(controllerSearch.text);
+
                   controllerSearch.clear();
                   filterSearchResults(controllerSearch.text);
-                  print(controllerSearch.text);
+
                 }),
           ),
         ),
@@ -519,8 +532,8 @@ class _GetPortraitOrientState extends State<GetPortraitOrient> {
 
         Padding(
           padding: const EdgeInsets.only(left:AppSize.s4,right: AppSize.s4),
-          child: Container(
-           // color: Colors.red,
+          child:Container(
+            // color: Colors.red,
             height: getHeight(context) / FontManagerSize.s10,
             width: getWidth(context),
             child: ListView.builder(
@@ -538,19 +551,43 @@ class _GetPortraitOrientState extends State<GetPortraitOrient> {
                             onTap: ()
                             {
 
-                              filterSearchResultsCat(instCatList[index].categoryName);
+
+
+                              setState(() {
+                                filterSearchResultsCat(instCatList[index].categoryName);
+                                indexParameter=index;
+                              });
                             },
-                            child: Card(
-                              elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                //side: BorderSide(color: ColorManager.primary, width: AppSize.s0_5),
-                                  borderRadius: BorderRadius.circular(270)),
-                              child:  CircleAvatar(
-                                foregroundImage: ExactAssetImage(instCatList[index].categoryImage),
-                                backgroundColor: ColorManager.primary.withOpacity(.2),
-                                radius: FontManagerSize.s30,
-                                // backgroundImage: ExactAssetImage(AssetManager),
-                              ),
+                            child: Stack(
+                              children: [
+                            Card(
+                                  elevation: 0,
+                                  shape: RoundedRectangleBorder(
+                                      side: index==indexParameter ? BorderSide(color: Colors.grey, width: AppSize.s1):
+                                      BorderSide(color: Colors.transparent, width: AppSize.s0),
+                                      borderRadius: BorderRadius.circular(270)),
+                                  child:  CircleAvatar(
+                                    foregroundImage: ExactAssetImage(instCatList[index].categoryImage),
+                                    backgroundColor: ColorManager.primary.withOpacity(.2),
+                                    radius: FontManagerSize.s30,
+                                    // backgroundImage: ExactAssetImage(AssetManager),
+                                  ),
+                                ),
+                                Positioned(
+                                  right:10,
+                                  top:5,
+                                  child:  index==indexParameter ?Container(
+                                    height: 10,
+                                    width: 10,
+                                    decoration: BoxDecoration(
+                                      color: Colors.green,
+                                      borderRadius: BorderRadius.circular(250)
+                                    ),
+
+                                  ):Container(),
+                                ),
+
+                              ],
                             ),
                           ),
                         ),
@@ -560,9 +597,12 @@ class _GetPortraitOrientState extends State<GetPortraitOrient> {
                     ),
                   );
 
-                    //Center(child: widgetCategory( instCat: instCatList[index]));
+                  //Center(child: widgetCategory( instCat: instCatList[index]));
                 }),
-          ),
+          )
+
+
+
         ),
        isViewAll? Padding(
           padding: const EdgeInsets.only(left:AppSize.s8,right: AppSize.s8),
@@ -591,10 +631,15 @@ class _GetPortraitOrientState extends State<GetPortraitOrient> {
              child:   GestureDetector(
                onTap: ()
                  {
+
+
+
                    setState(() {
                      if (  isViewAll)
                        {
                          viewall='View Less';
+                         controllerSearch.clear();
+                         filterSearchResults(controllerSearch.text);
                        }
                      else
                        {

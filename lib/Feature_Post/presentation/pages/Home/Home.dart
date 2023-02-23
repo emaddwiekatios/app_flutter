@@ -169,7 +169,7 @@ Widget getDrawer(context) {
 
                 Navigator.of(context).pop();
               //  Navigator.pushReplacementNamed(context,'/');
-                 _authlogout.logout();
+                _authlogout.logout();
 
               }),
           const Divider(

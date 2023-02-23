@@ -72,9 +72,9 @@ class MyApp extends StatelessWidget {
                  return
 
                    authsnapshot.connectionState ==  ConnectionState.waiting
-                          ? const Splash()
-                          : const login();
-                         // : login();
+                        ? const Splash()
+                       :const  login();
+
               }
           ),
 

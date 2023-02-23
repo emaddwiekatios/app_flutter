@@ -38,15 +38,14 @@ late CategoryClass instCat ;
 
 
 List<ProductClass> instProdList=[];
-//List<ProductClass> Shackslist = <ProductClass>[];
-//List<ProductClass> listtemp;
 List<ProductClass> dummyListData =  <ProductClass>[];
 List<ProductClass> duplicateItems2 =  <ProductClass>[];
 List<ProductClass> duplicateItems =  <ProductClass>[];
 List<ProductClass> dummySearchList =  <ProductClass>[];
 
 TextEditingController controllerSearch =TextEditingController();
-
+bool isViewAll=true;
+String viewall='View All';
 void loadcategoryinit() {
   instCatList.clear();
   instCatList.add(
@@ -64,7 +63,7 @@ void loadcategoryinit() {
   instCatList.add(
       CategoryClass(
           categoryId: 3,
-          categoryName: 'shop',
+          categoryName: 'Clothes',
           categoryImage: AssetManager.shop,
           categoryEntryDate: DateTime.now()));
   instCatList.add(
@@ -120,7 +119,14 @@ void loadProductinit() {
   instProdList.add(ProductClass(productId: 6, productName: 'Jaketttt', productImage: AssetManager.mancat3, productPrice: 560, productCat: 'Clothes', productEntryDate: DateTime.now()));
   instProdList.add(ProductClass(productId: 7, productName: 'Jeattns', productImage: AssetManager.mancat4, productPrice: 1600, productCat: 'Clothes', productEntryDate: DateTime.now()));
   instProdList.add(ProductClass(productId: 8, productName: 'Bodtty', productImage: AssetManager.mancat5, productPrice: 4060, productCat: 'Clothes', productEntryDate: DateTime.now()));
- //emad dupitems
+
+  instProdList.add(ProductClass(productId: 4, productName: 'Body', productImage: AssetManager.mancat5, productPrice: 400, productCat: 'Socks', productEntryDate: DateTime.now()));
+  instProdList.add(ProductClass(productId: 5, productName: 'T-shttirt', productImage: AssetManager.mancat, productPrice: 616, productCat: 'Socks', productEntryDate: DateTime.now()));
+  instProdList.add(ProductClass(productId: 6, productName: 'Jaketttt', productImage: AssetManager.mancat3, productPrice: 560, productCat: 'Socks', productEntryDate: DateTime.now()));
+  instProdList.add(ProductClass(productId: 7, productName: 'Jeattns', productImage: AssetManager.mancat4, productPrice: 1600, productCat: 'Socks', productEntryDate: DateTime.now()));
+  instProdList.add(ProductClass(productId: 8, productName: 'Bodtty', productImage: AssetManager.mancat5, productPrice: 4060, productCat: 'Socks', productEntryDate: DateTime.now()));
+
+  //emad dupitems
  //fffffffff
  // emad   nbjnj
   duplicateItems = instProdList;
@@ -239,14 +245,15 @@ loadcategoryinit();
             ),
             //header title
             //header titleini
-            // Positioned(
-            //   top: MediaQuery.of(context).size.height / 18,
-            //   left: MediaQuery.of(context).size.width / 2 - 50,
-            //   child: Text('Details'
-            //     //AppLocalizations.of(context).translate('Details'),
-            //     ,style: TextStyle(fontSize: 29, fontWeight: FontWeight.bold),
-            //   ),
-            // ),
+            Positioned(
+              top: MediaQuery.of(context).size.height /FontManagerSize.s50
+              ,
+              left: MediaQuery.of(context).size.width / 2 - 50,
+              child: Text('Home'.tr
+                //AppLocalizations.of(context).translate('Details'),
+                ,style:const TextStyle(fontSize: FontManagerSize.s24, fontWeight: FontWeight.bold),
+              ),
+            ),
           ],
         ),
       ),
@@ -289,26 +296,37 @@ CategoryClass instCat;
 }
 
 class _widgetCategoryState extends State<widgetCategory> {
+
+
   @override
   Widget build(BuildContext context) {
 
     return SizedBox(
-      //color: Colors.red,
+
       height: getHeight(context)/AppSize.s9,
       child: Column(
         children: [
           Padding(
             padding: const EdgeInsets.only(left:AppSize.s8,right:AppSize.s8),
-            child: Card(
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                  //side: BorderSide(color: ColorManager.primary, width: AppSize.s0_5),
-                  borderRadius: BorderRadius.circular(270)),
-              child:  CircleAvatar(
-                foregroundImage: ExactAssetImage(widget.instCat.categoryImage),
-                backgroundColor: ColorManager.primary.withOpacity(.2),
-                radius: FontManagerSize.s30,
-                  // backgroundImage: ExactAssetImage(AssetManager),
+            child: GestureDetector(
+              onTap: ()
+              {
+
+
+
+
+              },
+              child: Card(
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                    //side: BorderSide(color: ColorManager.primary, width: AppSize.s0_5),
+                    borderRadius: BorderRadius.circular(270)),
+                child:  CircleAvatar(
+                  foregroundImage: ExactAssetImage(widget.instCat.categoryImage),
+                  backgroundColor: ColorManager.primary.withOpacity(.2),
+                  radius: FontManagerSize.s30,
+                    // backgroundImage: ExactAssetImage(AssetManager),
+                ),
               ),
             ),
           ),
@@ -318,6 +336,9 @@ class _widgetCategoryState extends State<widgetCategory> {
       ),
     );
   }
+
+
+
 }
 
 class GetCarouselSlider extends StatefulWidget {
@@ -404,40 +425,58 @@ class GetPortraitOrient extends StatefulWidget {
 }
 
 class _GetPortraitOrientState extends State<GetPortraitOrient> {
-
-  void filterSearchResults(String query) {
+  void filterSearchResultsCat(String query) {
     print(query);
-    print(duplicateItems);
-
     dummySearchList = duplicateItems;
     if (query.isNotEmpty) {
-      print('inside if');
       dummyListData.clear();
       // List<Clients> dummyListData = List<Clients>();
       dummySearchList.forEach((item) {
-        //print(item['Payment_name']);
+        if (item.productCat.toUpperCase().contains(query.toUpperCase()) ||
+            item.productCat.contains(query)) {
+
+          dummyListData.add(item);
+        }
+      });
+      setState(() {
+        print('setState1');
+        instProdList = dummyListData;
+        print(instProdList.length);
+      });
+      return;
+    } else {
+      setState(() {
+        print('setState2');
+        instProdList = duplicateItems;
+        print(instProdList.length);
+      });
+    }
+  }
+  void filterSearchResults(String query) {
+    dummySearchList = duplicateItems;
+    if (query.isNotEmpty) {
+      dummyListData.clear();
+      // List<Clients> dummyListData = List<Clients>();
+      dummySearchList.forEach((item) {
         if (item.productName.toUpperCase().contains(query.toUpperCase()) ||
             item.productName.contains(query)) {
-          // print('inside if ${item['Payment_name']}');
-          dummyListData.add(item);
+            dummyListData.add(item);
         }
       });
       setState(() {
         //  Shackslist=null;
         instProdList = dummyListData;
       });
-      print('the list search${instProdList}');
       return;
     } else {
       setState(() {
-        //Shackslist.clear();
         instProdList = duplicateItems;
       });
     }
-
-    print('the list search${instProdList}');
   }
-//eeeeeeeeeee//////
+
+
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -477,10 +516,58 @@ class _GetPortraitOrientState extends State<GetPortraitOrient> {
           ),
         ),
         ),
+
         Padding(
+          padding: const EdgeInsets.only(left:AppSize.s4,right: AppSize.s4),
+          child: Container(
+           // color: Colors.red,
+            height: getHeight(context) / FontManagerSize.s10,
+            width: getWidth(context),
+            child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: instCatList.length,
+                itemBuilder: (context, int index) {
+                  return   SizedBox(
+                    //color: Colors.red,
+                    height: getHeight(context)/AppSize.s9,
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left:AppSize.s8,right:AppSize.s8),
+                          child: GestureDetector(
+                            onTap: ()
+                            {
+
+                              filterSearchResultsCat(instCatList[index].categoryName);
+                            },
+                            child: Card(
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(
+                                //side: BorderSide(color: ColorManager.primary, width: AppSize.s0_5),
+                                  borderRadius: BorderRadius.circular(270)),
+                              child:  CircleAvatar(
+                                foregroundImage: ExactAssetImage(instCatList[index].categoryImage),
+                                backgroundColor: ColorManager.primary.withOpacity(.2),
+                                radius: FontManagerSize.s30,
+                                // backgroundImage: ExactAssetImage(AssetManager),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Text(instCatList[index].categoryName)
+                        //  backgroundImage:  (AssetManager.onBoarding3,fit: BoxFit.cover))
+                      ],
+                    ),
+                  );
+
+                    //Center(child: widgetCategory( instCat: instCatList[index]));
+                }),
+          ),
+        ),
+       isViewAll? Padding(
           padding: const EdgeInsets.only(left:AppSize.s8,right: AppSize.s8),
           child: Container(
-            margin: const EdgeInsets.all(AppSize.s0_5),
+            margin: const EdgeInsets.only(left:AppSize.s0_5),
             decoration: BoxDecoration(
               //color: Colors.red,
                 borderRadius: BorderRadius.circular(10)),
@@ -490,22 +577,39 @@ class _GetPortraitOrientState extends State<GetPortraitOrient> {
             child: GetCarouselSlider(),
             //child:Cal
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left:AppSize.s4,right: AppSize.s4),
-          child: SizedBox(
-            //  color: Colors.red,
-            height: getHeight(context) / FontManagerSize.s6,
-            width: getWidth(context),
-            child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: instCatList.length,
-                itemBuilder: (context, int index) {
-                  return  Center(child: widgetCategory( instCat: instCatList[index]));
-                }),
-          ),
-        ),
-         //Text('Products'),
+        ) :Container(),
+       Row(
+         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+         children: [
+
+           Padding(
+             padding: const EdgeInsets.only(left:15.0),
+             child:   Text('Newest',style: TextStyle(fontSize: 15,fontWeight: FontWeight.w400),),
+           ),
+           Padding(
+             padding: const EdgeInsets.only(right:15.0),
+             child:   GestureDetector(
+               onTap: ()
+                 {
+                   setState(() {
+                     if (  isViewAll)
+                       {
+                         viewall='View Less';
+                       }
+                     else
+                       {
+                         viewall='View All' ;
+                       }
+                     isViewAll=!isViewAll;
+
+
+                   });
+                  // Get.to(() => HomePageAll());
+                 },
+                 child: Text(viewall,style: TextStyle(fontSize: 15,fontWeight: FontWeight.w400,color: ColorManager.primary),)),
+           ),
+         ],
+       ),
         Expanded(
           child: Padding(
             padding: const EdgeInsets.only(left:AppSize.s4,right: AppSize.s4),
@@ -552,7 +656,7 @@ class _GetPortraitOrientState extends State<GetPortraitOrient> {
 
                                       child: Padding(
                                         padding: const EdgeInsets.only(left:AppSize.s4),
-                                        child: Text(instProdList[index].productName),
+                                        child: Text(instProdList[index].productCat),
                                       )),),
                                 footer: Container(
                                     decoration: BoxDecoration(
@@ -562,9 +666,19 @@ class _GetPortraitOrientState extends State<GetPortraitOrient> {
                                           bottomRight:Radius.circular(AppSize.s10)
                                              ),
                                     ),
-                                    height: getHeight(context)/AppSize.s28,
+                                    height: getHeight(context)/FontManagerSize.s24,
 
-                                  child:Center(child:  Text('Price :${instProdList[index].productPrice}'),)
+                                  child:Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(' ${instProdList[index].productName}'
+                                        ,style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
+                                      Text(' Price :${instProdList[index].productPrice} \$'
+                                        ,style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold,color: ColorManager.primary),),
+
+                                    ],
+                                  )
                                 ),
 
                                 child: Container(
@@ -643,12 +757,15 @@ class _GetPortraitOrientState extends State<GetPortraitOrient> {
                               ),
                             ),
                           ),
+
                           Positioned(
                               right:AppSize.s4 ,child:IconButton(onPressed: () {
 
                             loadProductinit();
 
-                          },icon:const Icon(Icons.add))
+                          },icon: Icon(Icons.favorite, color: Colors.red,)
+
+                          )
 
                           )
                         ],

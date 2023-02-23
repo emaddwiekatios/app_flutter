@@ -9,6 +9,7 @@ import 'package:clean_arch_app/core/resource/StringManager.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../../core/resource/RoutesManager.dart';
 import '../../../../../core/resource/ValueManger.dart';
 
 class OnBoarding extends StatefulWidget {
@@ -118,9 +119,9 @@ class _OnBoardingState extends State<OnBoarding> {
                   shape: MaterialStateProperty.all(RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(350)))),
               onPressed: () {
-                // Navigator.pushReplacementNamed(context, RoutesManager.loginRoute);
-                Navigator.pushReplacementNamed(
-                    context, '/login');
+               // Navigator.pushReplacementNamed(context, RoutesManager.loginRoute);
+               Navigator.pushReplacementNamed(context, '/login');
+
               },
               child: Text(StringManager.onBoardSkip.tr)),
         ),

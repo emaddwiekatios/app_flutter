@@ -1,4 +1,4 @@
-/*import 'package:clean_arch_app/Feature_Post/presentation/pages/Login/view_login/view_login.dart';
+import 'package:clean_arch_app/Feature_Post/presentation/pages/Login/view_login/view_login.dart';
 import 'package:clean_arch_app/Feature_Post/presentation/pages/Onbording/View_Onboarding/onbording.dart';
 import 'package:clean_arch_app/Feature_Post/presentation/pages/splash/splash.dart';
 import 'package:flutter/material.dart';
@@ -33,8 +33,7 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const Home());
       case RoutesManager.layoutbuilderRoute:
         return MaterialPageRoute(builder: (_) => const GetLayoutBuilder());
-      case RoutesManager.getxbuilder:
-        return MaterialPageRoute(builder: (_) => GetxManagement());
+
       // case RoutesManager.storeDetailsRoute:
       //   return MaterialPageRoute(builder: (_) => const StoreDetailsView());
       default:
@@ -54,4 +53,3 @@ class RouteGenerator {
             ));
   }
 }
-*/

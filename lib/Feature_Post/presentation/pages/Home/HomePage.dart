@@ -118,7 +118,7 @@ void loadProductinit() {
   instProdList.add(ProductClass(productId: 1, productName: 'T-shirt', productImage: AssetManager.mancat, productPrice: 16, productCat: 'Clothes', productEntryDate: DateTime.now()));
   instProdList.add(ProductClass(productId: 2, productName: 'Jaket', productImage: AssetManager.mancat3, productPrice: 50, productCat: 'Clothes', productEntryDate: DateTime.now()));
   instProdList.add(ProductClass(productId: 3, productName: 'Jeans', productImage: AssetManager.mancat4, productPrice: 100, productCat: 'Clothes', productEntryDate: DateTime.now()));
-  instProdList.add(ProductClass(productId: 4, productName: 'Body', productImage: AssetManager.mancat5, productPrice: 400, productCat: 'Clothes', productEntryDate: DateTime.now()));
+  instProdList.add(ProductClass(productId: 4, productName: 'Body', productImage: AssetManager.mancat5, productPrice: 400, productCat: 'buying', productEntryDate: DateTime.now()));
   instProdList.add(ProductClass(productId: 5, productName: 'T-shttirt', productImage: AssetManager.mancat, productPrice: 616, productCat: 'Clothes', productEntryDate: DateTime.now()));
   instProdList.add(ProductClass(productId: 6, productName: 'Jaketttt', productImage: AssetManager.mancat3, productPrice: 560, productCat: 'Clothes', productEntryDate: DateTime.now()));
   instProdList.add(ProductClass(productId: 7, productName: 'Jeattns', productImage: AssetManager.mancat4, productPrice: 1600, productCat: 'Clothes', productEntryDate: DateTime.now()));
@@ -140,13 +140,75 @@ class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
 
+  void filterSearchResultsCat(String query)   {
+
+    print('insdie filter');
+    dummySearchList = duplicateItems;
+    if (query.isNotEmpty) {
+      dummyListData.clear();
+      // List<Clients> dummyListData = List<Clients>();
+      dummySearchList.forEach((item) {
+        if (item.productCat.toUpperCase().contains(query.toUpperCase()) ||
+            item.productCat.contains(query)) {
+
+          dummyListData.add(item);
+        }
+      });
+      setState(() {
+        titlePage=query;
+        instProdList = dummyListData;
+
+        print('titlePage');
+        print(titlePage);
+
+      });
+      return;
+    } else {
+      setState(() {
+        titlePage=query;
+        print('setState2');
+        instProdList = duplicateItems;
+        indexParameter=null;
+
+
+      });
+    }
+
+
+  }
+  void filterSearchResults(String query) {
+    dummySearchList = duplicateItems;
+    if (query.isNotEmpty) {
+      dummyListData.clear();
+      // List<Clients> dummyListData = List<Clients>();
+      dummySearchList.forEach((item) {
+        if (item.productName.toUpperCase().contains(query.toUpperCase()) ||
+            item.productName.contains(query)) {
+          dummyListData.add(item);
+        }
+      });
+      setState(() {
+        //  Shackslist=null;
+        instProdList = dummyListData;
+      });
+      return;
+    } else {
+      setState(() {
+        instProdList = duplicateItems;
+        indexParameter=null;
+      });
+    }
+  }
+
   @override
   void initState() {
     // TODO: implement initState
 loadcategoryinit();
     loadProductinit();
 
-    super.initState();
+
+
+super.initState();
   }
   @override
   Widget build(BuildContext context) {
@@ -243,9 +305,343 @@ loadcategoryinit();
                 child:
                    // (MediaQuery.of(context).orientation == Orientation.portrait)
                       //  ?
-                  const GetPortraitOrient()
-                        //: const GetLandScapeOrient(),
-              ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+
+                    Padding(
+                      padding: const EdgeInsets.only(left:AppSize.s8,right: AppSize.s8),
+                      child: TextFormField(
+                        onChanged: (value) {
+                          filterSearchResults(value);
+
+                        },
+                        showCursor: true,
+                        // readOnly: true,
+                        controller: controllerSearch,
+                        decoration: InputDecoration(
+                          label: Text(StringManager.search.tr),
+                          hintText: StringManager.search.tr,
+                          //  prefix: Text(StringManager.userName),
+                          prefixIcon:  IconButton(
+                            icon  :Icon(Icons.search), onPressed: ()=>filterSearchResults(controllerSearch.text),),
+                          // errorText: (snapshot.data ?? true)
+                          //     ? null
+                          //     : StringManager.usernameError,
+                          suffix: Text(StringManager.search.tr),
+                          //  suffixText: StringManager.userName,
+                          suffixIcon: IconButton(
+                              icon  :const Icon(Icons.cancel), onPressed: (){
+
+                            controllerSearch.clear();
+                            filterSearchResults(controllerSearch.text);
+
+                          }),
+                        ),
+                      ),
+                    ),
+
+                    Padding(
+                        padding: const EdgeInsets.only(left:AppSize.s4,right: AppSize.s4),
+                        child:Container(
+                          // color: Colors.red,
+                          height: getHeight(context) / FontManagerSize.s10,
+                          width: getWidth(context),
+                          child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: instCatList.length,
+                              itemBuilder: (context, int index) {
+                                return   SizedBox(
+                                  //color: Colors.red,
+                                  height: getHeight(context)/AppSize.s9,
+                                  child: Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(left:AppSize.s8,right:AppSize.s8),
+                                        child: GestureDetector(
+                                          onTap: ()
+                                          {
+
+
+
+                                            setState(() {
+
+                                              indexParameter=index;
+                                            });
+                                            filterSearchResultsCat(instCatList[index].categoryName);
+                                          },
+                                          child: Stack(
+                                            children: [
+                                              Card(
+                                                elevation: 0,
+                                                shape: RoundedRectangleBorder(
+                                                    side: index==indexParameter ? BorderSide(color: Colors.grey, width: AppSize.s1):
+                                                    BorderSide(color: Colors.transparent, width: AppSize.s0),
+                                                    borderRadius: BorderRadius.circular(270)),
+                                                child:  CircleAvatar(
+                                                  foregroundImage: ExactAssetImage(instCatList[index].categoryImage),
+                                                  backgroundColor: ColorManager.primary.withOpacity(.2),
+                                                  radius: FontManagerSize.s30,
+                                                  // backgroundImage: ExactAssetImage(AssetManager),
+                                                ),
+                                              ),
+                                              Positioned(
+                                                right:10,
+                                                top:5,
+                                                child:  index==indexParameter ?Container(
+                                                  height: 10,
+                                                  width: 10,
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.green,
+                                                      borderRadius: BorderRadius.circular(250)
+                                                  ),
+
+                                                ):Container(),
+                                              ),
+
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      Text(instCatList[index].categoryName)
+                                      //  backgroundImage:  (AssetManager.onBoarding3,fit: BoxFit.cover))
+                                    ],
+                                  ),
+                                );
+
+                                //Center(child: widgetCategory( instCat: instCatList[index]));
+                              }),
+                        )
+
+
+
+                    ),
+                    isViewAll? Padding(
+                      padding: const EdgeInsets.only(left:AppSize.s8,right: AppSize.s8),
+                      child: Container(
+                        margin: const EdgeInsets.only(left:AppSize.s0_5),
+                        decoration: BoxDecoration(
+                          //color: Colors.red,
+                            borderRadius: BorderRadius.circular(10)),
+
+                        height: getHeight(context) / AppSize.s6,
+                        width: getWidth(context),
+                        child: GetCarouselSlider(),
+                        //child:Cal
+                      ),
+                    ) :Container(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+
+                        Padding(
+                          padding: const EdgeInsets.only(left:15.0),
+                          child:   Text('Newest',style: TextStyle(fontSize: 15,fontWeight: FontWeight.w400),),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(right:15.0),
+                          child:   GestureDetector(
+                              onTap: ()
+                              {
+
+
+
+                                setState(() {
+                                  if (  isViewAll)
+                                  {
+                                    viewall='View Less';
+                                    controllerSearch.clear();
+                                    filterSearchResults(controllerSearch.text);
+                                  }
+                                  else
+                                  {
+                                    viewall='View All' ;
+                                  }
+                                  isViewAll=!isViewAll;
+
+
+                                });
+                                // Get.to(() => HomePageAll());
+                              },
+                              child: Text(viewall,style: TextStyle(fontSize: 15,fontWeight: FontWeight.w400,color: ColorManager.primary),)),
+                        ),
+                      ],
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left:AppSize.s4,right: AppSize.s4),
+                        child: Container(
+                            decoration:  BoxDecoration(
+
+                              borderRadius: BorderRadius.circular(AppSize.s20),
+
+                              //color: Colors.blue,
+                            ),
+                            width: getWidth(context),
+                            height: getHeight(context), //FontManagerSize.s3,
+
+                            child: GridView.builder(
+                              itemBuilder: (context, int index) {
+                                return InkWell(
+                                  onTap: () {
+                                    //(index);
+
+                                    Get.to(() =>  ProductDetails( instProd: instProdList[index]));
+                                  },
+                                  child: Stack(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Hero(
+                                          tag: instProdList[index].productId,
+                                          child: Card(
+                                            color: Colors.red,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(AppSize.s10)),
+                                            child: GridTile(
+                                                header: Align(
+                                                  alignment: Alignment.topLeft,
+                                                  child:  Container(
+                                                      decoration: BoxDecoration(
+                                                        color: ColorManager.primary.withOpacity(.9),
+                                                        borderRadius: const BorderRadius.only(
+                                                          // bottomLeft:Radius.circular(AppSize.s10),
+                                                            topLeft:Radius.circular(AppSize.s10)
+                                                        ),
+                                                      ),
+                                                      height: getHeight(context)/AppSize.s40,
+
+                                                      child: Padding(
+                                                        padding: const EdgeInsets.only(left:AppSize.s4),
+                                                        child: Text(instProdList[index].productCat),
+                                                      )),),
+                                                footer: Container(
+                                                    decoration: BoxDecoration(
+                                                      color: ColorManager.white.withOpacity(.6),
+                                                      borderRadius:const  BorderRadius.only(
+                                                          bottomLeft:Radius.circular(AppSize.s10),
+                                                          bottomRight:Radius.circular(AppSize.s10)
+                                                      ),
+                                                    ),
+                                                    height: getHeight(context)/FontManagerSize.s24,
+
+                                                    child:Column(
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: [
+                                                        Text(' ${instProdList[index].productName}'
+                                                          ,style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
+                                                        Text(' Price :${instProdList[index].productPrice} \$'
+                                                          ,style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold,color: ColorManager.primary),),
+
+                                                      ],
+                                                    )
+                                                ),
+
+                                                child: Container(
+                                                  height: getHeight(context)/AppSize.s20,
+                                                  //width: 80,
+                                                  decoration: BoxDecoration(
+
+                                                    borderRadius: BorderRadius.circular(AppSize.s10),
+
+                                                    image:  DecorationImage(
+                                                        fit: BoxFit.fill,         image: AssetImage(//AssetManager.mancat
+                                                      instProdList[index].productImage,
+                                                    )),
+                                                    color: ColorManager.primary.withOpacity(.9),
+                                                  ),)
+
+                                              // Column(
+                                              //   children: [
+                                              //     Card(
+                                              //       elevation: 0,
+                                              //       shape: const OutlineInputBorder(
+                                              //         borderSide: BorderSide(
+                                              //             color: Colors.transparent,
+                                              //             width: AppSize.s0_5),
+                                              //         borderRadius: BorderRadius.all(
+                                              //           Radius.circular(AppSize.s8),
+                                              //         ),
+                                              //       ),
+                                              //       child: Stack(
+                                              //         children: [
+                                              //           Positioned(
+                                              //             child: Container(
+                                              //               height: 90,
+                                              //               //width: 80,
+                                              //               decoration: BoxDecoration(
+                                              //                 borderRadius: BorderRadius.circular(5),
+                                              //                 image: const DecorationImage(
+                                              //                     fit: BoxFit.fill,
+                                              //             ';]        image: AssetImage(
+                                              //                       AssetManager.mancat4,
+                                              //                     )),
+                                              //                 color: Colors.green,
+                                              //               ),
+                                              //             ),
+                                              //           ),
+                                              //           Positioned(
+                                              //               bottom: AppSize.s0,
+                                              //               left: AppSize.s0,
+                                              //               right: AppSize.s0,
+                                              //               child: Container(
+                                              //                   height:
+                                              //                       get_height(context) / AppSize.s40,
+                                              //                   color: ColorManager.primary
+                                              //                       .withOpacity(.4),
+                                              //                   child: const Center(
+                                              //                       child: Text('T-shirt')))),
+                                              //           const Positioned(
+                                              //             right: AppSize.s4,
+                                              //             child: Icon(
+                                              //               Icons.favorite_border_outlined,
+                                              //               color: Colors.red,
+                                              //             ),
+                                              //           ),
+                                              //         ],
+                                              //       ),
+                                              //     ),
+                                              //     Column(
+                                              //       children: [
+                                              //         const Text('Price :50'),
+                                              //       ],
+                                              //     ),
+                                              //     // Text('price : ${23}\$'),
+                                              //   ],
+                                              // ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+
+                                      Positioned(
+                                          right:AppSize.s4 ,child:IconButton(onPressed: () {
+
+                                        loadProductinit();
+
+                                      },icon: Icon(Icons.favorite, color: Colors.red,)
+
+                                      )
+
+                                      )
+                                    ],
+                                  ),
+                                );
+                              },
+                              itemCount: instProdList.length,
+                              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                              ),
+                            )),
+                      ),
+                    )
+                  ],
+                ),
+                ),
+
+
             ),
             //header title
             //header titleini
@@ -554,9 +950,10 @@ print('insdie filter');
 
 
                               setState(() {
-                                filterSearchResultsCat(instCatList[index].categoryName);
+
                                 indexParameter=index;
                               });
+                              filterSearchResultsCat(instCatList[index].categoryName);
                             },
                             child: Stack(
                               children: [
@@ -604,7 +1001,7 @@ print('insdie filter');
 
 
         ),
-       isViewAll? Padding(
+                   isViewAll? Padding(
           padding: const EdgeInsets.only(left:AppSize.s8,right: AppSize.s8),
           child: Container(
             margin: const EdgeInsets.only(left:AppSize.s0_5),

@@ -38,7 +38,7 @@ class _CartsCeilState extends State<CartsCeil> {
         ),
         child:
         Card(
-          elevation: 10,
+          elevation: 2,
           child:
           Padding(
             padding: const EdgeInsets.all(AppSize.s10),

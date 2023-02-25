@@ -22,7 +22,7 @@ void main() async {
   prefs = await SharedPreferences.getInstance();
   //await GetStorage.init();
 /////fdfdfdfdfdfdfd
-  ////updaedddddd
+  ////updaedddddd   ghfgfgfggjgh
   runApp(const MyApp());
      //emad 15/2/2023
   //   runApp(

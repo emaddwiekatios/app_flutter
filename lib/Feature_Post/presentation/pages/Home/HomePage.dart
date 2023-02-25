@@ -196,6 +196,7 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         instProdList = duplicateItems;
         indexParameter=null;
+        titlePage='Home';
       });
     }
   }

@@ -34,6 +34,7 @@ late ProductClass instProd ;
 
 late CategoryClass instCat ;
  List<CategoryClass> instCatList=[];
+List<ProductClass> instProdListSimilar=[];
 
 
 
@@ -138,7 +139,29 @@ void loadProductinit() {
 
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  void filterSearchResultsCatSimilar(String query)   {
+    dummySearchList = duplicateItems;
+    if (query.isNotEmpty) {
+      dummyListData.clear();
+      // List<Clients> dummyListData = List<Clients>();
+      dummySearchList.forEach((item) {
+        if (item.productCat.toUpperCase().contains(query.toUpperCase()) ||
+            item.productCat.contains(query)) {
+          dummyListData.add(item);
+        }
+      });
+      setState(() {
+        instProdListSimilar = dummyListData;
+      });
+      return;
+    } else {
+      setState(() {
+        instProdListSimilar = duplicateItems;
+      });
+    }
 
+
+  }
 
   void filterSearchResultsCat(String query)   {
 
@@ -487,8 +510,10 @@ super.initState();
                                 return InkWell(
                                   onTap: () {
                                     //(index);
+                                    instProdListSimilar.clear();
+                                    filterSearchResultsCatSimilar(instProdList[index].productCat);
 
-                                    Get.to(() =>  ProductDetails( instProd: instProdList[index]));
+                                    Get.to(() =>  ProductDetails( instProd: instProdList[index],prodList: instProdListSimilar,));
                                   },
                                   child: Stack(
                                     children: [
@@ -622,7 +647,7 @@ super.initState();
 
                                         loadProductinit();
 
-                                      },icon: Icon(Icons.favorite, color: Colors.red,)
+                                      },icon: Icon(Icons.favorite_border, color: Colors.red,)
 
                                       )
 
@@ -828,7 +853,7 @@ class GetPortraitOrient extends StatefulWidget {
 class _GetPortraitOrientState extends State<GetPortraitOrient> {
   void filterSearchResultsCat(String query)   {
 
-print('insdie filter');
+//print('insdie filter');
     dummySearchList = duplicateItems;
     if (query.isNotEmpty) {
       dummyListData.clear();
@@ -862,6 +887,7 @@ print('insdie filter');
 
 
   }
+
   void filterSearchResults(String query) {
     dummySearchList = duplicateItems;
     if (query.isNotEmpty) {
@@ -1072,7 +1098,7 @@ print('insdie filter');
                       onTap: () {
                         //(index);
 
-                        Get.to(() =>  ProductDetails( instProd: instProdList[index]));
+                        Get.to(() =>  ProductDetails( instProd: instProdList[index],prodList: instProdList,));
                       },
                       child: Stack(
                         children: [

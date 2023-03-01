@@ -17,6 +17,7 @@ class _PreHomeState extends State<PreHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.red,
       body: [
         Home(),
         Carts(),

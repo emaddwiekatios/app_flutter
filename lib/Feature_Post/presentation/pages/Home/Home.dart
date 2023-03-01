@@ -166,9 +166,10 @@ Widget getDrawer(context) {
               title: Text('Logout'.tr),
               trailing: Text('Logout'.tr),
               onTap: () {
+
                 _authlogout.logout();
-                Navigator.of(context).pop();
-              //  Navigator.pushReplacementNamed(context,'/');
+               // Navigator.of(context).pop();
+               Navigator.pushReplacementNamed(context,'/');
 
 
               }),

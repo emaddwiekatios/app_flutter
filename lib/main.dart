@@ -1,4 +1,5 @@
 //import 'dart:html';
+import 'package:clean_arch_app/core/resource/RoutesManager.dart';
 import 'package:device_preview/device_preview.dart';
 
 import 'package:clean_arch_app/Feature_Post/presentation/manager/Language/Locale.dart';
@@ -57,8 +58,8 @@ class MyApp extends StatelessWidget {
         return GetMaterialApp(
           title: 'Flutter Demo',
           theme: getApplicationTheme(),
-          // onGenerateRoute: RouteGenerator.getRoute,
-          // initialRoute: RoutesManager.splashRoute,
+          onGenerateRoute: RouteGenerator.getRoute,
+          initialRoute: RoutesManager.splashRoute,
           locale: lang,
           translations: LocaleLang(),
           //home: login(),
@@ -82,6 +83,7 @@ class MyApp extends StatelessWidget {
 
             '/Home': (context) => const Home(),
             '/PreHome': (context) => PreHome(),
+            '/Splash': (context) => const Splash(),
             '/Splash': (context) => const Splash(),
             '/Onboarding': (context) => const OnBoarding(),
             '/login': (context) => const login(),

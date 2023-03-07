@@ -135,7 +135,7 @@ class Auth extends GetxController {
         setEmail(responsedata['email']);
       changeistoken(responsedata['idToken'].toString());
       changeisuserId(responsedata['localId'].toString());
-        changeExpiryDate(DateTime.now().add(const Duration(seconds: 3600))); //int.parse(responsedata['expiresIn']))));
+        changeExpiryDate(DateTime.now().add(const Duration(seconds: 36))); //int.parse(responsedata['expiresIn']))));
 
   // print(_userId);
         saveUserInfo(_token!,_userId,_expiryDate.toString());

@@ -168,7 +168,7 @@ Widget getDrawer(context) {
               onTap: () {
 
                 _authlogout.logout();
-               // Navigator.of(context).pop();
+                Navigator.of(context).pop();
                Navigator.pushReplacementNamed(context,'/');
 
 

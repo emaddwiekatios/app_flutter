@@ -119,8 +119,9 @@ class _OnBoardingState extends State<OnBoarding> {
                   shape: MaterialStateProperty.all(RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(350)))),
               onPressed: () {
+                Get.offAndToNamed('/login');
                // Navigator.pushReplacementNamed(context, RoutesManager.loginRoute);
-               Navigator.pushReplacementNamed(context, '/login');
+             //  Navigator.pushReplacementNamed(context, '/login');
 
               },
               child: Text(StringManager.onBoardSkip.tr)),
@@ -157,8 +158,9 @@ class _OnBoardingState extends State<OnBoarding> {
                         curve: Curves.bounceInOut);
                     if (onBoardingClassObject.currentIndex >=
                         onBoardingClassObject.noOfItem - 1) {
-                      Navigator.pushReplacementNamed(
-                          context, '/login');
+                      Get.offAndToNamed('/login');
+                    //  Navigator.pushReplacementNamed(
+                      //    context, '/login');
                     }
                   },
                   child: Text(StringManager.onBoardStart.tr)),

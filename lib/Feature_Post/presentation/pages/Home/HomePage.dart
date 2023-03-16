@@ -15,7 +15,7 @@ import '../Login/view_login/Auth.dart';
 import '../Products/ProductDetails.dart';
 import '../Products/ProductsClass.dart';
 import 'Home.dart';
-//import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -287,7 +287,7 @@ super.initState();
                       color: ColorManager.grey2,
                     ),
                     onPressed: () {
-                      //send_data_firestore();
+                      send_data_firestore();
                      // Navigator.pop(context);
                       //  Navigator.popAndPushNamed(context, "/SignIn");
 
@@ -699,18 +699,18 @@ super.initState();
     );
   }
 
-  // void send_data_firestore() {
-  //   FirebaseFirestore.instance.collection("Clean_App_Products").doc().set({
-  //     'Payment_id': 1,
-  //     'Payment_name': "emad",
-  //     'Payment_desc': "rrrr"
-  //   })
-  //   ;
+  void send_data_firestore() {
+    FirebaseFirestore.instance.collection("Clean_App_Products").doc().set({
+      'Payment_id': 1,
+      'Payment_name': "emad",
+      'Payment_desc': "rrrr"
+    })
+    ;
 
   }
 
 
-
+}
 
 class MyPainter extends CustomPainter {
   @override

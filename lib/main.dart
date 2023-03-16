@@ -15,8 +15,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'Feature_Post/presentation/pages/Home/Home.dart';
 import 'Feature_Post/presentation/pages/Home/PreHome.dart';
 import 'Feature_Post/presentation/pages/Login/view_login/view_login.dart';
-//import 'package:cloud_firestore/cloud_firestore.dart';
-//import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 
 SharedPreferences? prefs;
@@ -24,11 +24,10 @@ void main() async {
 
 
   // WidgetsFlutterBinding.ensureInitialized();
- WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   prefs = await SharedPreferences.getInstance();
-  //await GetStorage.init();
-/////fdfdfdfdfdfdfd       ghfdhdfhd
-  ////updaedddddd   ghfgfgfggjgh
+
   runApp(const MyApp());
      //emad 15/2/2023
   //   runApp(

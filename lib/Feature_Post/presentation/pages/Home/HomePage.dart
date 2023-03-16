@@ -15,7 +15,7 @@ import '../Login/view_login/Auth.dart';
 import '../Products/ProductDetails.dart';
 import '../Products/ProductsClass.dart';
 import 'Home.dart';
-
+//import 'package:cloud_firestore/cloud_firestore.dart';
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -43,7 +43,7 @@ List<ProductClass> dummyListData =  <ProductClass>[];
 List<ProductClass> duplicateItems2 =  <ProductClass>[];
 List<ProductClass> duplicateItems =  <ProductClass>[];
 List<ProductClass> dummySearchList =  <ProductClass>[];
-
+bool favoriteFlag =false;
 TextEditingController controllerSearch =TextEditingController();
 bool isViewAll=true;
 String viewall='View All';
@@ -116,20 +116,20 @@ void loadcategoryinit() {
 
 void loadProductinit() {
   instProdList.clear();
-  instProdList.add(ProductClass(productId: 1, productName: 'T-shirt', productImage: AssetManager.mancat, productPrice: 16, productCat: 'Clothes', productEntryDate: DateTime.now()));
-  instProdList.add(ProductClass(productId: 2, productName: 'Jaket', productImage: AssetManager.mancat3, productPrice: 50, productCat: 'Clothes', productEntryDate: DateTime.now()));
-  instProdList.add(ProductClass(productId: 3, productName: 'Jeans', productImage: AssetManager.mancat4, productPrice: 100, productCat: 'Clothes', productEntryDate: DateTime.now()));
-  instProdList.add(ProductClass(productId: 4, productName: 'Body', productImage: AssetManager.mancat5, productPrice: 400, productCat: 'buying', productEntryDate: DateTime.now()));
-  instProdList.add(ProductClass(productId: 5, productName: 'T-shttirt', productImage: AssetManager.mancat, productPrice: 616, productCat: 'Clothes', productEntryDate: DateTime.now()));
-  instProdList.add(ProductClass(productId: 6, productName: 'Jaketttt', productImage: AssetManager.mancat3, productPrice: 560, productCat: 'Clothes', productEntryDate: DateTime.now()));
-  instProdList.add(ProductClass(productId: 7, productName: 'Jeattns', productImage: AssetManager.mancat4, productPrice: 1600, productCat: 'Clothes', productEntryDate: DateTime.now()));
-  instProdList.add(ProductClass(productId: 8, productName: 'Bodtty', productImage: AssetManager.mancat5, productPrice: 4060, productCat: 'Clothes', productEntryDate: DateTime.now()));
+  instProdList.add(ProductClass(productId: 1, productName: 'T-shirt', productImage: AssetManager.mancat, productPrice: 16, productCat: 'Clothes', productEntryDate: DateTime.now(),favoriteFlag:1 ));
+  instProdList.add(ProductClass(productId: 2, productName: 'Jaket', productImage: AssetManager.mancat3, productPrice: 50, productCat: 'Clothes', productEntryDate: DateTime.now(),favoriteFlag:1 ));
+  instProdList.add(ProductClass(productId: 3, productName: 'Jeans', productImage: AssetManager.mancat4, productPrice: 100, productCat: 'Clothes', productEntryDate: DateTime.now(),favoriteFlag:0 ));
+  instProdList.add(ProductClass(productId: 4, productName: 'Body', productImage: AssetManager.mancat5, productPrice: 400, productCat: 'buying', productEntryDate: DateTime.now(),favoriteFlag:1 ));
+  instProdList.add(ProductClass(productId: 5, productName: 'T-shttirt', productImage: AssetManager.mancat, productPrice: 616, productCat: 'Clothes', productEntryDate: DateTime.now(),favoriteFlag:1 ));
+  instProdList.add(ProductClass(productId: 6, productName: 'Jaketttt', productImage: AssetManager.mancat3, productPrice: 560, productCat: 'Clothes', productEntryDate: DateTime.now(),favoriteFlag:0 ));
+  instProdList.add(ProductClass(productId: 7, productName: 'Jeattns', productImage: AssetManager.mancat4, productPrice: 1600, productCat: 'Clothes', productEntryDate: DateTime.now(),favoriteFlag:0 ));
+  instProdList.add(ProductClass(productId: 8, productName: 'Bodtty', productImage: AssetManager.mancat5, productPrice: 4060, productCat: 'Clothes', productEntryDate: DateTime.now(),favoriteFlag:0 ));
 
-  instProdList.add(ProductClass(productId: 4, productName: 'Body', productImage: AssetManager.mancat5, productPrice: 400, productCat: 'Socks', productEntryDate: DateTime.now()));
-  instProdList.add(ProductClass(productId: 5, productName: 'T-shttirt', productImage: AssetManager.mancat, productPrice: 616, productCat: 'Socks', productEntryDate: DateTime.now()));
-  instProdList.add(ProductClass(productId: 6, productName: 'Jaketttt', productImage: AssetManager.mancat3, productPrice: 560, productCat: 'Socks', productEntryDate: DateTime.now()));
-  instProdList.add(ProductClass(productId: 7, productName: 'Jeattns', productImage: AssetManager.mancat4, productPrice: 1600, productCat: 'Socks', productEntryDate: DateTime.now()));
-  instProdList.add(ProductClass(productId: 8, productName: 'Bodtty', productImage: AssetManager.mancat5, productPrice: 4060, productCat: 'Socks', productEntryDate: DateTime.now()));
+  instProdList.add(ProductClass(productId: 4, productName: 'Body', productImage: AssetManager.mancat5, productPrice: 400, productCat: 'Socks', productEntryDate: DateTime.now(),favoriteFlag:1 ));
+  instProdList.add(ProductClass(productId: 5, productName: 'T-shttirt', productImage: AssetManager.mancat, productPrice: 616, productCat: 'Socks', productEntryDate: DateTime.now(),favoriteFlag:1 ));
+  instProdList.add(ProductClass(productId: 6, productName: 'Jaketttt', productImage: AssetManager.mancat3, productPrice: 560, productCat: 'Socks', productEntryDate: DateTime.now(),favoriteFlag:1 ));
+  instProdList.add(ProductClass(productId: 7, productName: 'Jeattns', productImage: AssetManager.mancat4, productPrice: 1600, productCat: 'Socks', productEntryDate: DateTime.now(),favoriteFlag:0 ));
+  instProdList.add(ProductClass(productId: 8, productName: 'Bodtty', productImage: AssetManager.mancat5, productPrice: 4060, productCat: 'Socks', productEntryDate: DateTime.now(),favoriteFlag:0 ));
 
   //emad dupitems
  //fffffffffn
@@ -287,7 +287,8 @@ super.initState();
                       color: ColorManager.grey2,
                     ),
                     onPressed: () {
-                      Navigator.pop(context);
+                      //send_data_firestore();
+                     // Navigator.pop(context);
                       //  Navigator.popAndPushNamed(context, "/SignIn");
 
                       //Navigator.pushReplacementNamed(context, "/SignIn");
@@ -645,9 +646,21 @@ super.initState();
                                       Positioned(
                                           right:AppSize.s4 ,child:IconButton(onPressed: () {
 
-                                        loadProductinit();
+                                          setState(() {
+                                            int temp =instProdList[index].favoriteFlag == 0 ? 1 :0;
 
-                                      },icon: Icon(Icons.favorite_border, color: Colors.red,)
+  print('temp=$temp');
+                                            instProdList[index].favoriteFlag = temp;
+                                            print( instProdList[index].favoriteFlag);
+                                          });
+
+
+
+
+                                      },icon: instProdList[index].favoriteFlag==1?
+                                      Icon(  Icons.favorite_outlined, color: Colors.red,)
+                                          :
+                                      Icon(  Icons.favorite_border, color: Colors.red,)
 
                                       )
 
@@ -686,8 +699,18 @@ super.initState();
     );
   }
 
+  // void send_data_firestore() {
+  //   FirebaseFirestore.instance.collection("Clean_App_Products").doc().set({
+  //     'Payment_id': 1,
+  //     'Payment_name': "emad",
+  //     'Payment_desc': "rrrr"
+  //   })
+  //   ;
 
-}
+  }
+
+
+
 
 class MyPainter extends CustomPainter {
   @override

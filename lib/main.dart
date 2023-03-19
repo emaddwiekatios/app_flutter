@@ -1,4 +1,6 @@
 //import 'dart:html';
+import 'package:clean_arch_app/Feature_Post/presentation/pages/Products/ProductMain.dart';
+import 'package:clean_arch_app/Feature_Post/presentation/pages/Products/ProductMainNew.dart';
 import 'package:clean_arch_app/core/resource/RoutesManager.dart';
 import 'package:device_preview/device_preview.dart';
 
@@ -17,6 +19,8 @@ import 'Feature_Post/presentation/pages/Home/PreHome.dart';
 import 'Feature_Post/presentation/pages/Login/view_login/view_login.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+
+import 'Feature_Post/presentation/pages/Products/ProductAdd.dart';
 
 
 SharedPreferences? prefs;
@@ -88,7 +92,11 @@ class MyApp extends StatelessWidget {
             '/Home': (context) => const Home(),
             '/PreHome': (context) => PreHome(),
             '/Splash': (context) => const Splash(),
-            '/Splash': (context) => const Splash(),
+            '/ProductMain': (context) =>  ProductMain(),
+            '/ProductMainNew': (context) =>  ProductMainNew(),
+            '/ProductAdd': (context) =>  ProductAdd(),
+
+
             '/Onboarding': (context) => const OnBoarding(),
             '/login': (context) => const login(),
 

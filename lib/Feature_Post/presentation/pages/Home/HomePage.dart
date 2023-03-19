@@ -701,9 +701,9 @@ super.initState();
 
   void send_data_firestore() {
     FirebaseFirestore.instance.collection("Clean_App_Products").doc().set({
-      'Payment_id': 1,
-      'Payment_name': "emad",
-      'Payment_desc': "rrrr"
+      'name': "rmsd",
+      'price': "10",
+
     })
     ;
 

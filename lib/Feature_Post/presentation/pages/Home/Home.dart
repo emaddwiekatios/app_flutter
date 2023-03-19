@@ -97,17 +97,55 @@ Widget getDrawer(context) {
                     Icons.generating_tokens,
                     color: ColorManager.primary,
                   ),
-                  title: Text('GetX'.tr),
-                  trailing: Text('Getx'.tr),
+                  title: Text('ProductMain'.tr),
+                  trailing: Text('ProductMain'.tr),
                   onTap: () {
                     // print('ontap');
-                   // Get.toNamed(RoutesManager.getxbuilder);
+                    Get.toNamed('/ProductMain');
+                    //  Get.to(() => GetxManagement());
+                  }),
+              const Divider(
+                height: FontManagerSize.s8,
+              )
+
+
+       ,
+              ListTile(
+                  leading: Icon(
+                    Icons.generating_tokens,
+                    color: ColorManager.primary,
+                  ),
+                  title: Text('ProductMainNew'.tr),
+                  trailing: Text('ProductMainNew'.tr),
+                  onTap: () {
+                    // print('ontap');
+                    Get.toNamed('/ProductMainNew');
                     //  Get.to(() => GetxManagement());
                   }),
               const Divider(
                 height: FontManagerSize.s8,
               ),
-              ListTile(
+
+
+  ListTile(
+  leading: Icon(
+  Icons.generating_tokens,
+  color: ColorManager.primary,
+  ),
+  title: Text('ProductAdd'.tr),
+  trailing: Text('ProductAdd'.tr),
+  onTap: () {
+  // print('ontap');
+  Get.toNamed('/ProductAdd');
+  //  Get.to(() => GetxManagement());
+  }),
+  const Divider(
+  height: FontManagerSize.s8,
+  ),
+
+
+
+  ListTile(
                   leading: Icon(
                     Icons.layers_outlined,
                     color: ColorManager.primary,

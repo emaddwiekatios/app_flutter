@@ -1,9 +1,14 @@
 
+//import 'dart:html';
+
+import 'package:clean_arch_app/core/resource/AssetManager.dart';
+import 'package:clean_arch_app/core/resource/MediaQuery.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'dart:io';
 import 'dart:async';
 import 'package:image/image.dart' as Im;
+import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:math' as Math;
 
@@ -41,6 +46,16 @@ Color? colorOne ;
 Color? colorTwo ;
 Color? colorThree ;
 User? user;
+dynamic _pickImageError;
+bool isVideo = false;
+
+String? _retrieveDataError;
+typedef OnPickImageCallback = void Function(
+    double? maxWidth, double? maxHeight, int? quality);
+final ImagePicker _picker = ImagePicker();
+final TextEditingController maxWidthController = TextEditingController();
+final TextEditingController maxHeightController = TextEditingController();
+final TextEditingController qualityController = TextEditingController();
 
 class _ProductAddState extends State<ProductAdd> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -61,11 +76,13 @@ class _ProductAddState extends State<ProductAdd> {
   /// end add  keyboard action
   //  Color pyellow = Color(red4);
   File? _image;
+  XFile? image;
   final ImagePicker _picker = ImagePicker();
   // PickedFile _imageFile;
-  File? _imageFile;
+  //File? _imageFile;
   DateTime _date = DateTime.now();
   QuerySnapshot? carsinvoice;
+
   final GlobalKey<ScaffoldState> _scaffoldKeysnak = new GlobalKey<ScaffoldState>();
 
 
@@ -147,24 +164,12 @@ class _ProductAddState extends State<ProductAdd> {
   TextEditingController contPaymentdentrydate = new TextEditingController();
   TextEditingController contPaymentTo = new TextEditingController();
   TextEditingController contPaymentdate = new TextEditingController();
+   File? imageFile ;
 
-  Future getImagecamera() async {
-    // var tempImage = await ImagePicker.pickImage(source: ImageSource.camera);
-    // setState(() {
-    //   sampleimage = tempImage;
-    // });
 
-    //  compressImage();
-  }
 
-  Future getImagegalary() async {
-    var tempImage = await ImagePicker().pickImage(source: ImageSource.gallery);
-    setState(() {
-      sampleimage = tempImage as File?;
-    });
 
-    /// compressImage();
-  }
+
 
   Widget build(BuildContext context) {
 
@@ -173,217 +178,219 @@ class _ProductAddState extends State<ProductAdd> {
 
 //    var appLanguage = Provider.of<AppLanguage>(context);
 
-    return Scaffold(
-    //  resizeToAvoidBottomPadding: false,
-      resizeToAvoidBottomInset: true,
-      key: _scaffoldKey,
-      // drawer: Appdrawer(),
-      body:  GestureDetector(
-        onTap: (){
-          print('ontap');
-          FocusScopeNode currentFocus = FocusScope.of(context);
+    return SafeArea(
+      child: Scaffold(
+      //  resizeToAvoidBottomPadding: false,
+        resizeToAvoidBottomInset: true,
+        key: _scaffoldKey,
+        // drawer: Appdrawer(),
+        body:  GestureDetector(
+          onTap: (){
+            print('ontap');
+            FocusScopeNode currentFocus = FocusScope.of(context);
 
-          if (!currentFocus.hasPrimaryFocus) {
-            currentFocus.unfocus();
-          }
-        },
+            if (!currentFocus.hasPrimaryFocus) {
+              currentFocus.unfocus();
+            }
+          },
 
-        child: Stack(
-          children: <Widget>[
-            //header shape
-            Positioned(
-              top: 0,
-              left: 0,
-              child: Container(
-                height: MediaQuery.of(context).size.height / 4,
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  //borderRadius: BorderRadius.circular(200),
-                  //  color: red4,
-                ),
-                child: CustomPaint(
-                  child: Container(
-                    height: 400.0,
+          child: Stack(
+            children: <Widget>[
+              //header shape
+              Positioned(
+                top: 0,
+                left: 0,
+                child: Container(
+                  height: MediaQuery.of(context).size.height / 4,
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                    //borderRadius: BorderRadius.circular(200),
+                    //  color: red4,
                   ),
-                  painter: _MyPainter(),
+                  child: CustomPaint(
+                    child: Container(
+                      height: 400.0,
+                    ),
+                    painter: _MyPainter(),
+                  ),
                 ),
               ),
-            ),
 
-            //background color
-            Positioned(
-              bottom: -125,
-              left: -150,
-              child: Container(
-                height: 250, //MediaQuery.of(context).size.height / 4,
-                width: 250, //MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(250),
-                  color: Colors.red,
+              //background color
+              Positioned(
+                bottom: -125,
+                left: -150,
+                child: Container(
+                  height: 250, //MediaQuery.of(context).size.height / 4,
+                  width: 250, //MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(250),
+                    color: Colors.red,
+                  ),
                 ),
               ),
-            ),
-            Positioned(
-              bottom: -100,
-              right: -115,
-              child: Container(
-                height: 250, //MediaQuery.of(context).size.height / 4,
-                width: 250, //MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(200),
-                    color: Colors.red),
+              Positioned(
+                bottom: -100,
+                right: -115,
+                child: Container(
+                  height: 250, //MediaQuery.of(context).size.height / 4,
+                  width: 250, //MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(200),
+                      color: Colors.red),
+                ),
               ),
-            ),
-            //menu
-            Positioned(
-              top: 20,
-              right: 20,
-              child: IconButton(
-                icon: Icon(Icons.arrow_back),
-                onPressed: () {
-                  print('inside button');
-                  print('inside button');
-                  //_scaffoldKey.currentState.openDrawer();
-                  // Navigator.of(context).pushReplacement(
-                  //   new MaterialPageRoute(
-                  //       builder: (BuildContext context) => new main_page()),
-                  // );
-                },
+              //menu
+              Positioned(
+                top: 20,
+                right: 20,
+                child: IconButton(
+                  icon: Icon(Icons.arrow_back),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    print('inside button');
+                    print('inside button');
+                    //_scaffoldKey.currentState.openDrawer();
+                    // Navigator.of(context).pushReplacement(
+                    //   new MaterialPageRoute(
+                    //       builder: (BuildContext context) => new main_page()),
+                    // );
+                  },
+                ),
               ),
-            ),
-            Positioned(
-              top: MediaQuery.of(context).size.height / 15,
-              left: MediaQuery.of(context).size.width / 2 -
-                  ('Add Payment'.toString().length * 8),
-              child: Text('Add Payment',
-                //AppLocalizations.of(context).translate('Add Payment'),
+              Positioned(
+                top: MediaQuery.of(context).size.height / 15,
+                left: MediaQuery.of(context).size.width / 2 -
+                    ('Add Payment'.toString().length * 8),
+                child: Text('Add Payment',
+                  //AppLocalizations.of(context).translate('Add Payment'),
 
-                //'Add Payment',
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.white,),
+                  //'Add Payment',
+                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.white,),
+                ),
               ),
-            ),
-            //body
-            Positioned(
-                top: 100,
-                right: 0,
-                child: SingleChildScrollView(
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    height:pheight+200,
+              //body
+              Positioned(
+                  top: 100,
+                  right: 0,
+                  child: SingleChildScrollView(
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height:pheight+200,
 //                          MediaQuery.of(context).size.height >= 775.0
 //                              ? MediaQuery.of(context).size.height
 //                              : 775.0,
-                    child: Padding(
-                      padding: const EdgeInsets.all(4),
-                      child: Container(
-                        // color: Colors.red,
-                        //   height: MediaQuery.of(context).size.height/2,
-                        //   width: MediaQuery.of(context).size.width,
+                      child: Padding(
+                        padding: const EdgeInsets.all(4),
+                        child: Container(
+                          // color: Colors.red,
+                          //   height: MediaQuery.of(context).size.height/2,
+                          //   width: MediaQuery.of(context).size.width,
 
-                        child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: <Widget>[
-                                Row(
-                                  children: [
-                                    Container(
-                                      height: MediaQuery.of(context).size.height / 15,
-                                      width: MediaQuery.of(context).size.width/4,
-                                      child: Material(
-                                        elevation: 5.0,
-                                        borderRadius: BorderRadius.circular(5.0),
-                                        child:
+                          child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: <Widget>[
+                                  Row(
+                                    children: [
+                                      Container(
+                                        height: MediaQuery.of(context).size.height / 15,
+                                        width: MediaQuery.of(context).size.width/4,
+                                        child: Material(
+                                          elevation: 5.0,
+                                          borderRadius: BorderRadius.circular(5.0),
+                                          child:
 
-                                        Padding(
-                                          padding: const EdgeInsets.all(10),
-                                          child: Text('Payment Id',
-                                              //'${AppLocalizations.of(context).translate('Payment Id')} :'
-                                            ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(10),
+                                            child: Text('Payment Id',
+                                                //'${AppLocalizations.of(context).translate('Payment Id')} :'
+                                              ),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    SizedBox(width:5),
-                                    Container(
-                                      height: MediaQuery.of(context).size.height / 15,
-                                      width: MediaQuery.of(context).size.width-(MediaQuery.of(context).size.width/4)-15,
+                                      SizedBox(width:5),
+                                      Container(
+                                        height: MediaQuery.of(context).size.height / 15,
+                                        width: MediaQuery.of(context).size.width-(MediaQuery.of(context).size.width/4)-15,
 
-                                      child: Material(
-                                        elevation: 5.0,
-                                        borderRadius: BorderRadius.circular(5.0),
-                                        child: TextFormField(
+                                        child: Material(
+                                          elevation: 5.0,
+                                          borderRadius: BorderRadius.circular(5.0),
+                                          child: TextFormField(
 
-                                            keyboardType: TextInputType.number,
-                                            controller: contPaymentid,
-                                            onChanged: (value) {},
-                                            validator: (input) {
-                                              if (input!.isEmpty) {
-                                                return 'Please Prod Id ';
-                                              }
-                                            },
-                                            onSaved: (input) => imagename = input,
-                                            decoration: InputDecoration(
-                                                border: InputBorder.none,
+                                              keyboardType: TextInputType.number,
+                                              controller: contPaymentid,
+                                              onChanged: (value) {},
+                                              validator: (input) {
+                                                if (input!.isEmpty) {
+                                                  return 'Please Prod Id ';
+                                                }
+                                              },
+                                              onSaved: (input) => imagename = input,
+                                              decoration: InputDecoration(
+                                                  border: InputBorder.none,
 
 //                        prefixIcon: Icon(Icons.search,
 //                            color: red2),
 //                            size: 30.0),
-                                                suffixIcon: IconButton(
-                                                    icon: Icon(Icons.cancel,
-                                                        color:Colors.red,
-                                                        // Color(getColorHexFromStr('#FEE16D')),
-                                                        size: 20.0),
-                                                    onPressed: () {
-                                                      print('inside clear');
-                                                      contPaymentid.clear();
-                                                      contPaymentid.clear();
-                                                    }),
-                                                contentPadding:
-                                                EdgeInsets.only(left: 15.0, top: 15.0,right:15),
-                                                hintText:'Payment Id',
-                                               // AppLocalizations.of(context).translate('Payment Id'),
+                                                  suffixIcon: IconButton(
+                                                      icon: Icon(Icons.cancel,
+                                                          color:Colors.red,
+                                                          // Color(getColorHexFromStr('#FEE16D')),
+                                                          size: 20.0),
+                                                      onPressed: () {
+                                                        print('inside clear');
+                                                        contPaymentid.clear();
+                                                        contPaymentid.clear();
+                                                      }),
+                                                  contentPadding:
+                                                  EdgeInsets.only(left: 15.0, top: 15.0,right:15),
+                                                  hintText:'Payment Id',
+                                                 // AppLocalizations.of(context).translate('Payment Id'),
 
-                                                hintStyle: TextStyle(
-                                                    color: Colors.grey,
-                                                    fontFamily: 'Quicksand'))),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Row(
-                                  children: [
-                                    Container(
-                                      height: MediaQuery.of(context).size.height / 15,
-                                      width: MediaQuery.of(context).size.width/4,
-                                      child: Material(
-                                        elevation: 5.0,
-                                        borderRadius: BorderRadius.circular(5.0),
-                                        child:
-
-                                        Padding(
-                                          padding: const EdgeInsets.all(10),
-                                          child: Text('Payment_Date'
-                                            //  '${AppLocalizations.of(context).translate('Payment_Date')} :'
-                                            ),
+                                                  hintStyle: TextStyle(
+                                                      color: Colors.grey,
+                                                      fontFamily: 'Quicksand'))),
                                         ),
                                       ),
-                                    ),
-                                    SizedBox(width:5),
-                                    Row(
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Container(
+                                        height: MediaQuery.of(context).size.height / 15,
+                                        width: MediaQuery.of(context).size.width/4,
+                                        child: Material(
+                                          elevation: 5.0,
+                                          borderRadius: BorderRadius.circular(5.0),
+                                          child:
 
-                                      children: <Widget>[
+                                          Padding(
+                                            padding: const EdgeInsets.all(10),
+                                            child: Text('Payment_Date'
+                                              //  '${AppLocalizations.of(context).translate('Payment_Date')} :'
+                                              ),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(width:5),
+                                      Row(
+
+                                        children: <Widget>[
 
 
-                                        SizedBox(
-                                          width: MediaQuery
-                                              .of(context)
-                                              .size
-                                              .width / 2,
-                                          child: ElevatedButton(
-                                            //elevation: 0,
-                                            onPressed: () {
-                                              //  Navigator.of(context).pushReplacementNamed('/MainPage');
+                                          SizedBox(
+                                            width: MediaQuery
+                                                .of(context)
+                                                .size
+                                                .width / 2,
+                                            child: ElevatedButton(
+                                              //elevation: 0,
+                                              onPressed: () {
+                                                //  Navigator.of(context).pushReplacementNamed('/MainPage');
 //                                               DatePicker.showDatePicker(context,
 //                                                   showTitleActions: true,
 //                                                   minTime: DateTime(2018,3,5),
@@ -407,21 +414,21 @@ class _ProductAddState extends State<ProductAdd> {
 //                                                   currentTime: DateTime.now(),
 //                                                  // locale: LocaleType.ar
 //                                               );
-                                            }
-                                            ,
-                                          //  color: Colors.white,
-                                            //padding: EdgeInsets.only(left: (5.0), top: 5.0),
-                                            //shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))
-                                            child: Text('${formatDate(_date,
-                                                [yyyy,'-',M,'-',dd,' '])}',style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 17,
-                                                fontWeight: FontWeight
-                                                    .bold),),
+                                              }
+                                              ,
+                                            //  color: Colors.white,
+                                              //padding: EdgeInsets.only(left: (5.0), top: 5.0),
+                                              //shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))
+                                              child: Text('${formatDate(_date,
+                                                  [yyyy,'-',M,'-',dd,' '])}',style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 17,
+                                                  fontWeight: FontWeight
+                                                      .bold),),
+                                            ),
                                           ),
-                                        ),
-                                        InkWell(
-                                          onTap: () {
+                                          InkWell(
+                                            onTap: () {
 //                                             DatePicker.showDatePicker(context,
 //                                                 showTitleActions: true,
 //                                                 minTime: DateTime(2018,3,5),
@@ -444,197 +451,197 @@ class _ProductAddState extends State<ProductAdd> {
 //                                                 currentTime: DateTime.now(),
 //                                              //   locale: LocaleType.ar
 //                                             );
-                                          },
-                                          child: Icon(Icons.edit ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
+                                            },
+                                            child: Icon(Icons.edit ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
 
-                                Row(
-                                  children: [
-                                    Container(
-                                      height: MediaQuery.of(context).size.height / 15,
-                                      width: MediaQuery.of(context).size.width/4,
-                                      child: Material(
-                                        elevation: 5.0,
-                                        borderRadius: BorderRadius.circular(5.0),
-                                        child:
+                                  Row(
+                                    children: [
+                                      Container(
+                                        height: MediaQuery.of(context).size.height / 15,
+                                        width: MediaQuery.of(context).size.width/4,
+                                        child: Material(
+                                          elevation: 5.0,
+                                          borderRadius: BorderRadius.circular(5.0),
+                                          child:
 
-                                        Padding(
-                                          padding: const EdgeInsets.all(10),
-                                          child: Text('Payment_name',
-                                             // '${AppLocalizations.of(context).translate('Payment_name')} :'
+                                          Padding(
+                                            padding: const EdgeInsets.all(10),
+                                            child: Text('Payment_name',
+                                               // '${AppLocalizations.of(context).translate('Payment_name')} :'
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                    SizedBox(width:5),
-                                    Container(
-                                      height: MediaQuery.of(context).size.height / 15,
-                                      width: MediaQuery.of(context).size.width-(MediaQuery.of(context).size.width/4)-15,
+                                      SizedBox(width:5),
+                                      Container(
+                                        height: MediaQuery.of(context).size.height / 15,
+                                        width: MediaQuery.of(context).size.width-(MediaQuery.of(context).size.width/4)-15,
 
-                                      child: Material(
-                                        elevation: 5.0,
-                                        borderRadius: BorderRadius.circular(5.0),
-                                        child: TextFormField(
-                                            controller: contPaymentname,
-                                            onChanged: (value) {},
-                                            validator: (input) {
-                                              if (input!.isEmpty) {
-                                                return 'Please Prod Name ';
-                                              }
-                                            },
-                                            onSaved: (input) => imagename = input,
-                                            decoration: InputDecoration(
-                                                border: InputBorder.none,
+                                        child: Material(
+                                          elevation: 5.0,
+                                          borderRadius: BorderRadius.circular(5.0),
+                                          child: TextFormField(
+                                              controller: contPaymentname,
+                                              onChanged: (value) {},
+                                              validator: (input) {
+                                                if (input!.isEmpty) {
+                                                  return 'Please Prod Name ';
+                                                }
+                                              },
+                                              onSaved: (input) => imagename = input,
+                                              decoration: InputDecoration(
+                                                  border: InputBorder.none,
 //                        prefixIcon: Icon(Icons.search,
 //                            color: red2),
 //                            size: 30.0),
-                                                suffixIcon: IconButton(
-                                                    icon: Icon(Icons.cancel,
-                                                        color: Colors.cyan,//(
-                                                         //   getColorHexFromStr('#FEE16D')
-                                                        //),
-                                                        size: 20.0),
-                                                    onPressed: () {
-                                                      print('inside clear');
-                                                      contPaymentname.clear();
-                                                      contPaymentname.clear();
-                                                    }),
-                                                contentPadding:
-                                                EdgeInsets.only(left: 15.0, top: 15.0,right:15),
-                                               // hintText: AppLocalizations.of(context).translate('Payment_name'),
-                                                hintStyle: TextStyle(
-                                                    color: Colors.grey,
-                                                    fontFamily: 'Quicksand'))),
+                                                  suffixIcon: IconButton(
+                                                      icon: Icon(Icons.cancel,
+                                                          color: Colors.cyan,//(
+                                                           //   getColorHexFromStr('#FEE16D')
+                                                          //),
+                                                          size: 20.0),
+                                                      onPressed: () {
+                                                        print('inside clear');
+                                                        contPaymentname.clear();
+                                                        contPaymentname.clear();
+                                                      }),
+                                                  contentPadding:
+                                                  EdgeInsets.only(left: 15.0, top: 15.0,right:15),
+                                                 // hintText: AppLocalizations.of(context).translate('Payment_name'),
+                                                  hintStyle: TextStyle(
+                                                      color: Colors.grey,
+                                                      fontFamily: 'Quicksand'))),
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
 
 
 
-                                Row(
-                                  children: [
-                                    Container(
-                                      height: MediaQuery.of(context).size.height / 15,
-                                      width: MediaQuery.of(context).size.width/4,
-                                      child: Material(
-                                        elevation: 5.0,
-                                        borderRadius: BorderRadius.circular(5.0),
-                                        child:
+                                  Row(
+                                    children: [
+                                      Container(
+                                        height: MediaQuery.of(context).size.height / 15,
+                                        width: MediaQuery.of(context).size.width/4,
+                                        child: Material(
+                                          elevation: 5.0,
+                                          borderRadius: BorderRadius.circular(5.0),
+                                          child:
 
-                                        Padding(
-                                          padding: const EdgeInsets.all(10),
-                                          child: Text('Payment_desc'
-                                              //${AppLocalizations.of(context).translate('Payment_desc')} :'
+                                          Padding(
+                                            padding: const EdgeInsets.all(10),
+                                            child: Text('Payment_desc'
+                                                //${AppLocalizations.of(context).translate('Payment_desc')} :'
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                    SizedBox(width:5),
-                                    Container(
-                                      height: MediaQuery.of(context).size.height / 15,
-                                      width: MediaQuery.of(context).size.width-(MediaQuery.of(context).size.width/4)-15,
-                                      child: Material(
-                                        elevation: 5.0,
-                                        borderRadius: BorderRadius.circular(5.0),
-                                        child:
+                                      SizedBox(width:5),
+                                      Container(
+                                        height: MediaQuery.of(context).size.height / 15,
+                                        width: MediaQuery.of(context).size.width-(MediaQuery.of(context).size.width/4)-15,
+                                        child: Material(
+                                          elevation: 5.0,
+                                          borderRadius: BorderRadius.circular(5.0),
+                                          child:
 
-                                        TextFormField(
-                                            controller: contPaymentdesc,
-                                            onChanged: (value) {},
-                                            validator: (input) {
-                                              if (input!.isEmpty) {
-                                                return 'Please Prod Name ';
-                                              }
-                                            },
-                                            onSaved: (input) => imagename = input,
-                                            decoration: InputDecoration(
-                                                border: InputBorder.none,
+                                          TextFormField(
+                                              controller: contPaymentdesc,
+                                              onChanged: (value) {},
+                                              validator: (input) {
+                                                if (input!.isEmpty) {
+                                                  return 'Please Prod Name ';
+                                                }
+                                              },
+                                              onSaved: (input) => imagename = input,
+                                              decoration: InputDecoration(
+                                                  border: InputBorder.none,
 //                        prefixIcon: Icon(Icons.search,
 //                            color: red2),
 //                            size: 30.0),
-                                                suffixIcon: IconButton(
-                                                    icon: Icon(Icons.cancel,
-                                                        color: Colors.black
-                                                        ,
-                                                        size: 20.0),
-                                                    onPressed: () {
-                                                      print('inside clear');
-                                                      contPaymentdesc.clear();
-                                                      contPaymentdesc.clear();
-                                                    }),
-                                                contentPadding:
-                                                EdgeInsets.only(left: 15.0, top: 15.0,right:15),
-                                             //   hintText: AppLocalizations.of(context).translate('Payment_desc'),
+                                                  suffixIcon: IconButton(
+                                                      icon: Icon(Icons.cancel,
+                                                          color: Colors.black
+                                                          ,
+                                                          size: 20.0),
+                                                      onPressed: () {
+                                                        print('inside clear');
+                                                        contPaymentdesc.clear();
+                                                        contPaymentdesc.clear();
+                                                      }),
+                                                  contentPadding:
+                                                  EdgeInsets.only(left: 15.0, top: 15.0,right:15),
+                                               //   hintText: AppLocalizations.of(context).translate('Payment_desc'),
 
-                                                hintStyle: TextStyle(
-                                                    color: Colors.grey,
-                                                    fontFamily: 'Quicksand'))),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Row(
-                                  children: [
-                                    Container(
-                                      height: MediaQuery.of(context).size.height / 15,
-                                      width: MediaQuery.of(context).size.width/4,
-                                      child: Material(
-                                        elevation: 5.0,
-                                        borderRadius: BorderRadius.circular(5.0),
-                                        child:
-
-                                        Padding(
-                                          padding: const EdgeInsets.all(10),
-                                          child: Text('Payment_from',
-                                          //   '${AppLocalizations.of(context).translate('Payment_from')} :'
-                                            ),
+                                                  hintStyle: TextStyle(
+                                                      color: Colors.grey,
+                                                      fontFamily: 'Quicksand'))),
                                         ),
                                       ),
-                                    ),
-                                    SizedBox(width:5),
-                                    Container(
-                                      height: MediaQuery.of(context).size.height / 15,
-                                      width: MediaQuery.of(context).size.width-(MediaQuery.of(context).size.width/4)-15,
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Container(
+                                        height: MediaQuery.of(context).size.height / 15,
+                                        width: MediaQuery.of(context).size.width/4,
+                                        child: Material(
+                                          elevation: 5.0,
+                                          borderRadius: BorderRadius.circular(5.0),
+                                          child:
 
-                                      child: Material(
-                                        elevation: 5.0,
-                                        borderRadius: BorderRadius.circular(5.0),
-                                        child: Row(
-                                          children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(10),
+                                            child: Text('Payment_from',
+                                            //   '${AppLocalizations.of(context).translate('Payment_from')} :'
+                                              ),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(width:5),
+                                      Container(
+                                        height: MediaQuery.of(context).size.height / 15,
+                                        width: MediaQuery.of(context).size.width-(MediaQuery.of(context).size.width/4)-15,
 
-                                            Padding(
-                                              padding: const EdgeInsets.only(left:15.0,right:15),
-                                              child: Align(
-                                                alignment: Alignment.topLeft,
-                                                child: Padding(
-                                                  padding: const EdgeInsets.only(left: 15.0),
-                                                  child: DropdownButton<String>(
-                                                      items: list_pays_from.map((String val) {
-                                                        return new DropdownMenuItem<String>(
-                                                          value: val,
-                                                          child: new Text(val),
-                                                        );
-                                                      }).toList(),
-                                                      hint: Text(_selectedpays_from),
-                                                      onChanged: (newVal) {
-                                                        this.setState(() {
-                                                         // _selectedpays_from = newVal;
-                                                        });
-                                                      }),
+                                        child: Material(
+                                          elevation: 5.0,
+                                          borderRadius: BorderRadius.circular(5.0),
+                                          child: Row(
+                                            children: [
+
+                                              Padding(
+                                                padding: const EdgeInsets.only(left:15.0,right:15),
+                                                child: Align(
+                                                  alignment: Alignment.topLeft,
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.only(left: 15.0),
+                                                    child: DropdownButton<String>(
+                                                        items: list_pays_from.map((String val) {
+                                                          return new DropdownMenuItem<String>(
+                                                            value: val,
+                                                            child: new Text(val),
+                                                          );
+                                                        }).toList(),
+                                                        hint: Text(_selectedpays_from),
+                                                        onChanged: (newVal) {
+                                                          this.setState(() {
+                                                           // _selectedpays_from = newVal;
+                                                          });
+                                                        }),
+                                                  ),
                                                 ),
                                               ),
-                                            ),
 
 
 
@@ -642,92 +649,92 @@ class _ProductAddState extends State<ProductAdd> {
 
 
 
-                                          ],
+                                            ],
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Row(
-                                  children: [
-                                    Container(
-                                      height: MediaQuery.of(context).size.height / 15,
-                                      width: MediaQuery.of(context).size.width/4,
-                                      child: Material(
-                                        elevation: 5.0,
-                                        borderRadius: BorderRadius.circular(5.0),
-                                        child:
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Container(
+                                        height: MediaQuery.of(context).size.height / 15,
+                                        width: MediaQuery.of(context).size.width/4,
+                                        child: Material(
+                                          elevation: 5.0,
+                                          borderRadius: BorderRadius.circular(5.0),
+                                          child:
 
-                                        Padding(
-                                          padding: const EdgeInsets.all(10),
-                                          child: Text('Payment_to',
-                                             // '${AppLocalizations.of(context).translate('Payment_to')} :'
-                                            ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(10),
+                                            child: Text('Payment_to',
+                                               // '${AppLocalizations.of(context).translate('Payment_to')} :'
+                                              ),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    SizedBox(width:5),
-                                    Container(
-                                      height: MediaQuery.of(context).size.height / 15,
-                                      width: MediaQuery.of(context).size.width-(MediaQuery.of(context).size.width/4)-15,
+                                      SizedBox(width:5),
+                                      Container(
+                                        height: MediaQuery.of(context).size.height / 15,
+                                        width: MediaQuery.of(context).size.width-(MediaQuery.of(context).size.width/4)-15,
 
-                                      child: Material(
-                                        elevation: 5.0,
-                                        borderRadius: BorderRadius.circular(5.0),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          children: [
+                                        child: Material(
+                                          elevation: 5.0,
+                                          borderRadius: BorderRadius.circular(5.0),
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: [
 
-                                            Padding(
-                                              padding: const EdgeInsets.only(left:5.0,right:5),
-                                              child: Align(
-                                                alignment: Alignment.topLeft,
-                                                child: Padding(
-                                                  padding: const EdgeInsets.only(left: 15.0),
-                                                  child: DropdownButton<String>(
-                                                      items: list_Providers.map((String val) {
-                                                        return new DropdownMenuItem<String>(
-                                                          value: val,
-                                                          child: new Text(val),
-                                                        );
-                                                      }).toList(),
-                                                      hint: Text(_selectedProviders),
-                                                      onChanged: (newVal) {
-                                                        this.setState(() {
-                                                          //_selectedProviders = newVal;
-                                                        });
-                                                      }),
+                                              Padding(
+                                                padding: const EdgeInsets.only(left:5.0,right:5),
+                                                child: Align(
+                                                  alignment: Alignment.topLeft,
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.only(left: 15.0),
+                                                    child: DropdownButton<String>(
+                                                        items: list_Providers.map((String val) {
+                                                          return new DropdownMenuItem<String>(
+                                                            value: val,
+                                                            child: new Text(val),
+                                                          );
+                                                        }).toList(),
+                                                        hint: Text(_selectedProviders),
+                                                        onChanged: (newVal) {
+                                                          this.setState(() {
+                                                            //_selectedProviders = newVal;
+                                                          });
+                                                        }),
+                                                  ),
                                                 ),
                                               ),
-                                            ),
 
 
-                                            IconButton(icon:Icon(Icons.refresh,color: Colors.red,size: 15,
-                                            ),
-                                              onPressed:(){
-                                                getDataproviders().then((results) {
-                                                  setState(() {
-                                                    // print(widget.Docs_max);
-                                                    //contPaymentid.text = widget.Docs_max;
-                                                    carsproviders = results;
-                                                    printlistproviders();
+                                              IconButton(icon:Icon(Icons.refresh,color: Colors.red,size: 15,
+                                              ),
+                                                onPressed:(){
+                                                  getDataproviders().then((results) {
+                                                    setState(() {
+                                                      // print(widget.Docs_max);
+                                                      //contPaymentid.text = widget.Docs_max;
+                                                      carsproviders = results;
+                                                      printlistproviders();
+                                                    });
                                                   });
-                                                });
-                                              },),
+                                                },),
 
-                                            IconButton(icon:Icon(Icons.add,color: Colors.red,size: 15,
-                                            ),
-                                              onPressed:(){
-                                                getData().then((results) {
-                                                  setState(() {
-                                                    Navigator.pushNamed(
-                                                        context, '/AddProvider');
+                                              IconButton(icon:Icon(Icons.add,color: Colors.red,size: 15,
+                                              ),
+                                                onPressed:(){
+                                                  getData().then((results) {
+                                                    setState(() {
+                                                      Navigator.pushNamed(
+                                                          context, '/AddProvider');
+                                                    });
                                                   });
-                                                });
-                                              },),
+                                                },),
 
 
 
@@ -741,12 +748,12 @@ class _ProductAddState extends State<ProductAdd> {
 //                                          Navigator.pushNamed(
 //                                              context, '/CategoryAdd');
 //                                        }),
-                                          ],
+                                            ],
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
+                                    ],
+                                  ),
 //                              Material(
 //                                elevation: 5.0,
 //                                borderRadius: BorderRadius.circular(5.0),
@@ -782,221 +789,217 @@ class _ProductAddState extends State<ProductAdd> {
 //                                            color: Colors.grey,
 //                                            fontFamily: 'Quicksand'))),
 //                              ),
-                                SizedBox(
-                                  height: 5,
-                                ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
 
 
-                                Row(
-                                  children: [
-                                    Container(
-                                      height: MediaQuery.of(context).size.height / 15,
-                                      width: MediaQuery.of(context).size.width/4,
-                                      child: Material(
-                                        elevation: 5.0,
-                                        borderRadius: BorderRadius.circular(5.0),
-                                        child:
-
-                                        Padding(
-                                          padding: const EdgeInsets.all(10),
-                                          child: Text('Category',
-                                            //  '${AppLocalizations.of(context).translate('Category')} :'
-                                            ),
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(width:5),
-                                    Container(
-                                      height: MediaQuery.of(context).size.height / 15,
-                                      width: MediaQuery.of(context).size.width-(MediaQuery.of(context).size.width/4)-15,
-
-                                      child: Material(
-                                        elevation: 5.0,
-                                        borderRadius: BorderRadius.circular(5.0),
-                                        child: Row(
-
-                                          children: [
-
-                                            Padding(
-                                              padding: const EdgeInsets.only(left:0.0,right:0),
-                                              child: Align(
-                                                alignment: Alignment.topLeft,
-                                                child: Padding(
-                                                  padding: const EdgeInsets.only(left: 15.0),
-                                                  child: DropdownButton<String>(
-                                                      items: list_cat.map((String val) {
-                                                        return new DropdownMenuItem<String>(
-                                                          value: val,
-                                                          child: new Text(val),
-                                                        );
-                                                      }).toList(),
-                                                      hint: Text(_selectedCat),
-                                                      onChanged: (newVal) {
-                                                        this.setState(() {
-                                                          //_selectedCat = newVal;
-                                                        });
-                                                      }),
-                                                ),
-                                              ),
-                                            ),
-                                            IconButton(icon:Icon(Icons.refresh,color: Colors.red,size: 15,
-                                            ),
-
-
-                                              onPressed:(){
-                                                getData().then((results) {
-                                                  setState(() {
-                                                    print(widget.Docs_max);
-                                                    contPaymentid.text = widget.Docs_max;
-                                                    cars = results;
-                                                    printlist();
-                                                  });
-                                                });
-                                              },),
-
-                                            IconButton(icon:Icon(Icons.add,color: Colors.red,size: 15,
-                                            ),
-                                              onPressed:(){
-                                                getData().then((results) {
-                                                  setState(() {
-                                                    Navigator.pushNamed(
-                                                        context, '/CategoryAdd');
-                                                  });
-                                                });
-                                              },),
-//                                    RaisedButton(
-//                                        elevation: 7.0,
-//                                        child: Text( AppLocalizations.of(context).translate('Add Category')),
-//                                        textColor: Colors.white,
-//                                        color: Colors.red,
-//                                        onPressed: () {
-//                                          Navigator.pushNamed(
-//                                              context, '/CategoryAdd');
-//                                        }),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-
-                                Row(
-                                  children: [
-                                    Container(
-                                      height: MediaQuery.of(context).size.height / 15,
-                                      width: MediaQuery.of(context).size.width/4,
-                                      child: Material(
-                                        elevation: 5.0,
-                                        borderRadius: BorderRadius.circular(5.0),
-                                        child:
-
-                                        Padding(
-                                          padding: const EdgeInsets.all(10),
-                                          child: Text('Payment_amt',
-                                             // '${AppLocalizations.of(context).translate('Payment_amt')} :'
-                                             ),
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(width:5),
-                                    Container(
-                                      height: MediaQuery.of(context).size.height / 15,
-                                      width: MediaQuery.of(context).size.width-(MediaQuery.of(context).size.width/4)-15,
-
-                                      child: Material(
-                                        elevation: 5.0,
-                                        borderRadius: BorderRadius.circular(5.0),
-                                        child:
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                          children: [
-                                            Container(
-                                              width: MediaQuery.of(context).size.width/3,
-                                              child: TextFormField(
-                                                  keyboardType: TextInputType.numberWithOptions(),
-                                                  focusNode: _nodeText1,
-                                                  controller: contPaymentAmt,
-                                                  onChanged: (value) {},
-                                                  validator: (input) {
-                                                    if (input!.isEmpty) {
-                                                      return 'Please Prod Cost ';
-                                                    }
-                                                  },
-                                                  onSaved: (input) => imagename = input,
-                                                  decoration: InputDecoration(
-                                                      border: InputBorder.none,
-//                        prefixIcon: Icon(Icons.search,
-//                            color: red2),
-//                            size: 30.0),
-                                                      suffixIcon: IconButton(
-                                                          icon: Icon(Icons.cancel,
-                                                              color: Colors.blue,
-                                                              size: 20.0),
-                                                          onPressed: () {
-                                                            print('inside clear');
-                                                            contPaymentAmt.clear();
-                                                            contPaymentAmt.clear();
-                                                          }),
-                                                      contentPadding:
-                                                      EdgeInsets.all( 10.0),//, top: 15.0,right:15),
-                                                     // hintText: AppLocalizations.of(context).translate('Payment_amt'),
-
-                                                      hintStyle: TextStyle(
-                                                          color: Colors.grey,
-                                                          fontFamily: 'Quicksand'))),
-                                            ),
-                                            Text("curr"),
-                                            SizedBox(width: 5,),
-                                            Align(
-                                              alignment: Alignment.topLeft,
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(left: 15.0),
-                                                child: DropdownButton<String>(
-                                                    items: list_currency.map((String val) {
-                                                      return new DropdownMenuItem<String>(
-                                                        value: val,
-                                                        child: new Text(val),
-                                                      );
-                                                    }).toList(),
-                                                    hint: Text(_selectedcurrency),
-                                                    onChanged: (newVal) {
-                                                      this.setState(() {
-                                                        _selectedcurrency = newVal!;
-                                                      });
-                                                    }),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-
-
-
-                                SizedBox(
-                                  height: 25,
-                                ),
+//                                 Row(
+//                                   children: [
+//                                     Container(
+//                                       height: MediaQuery.of(context).size.height / 15,
+//                                       width: MediaQuery.of(context).size.width/4,
+//                                       child: Material(
+//                                         elevation: 5.0,
+//                                         borderRadius: BorderRadius.circular(5.0),
+//                                         child:
+//
+//                                         Padding(
+//                                           padding: const EdgeInsets.all(10),
+//                                           child: Text('Category',
+//                                             //  '${AppLocalizations.of(context).translate('Category')} :'
+//                                             ),
+//                                         ),
+//                                       ),
+//                                     ),
+//                                     SizedBox(width:5),
+//                                     Container(
+//                                       height: MediaQuery.of(context).size.height / 15,
+//                                       width: MediaQuery.of(context).size.width-(MediaQuery.of(context).size.width/4)-15,
+//
+//                                       child: Material(
+//                                         elevation: 5.0,
+//                                         borderRadius: BorderRadius.circular(5.0),
+//                                         child: Row(
+//
+//                                           children: [
+//
+//                                             Padding(
+//                                               padding: const EdgeInsets.only(left:0.0,right:0),
+//                                               child: Align(
+//                                                 alignment: Alignment.topLeft,
+//                                                 child: Padding(
+//                                                   padding: const EdgeInsets.only(left: 15.0),
+//                                                   child: DropdownButton<String>(
+//                                                       items: list_cat.map((String val) {
+//                                                         return new DropdownMenuItem<String>(
+//                                                           value: val,
+//                                                           child: new Text(val),
+//                                                         );
+//                                                       }).toList(),
+//                                                       hint: Text(_selectedCat),
+//                                                       onChanged: (newVal) {
+//                                                         this.setState(() {
+//                                                           //_selectedCat = newVal;
+//                                                         });
+//                                                       }),
+//                                                 ),
+//                                               ),
+//                                             ),
+//                                             IconButton(icon:Icon(Icons.refresh,color: Colors.red,size: 15,
+//                                             ),
+//
+//
+//                                               onPressed:(){
+//                                                 getData().then((results) {
+//                                                   setState(() {
+//                                                     print(widget.Docs_max);
+//                                                     contPaymentid.text = widget.Docs_max;
+//                                                     cars = results;
+//                                                     printlist();
+//                                                   });
+//                                                 });
+//                                               },),
+//
+//                                             IconButton(icon:Icon(Icons.add,color: Colors.red,size: 15,
+//                                             ),
+//                                               onPressed:(){
+//                                                 getData().then((results) {
+//                                                   setState(() {
+//                                                     Navigator.pushNamed(
+//                                                         context, '/CategoryAdd');
+//                                                   });
+//                                                 });
+//                                               },),
+// //                                    RaisedButton(
+// //                                        elevation: 7.0,
+// //                                        child: Text( AppLocalizations.of(context).translate('Add Category')),
+// //                                        textColor: Colors.white,
+// //                                        color: Colors.red,
+// //                                        onPressed: () {
+// //                                          Navigator.pushNamed(
+// //                                              context, '/CategoryAdd');
+// //                                        }),
+//                                           ],
+//                                         ),
+//                                       ),
+//                                     ),
+//                                   ],
+//                                 ),
+//                                 SizedBox(
+//                                   height: 5,
+//                                 ),
+//
+//                                 Row(
+//                                   children: [
+//                                     Container(
+//                                       height: MediaQuery.of(context).size.height / 15,
+//                                       width: MediaQuery.of(context).size.width/4,
+//                                       child: Material(
+//                                         elevation: 5.0,
+//                                         borderRadius: BorderRadius.circular(5.0),
+//                                         child:
+//
+//                                         Padding(
+//                                           padding: const EdgeInsets.all(10),
+//                                           child: Text('Payment_amt',
+//                                              // '${AppLocalizations.of(context).translate('Payment_amt')} :'
+//                                              ),
+//                                         ),
+//                                       ),
+//                                     ),
+//                                     SizedBox(width:5),
+//                                     Container(
+//                                       height: MediaQuery.of(context).size.height / 15,
+//                                       width: MediaQuery.of(context).size.width-(MediaQuery.of(context).size.width/4)-15,
+//
+//                                       child: Material(
+//                                         elevation: 5.0,
+//                                         borderRadius: BorderRadius.circular(5.0),
+//                                         child:
+//                                         Row(
+//                                           mainAxisAlignment: MainAxisAlignment.spaceAround,
+//                                           children: [
+//                                             Container(
+//                                               width: MediaQuery.of(context).size.width/3,
+//                                               child: TextFormField(
+//                                                   keyboardType: TextInputType.numberWithOptions(),
+//                                                   focusNode: _nodeText1,
+//                                                   controller: contPaymentAmt,
+//                                                   onChanged: (value) {},
+//                                                   validator: (input) {
+//                                                     if (input!.isEmpty) {
+//                                                       return 'Please Prod Cost ';
+//                                                     }
+//                                                   },
+//                                                   onSaved: (input) => imagename = input,
+//                                                   decoration: InputDecoration(
+//                                                       border: InputBorder.none,
+// //                        prefixIcon: Icon(Icons.search,
+// //                            color: red2),
+// //                            size: 30.0),
+//                                                       suffixIcon: IconButton(
+//                                                           icon: Icon(Icons.cancel,
+//                                                               color: Colors.blue,
+//                                                               size: 20.0),
+//                                                           onPressed: () {
+//                                                             print('inside clear');
+//                                                             contPaymentAmt.clear();
+//                                                             contPaymentAmt.clear();
+//                                                           }),
+//                                                       contentPadding:
+//                                                       EdgeInsets.all( 10.0),//, top: 15.0,right:15),
+//                                                      // hintText: AppLocalizations.of(context).translate('Payment_amt'),
+//
+//                                                       hintStyle: TextStyle(
+//                                                           color: Colors.grey,
+//                                                           fontFamily: 'Quicksand'))),
+//                                             ),
+//                                             Text("curr"),
+//                                             SizedBox(width: 5,),
+//                                             Align(
+//                                               alignment: Alignment.topLeft,
+//                                               child: Padding(
+//                                                 padding: const EdgeInsets.only(left: 15.0),
+//                                                 child: DropdownButton<String>(
+//                                                     items: list_currency.map((String val) {
+//                                                       return new DropdownMenuItem<String>(
+//                                                         value: val,
+//                                                         child: new Text(val),
+//                                                       );
+//                                                     }).toList(),
+//                                                     hint: Text(_selectedcurrency),
+//                                                     onChanged: (newVal) {
+//                                                       this.setState(() {
+//                                                         _selectedcurrency = newVal!;
+//                                                       });
+//                                                     }),
+//                                               ),
+//                                             ),
+//                                           ],
+//                                         ),
+//                                       ),
+//                                     ),
+//                                   ],
+//                                 ),
+//
 
 
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                  children: [
-                                    ElevatedButton(
-                                       // elevation: 7.0,
-                                        child: Text('save'),
-                                            ///AppLocalizations.of(context).translate('Save'),
-                                        // Text("Save"),
-                                        //textColor: Colors.white,
-                                        //color: Colors.red,
-                                        onPressed: () {
-                                          print('inside save');
-                                          addpaymenttosql();
-                                          addimagedata();
+
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                    children: [
+                                      ElevatedButton(
+                                         // elevation: 7.0,
+                                          child: Text('save'),
+                                              ///AppLocalizations.of(context).translate('Save'),
+                                          // Text("Save"),
+                                          //textColor: Colors.white,
+                                          //color: Colors.red,
+                                          onPressed: () {
+                                            print('inside save');
+                                            addpaymenttosql();
+                                            addimagedata();
 
 //                                      _scaffoldKey.currentState.showSnackBar
 //                                      (SnackBar(
@@ -1008,103 +1011,124 @@ class _ProductAddState extends State<ProductAdd> {
 //                                          onPressed: _scaffoldKey.,
 //                                        ),
 //                                      ));
-                                        }
+                                          }
 
 
 
+                                      ),
+                                      ElevatedButton(
+                                        //elevation: 7.0,
+                                        child:  Text('Canceled',
+                                          //  AppLocalizations.of(context).translate('Cancel')
+                                           ),
+
+                                        // Text("Upload"),
+                                      //  textColor: Colors.white,
+                                       // color: Colors.red,
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                      ),
+                                      ElevatedButton(
+
+                                               child: Text("Show"),
+                                               //  Text("Upload"),
+                                               //textColor: Colors.white,
+                                              // color: Colors.red,
+                                               onPressed: () {
+                                                 print('inside save 1');
+                                                // _onPressedone();
+                                                // _onPressedall();
+                                                 addisubcollection();
+
+
+                                               },
+                                             ),
+                                             // RaisedButton(
+                                             //   elevation: 7.0,
+                                             //   child: Text("Read"),
+                                             //   //  Text("Upload"),
+                                             //   textColor: Colors.white,
+                                             //   color: Colors.red,
+                                             //   onPressed: () {
+                                             //     print('inside save 1');
+                                             //     // _onPressedone();
+                                             //     // _onPressedall();
+                                             //    // readisubcollection();
+                                             //     call_get_data_invoice();
+                                             //
+                                             //
+                                             //
+                                             //   },
+                                             // ),
+                                    ],
+                                  ),
+
+
+
+                        Container(
+                            padding: EdgeInsets.only(top:20, left:20, right:20),
+                            alignment: Alignment.topCenter,
+                            child: Column(
+
+                              children: [
+
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    ElevatedButton(
+                                        onPressed: () async {
+                                          image = await ImagePicker().pickImage(source: ImageSource.camera);
+                                          setState(() {
+                                            //update UI
+                                          });
+                                        },
+                                        child: Text("Pick Image camera")
                                     ),
                                     ElevatedButton(
-                                      //elevation: 7.0,
-                                      child:  Text('Canceled',
-                                        //  AppLocalizations.of(context).translate('Cancel')
-                                         ),
-
-                                      // Text("Upload"),
-                                    //  textColor: Colors.white,
-                                     // color: Colors.red,
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
+                                        onPressed: () async {
+                                          image = await ImagePicker().pickImage(source: ImageSource.gallery);
+                                          setState(() {
+                                            //update UI
+                                          });
+                                        },
+                                        child: Text("Pick Image gallery")
                                     ),
-//                                            RaisedButton(
-//                                              elevation: 7.0,
-//                                              child: Text("Show"),
-//                                              //  Text("Upload"),
-//                                              textColor: Colors.white,
-//                                              color: Colors.red,
-//                                              onPressed: () {
-//                                                print('inside save 1');
-//                                               // _onPressedone();
-//                                               // _onPressedall();
-//                                                addisubcollection();
-//
-//
-//                                              },
-//                                            ),
-//                                            RaisedButton(
-//                                              elevation: 7.0,
-//                                              child: Text("Read"),
-//                                              //  Text("Upload"),
-//                                              textColor: Colors.white,
-//                                              color: Colors.red,
-//                                              onPressed: () {
-//                                                print('inside save 1');
-//                                                // _onPressedone();
-//                                                // _onPressedall();
-//                                               // readisubcollection();
-//                                                call_get_data_invoice();
-//
-//
-//
-//                                              },
-//                                            ),
                                   ],
                                 ),
-                                SizedBox(
-                                  height: 5,
-                                ),
+
+                                image == null?Container():
+                                Container(
+                                    height:getHeight(context)/4,
+                                    width: getWidth(context) -20
+                                    ,child: Image.file(File(image!.path)))
+
+                              ],)
+                        )
 
 
-//                              new Row(
-//                                mainAxisAlignment: MainAxisAlignment.center,
-//                                children: <Widget>[
-//                                  IconButton(
-//                                    icon: Icon(Icons.camera_roll),
-//                                    onPressed: () {
-//                                      getImagegalary();
-//
-//                                      setState(() {
-//                                        state = 0;
-//                                      });
-//                                    },
-//                                  ),
-//                                  IconButton(
-//                                    icon: Icon(Icons.add_a_photo),
-//                                    onPressed: () {
-//                                      getImagecamera();
-//
-//                                      setState(() {
-//                                        state = 0;
-//                                      });
-//                                    },
-//                                  )
-//                                ],
-//                              ),
 
-                              ],
-                            )),
+
+
+
+
+
+
+                                ],
+                              )),
+                        ),
                       ),
                     ),
                   ),
-                ),
-            ],
+              ],
 
-            //  ),
+              //  ),
 
+          ),
         ),
+
+
       ),
-
-
     );
   }
 
@@ -1236,14 +1260,16 @@ class _ProductAddState extends State<ProductAdd> {
         [yyyy, '-', mm, '-', dd, ' ', hh, ':', nn, ':', ss, ' ', am]);
 
 
-    FirebaseFirestore.instance.collection("Invoices").add({
-      "Invoice_No": "123",
-      "Invoice_date": todayDate,
-      "Invoice_Details": [
-        {"Type_no": 1, "Type_name": "emad", "Type_price": 40},
-        {"Type_no": 2, "Type_name": "ddd", "Type_price": 60},
-        {"Type_no": 3, "Type_name": "ff", "Type_price": 70},
-      ]
+    FirebaseFirestore.instance.collection("Clean_App_Products_New").add({
+     "productId" :"1",
+     "productName":'CAKE',
+     "productImage" :"IMAGEPAth",
+     "productPrice" :40.4,
+     "productCat":"COLTHES",
+     "productEntryDate":currentdate,
+     "favoriteFlag" :"0"
+
+
     });
   }
 //  void readisubcollection() {

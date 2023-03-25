@@ -92,9 +92,15 @@ class _ProductMainNewState extends State<ProductMainNew> {
       _productImageController.text = documentSnapshot['productImage'];
       _productCatController.text = documentSnapshot['productCat'];
       _productEntryDateController.text = documentSnapshot['productEntryDate'];
-      _productPriceController.text = documentSnapshot['price'];
+      _productPriceController.text = documentSnapshot['productPrice'];
 
     }
+    else
+      {
+        _productNameController.text = '';
+        _productPriceController.text = '';
+        _productCatController.text = '';
+      }
 
     await showModalBottomSheet(
         isScrollControlled: true,
@@ -115,6 +121,9 @@ class _ProductMainNewState extends State<ProductMainNew> {
                   controller: _productNameController,
                   decoration: const InputDecoration(labelText: 'Name'),
                 ),
+                const SizedBox(
+                  height: 10,
+                ),
                 TextField(
                   keyboardType:
                   const TextInputType.numberWithOptions(decimal: true),
@@ -124,7 +133,7 @@ class _ProductMainNewState extends State<ProductMainNew> {
                   ),
                 ),
                 const SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
                 TextField(
                   keyboardType:
@@ -135,27 +144,42 @@ class _ProductMainNewState extends State<ProductMainNew> {
                   ),
                 ),
                 const SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
                 ElevatedButton(
                   child: Text(action == 'create' ? 'Create' : 'Update'),
                   onPressed: () async {
                     final String? name = _productNameController.text;
-                    final double? price = double.tryParse(_productPriceController
-                        .text);
+                    final String? price = _productPriceController.text;
                     final String? cat = _productCatController.text;
                     if (name != null && price != null &&cat != null) {
                       if (action == 'create') {
+                        _productNameController.text = '';
+                        _productPriceController.text = '';
+                        _productCatController.text = '';
+                        final todayDate = DateTime.now();
+                       var  currentdate = formatDate(todayDate,
+                            [yyyy, '-', mm, '-', dd, ' ', hh, ':', nn, ':', ss, ' ', am]);
+
                         // Persist a new product to Firestore
-                        await _productss.add({"productName": name, "productPrice": price
-                          , "productCat" :cat});
+                        await _productss.add({
+                          "productName": name,
+                          "productPrice": price
+                          , "productCat" :cat,
+                          "productId" :"13",
+                          "productImage" :"IMAGEPAth",
+                          "productCat":"COLTHES",
+                          "productEntryDate":currentdate,
+                          "favoriteFlag" :"0"
+
+                        });
                       }
 
                       if (action == 'update') {
                         // Update the product
                         await _productss
                             .doc(documentSnapshot!.id)
-                            .update({"name": name, "price": price, "productCat" :cat});
+                            .update({"productName": name, "productPrice": price, "productCat" :cat});
                       }
 
                       // Clear the text fields
@@ -386,7 +410,7 @@ class _ProductMainNewState extends State<ProductMainNew> {
                              productImage:documentSnapshot['productImage'],
                              productCat:documentSnapshot['productCat'],
                              productEntryDate:DateTime.now(),//DateTime.parse(documentSnapshot['productEntryDate']),
-                             productPrice:documentSnapshot['productPrice'],
+                             productPrice:documentSnapshot['productPrice'].toString(),
                              favoriteFlag:int.parse(documentSnapshot['favoriteFlag'])
                          );
 

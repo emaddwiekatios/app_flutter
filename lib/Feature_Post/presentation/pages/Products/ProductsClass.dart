@@ -2,7 +2,7 @@ class ProductClass {
   int productId;
   String productName;
   String productImage;
-  double productPrice;
+  String productPrice;
   String productCat;
   DateTime productEntryDate;
   int favoriteFlag;
@@ -14,7 +14,7 @@ class ProductClass {
     int productId=json['productId'];
     String productName = json['productName'];
     String productImage = json['productImage'];
-    double  productPrice = double.parse(json['productPrice']);
+    String  productPrice = json['productPrice'];
     String productCat = json['productCat'];
     DateTime productEntryDate = DateTime.parse(json['productEntryDate']);
     int  favoriteFlag = json['favoriteFlag'];

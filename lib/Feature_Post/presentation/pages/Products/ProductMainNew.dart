@@ -69,56 +69,6 @@ class _ProductMainNewState extends State<ProductMainNew> {
 
 
 
-  printlist() {
-    if (cars != null) {
-      if(list.length>0)
-      {
-        list.clear();
-      }
-
-      //print(cars.);
-      /*
-      for (var i = 0; i < cars.docs.length; i++) {
-        var tempprice =cars.docs[i].data()['Typeprice'];
-        ProductClass _typeone = new ProductClass()
-          ..productId=cars.docs[i].data()['productId']
-          ..productName=cars.docs[i].data()['productName']
-          ..productEntryDate=cars.docs[i].data()['productEntryDate'].toDate()
-          ..productPrice=double.parse(tempprice.toString())
-          ..productImage=cars.docs[i].data()['productImage'];
-          //..Type_doc=cars.docs[i].id;
-
-        setState(() {
-          list.add(_typeone);
-        });
-
-
-      }
-*/
-
-
-
-//      ProductMainNew.sort(
-//              (a, b) => a.id.compareTo(b.id));
-//      var array_len = ProductMainNew.length;
-//      setState(() {
-//        Type_id_max = (ProductMainNew[array_len - 1].id + 1);
-//        ProductMainNew.sort((b, a) =>
-//            a.id.compareTo(b.id));
-//        print('Type_id_max$Type_id_max');
-
-//      });
-      print(list);
-      setState(() {
-        duplicateItems = list;
-      });
-    } else {
-      print("error");
-    }
-
-    //gettypetotalprice();
-  }
-
 
   @override
   void initState() {
@@ -132,108 +82,112 @@ class _ProductMainNewState extends State<ProductMainNew> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   Color pyellow = Colors.red;
 
+  Future<void> _createOrUpdate([DocumentSnapshot? documentSnapshot]) async {
+    String action = 'create';
+    print('inside _createOrUpdate');
+    if (documentSnapshot != null) {
+      action = 'update';
+      _productIdController.text = documentSnapshot['productId'];
+      _productNameController.text = documentSnapshot['productName'];
+      _productImageController.text = documentSnapshot['productImage'];
+      _productCatController.text = documentSnapshot['productCat'];
+      _productEntryDateController.text = documentSnapshot['productEntryDate'];
+      _productPriceController.text = documentSnapshot['price'];
 
+    }
+
+    await showModalBottomSheet(
+        isScrollControlled: true,
+        context: context,
+        builder: (BuildContext ctx) {
+          return Padding(
+            padding: EdgeInsets.only(
+                top: 20,
+                left: 20,
+                right: 20,
+                // prevent the soft keyboard from covering text fields
+                bottom: MediaQuery.of(ctx).viewInsets.bottom + 20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextField(
+                  controller: _productNameController,
+                  decoration: const InputDecoration(labelText: 'Name'),
+                ),
+                TextField(
+                  keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
+                  controller: _productPriceController,
+                  decoration: const InputDecoration(
+                    labelText: 'Price',
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                TextField(
+                  keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
+                  controller: _productCatController,
+                  decoration: const InputDecoration(
+                    labelText: 'Cat',
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                ElevatedButton(
+                  child: Text(action == 'create' ? 'Create' : 'Update'),
+                  onPressed: () async {
+                    final String? name = _productNameController.text;
+                    final double? price = double.tryParse(_productPriceController
+                        .text);
+                    final String? cat = _productCatController.text;
+                    if (name != null && price != null &&cat != null) {
+                      if (action == 'create') {
+                        // Persist a new product to Firestore
+                        await _productss.add({"productName": name, "productPrice": price
+                          , "productCat" :cat});
+                      }
+
+                      if (action == 'update') {
+                        // Update the product
+                        await _productss
+                            .doc(documentSnapshot!.id)
+                            .update({"name": name, "price": price, "productCat" :cat});
+                      }
+
+                      // Clear the text fields
+                      _productNameController.text = '';
+                      _productPriceController.text = '';
+                      _productCatController.text = '';
+
+                      // Hide the bottom sheet
+                      Navigator.of(context).pop();
+                    }
+                  },
+                )
+              ],
+            ),
+          );
+        });
+  }
+
+
+  Future<void> _deleteProduct(String productId) async {
+    await _productss.doc(productId).delete();
+
+    // Show a snackbar
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('You have successfully deleted a product')));
+  }
 
 
   Widget build(BuildContext context) {
 
-    Future<void> _createOrUpdate([DocumentSnapshot? documentSnapshot]) async {
-      String action = 'create';
-      print('inside _createOrUpdate');
-      if (documentSnapshot != null) {
-        action = 'update';
-        _productIdController.text = documentSnapshot['productId'];
-        _productNameController.text = documentSnapshot['productName'];
-        _productImageController.text = documentSnapshot['productImage'];
-        _productCatController.text = documentSnapshot['productCat'];
-        _productEntryDateController.text = documentSnapshot['productEntryDate'];
-        _productPriceController.text = documentSnapshot['price'].toString();
-
-      }
-
-      await showModalBottomSheet(
-          isScrollControlled: true,
-          context: context,
-          builder: (BuildContext ctx) {
-            return Padding(
-              padding: EdgeInsets.only(
-                  top: 20,
-                  left: 20,
-                  right: 20,
-                  // prevent the soft keyboard from covering text fields
-                  bottom: MediaQuery.of(ctx).viewInsets.bottom + 20),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  TextField(
-                    controller: _productNameController,
-                    decoration: const InputDecoration(labelText: 'Name'),
-                  ),
-                  TextField(
-                    keyboardType:
-                    const TextInputType.numberWithOptions(decimal: true),
-                    controller: _productPriceController,
-                    decoration: const InputDecoration(
-                      labelText: 'Price',
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  TextField(
-                    keyboardType:
-                    const TextInputType.numberWithOptions(decimal: true),
-                    controller: _productCatController,
-                    decoration: const InputDecoration(
-                      labelText: 'Cat',
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  ElevatedButton(
-                    child: Text(action == 'create' ? 'Create' : 'Update'),
-                    onPressed: () async {
-                      final String? name = _productNameController.text;
-                      final double? price = double.tryParse(_productPriceController
-                          .text);
-                      if (name != null && price != null) {
-                        if (action == 'create') {
-                          // Persist a new product to Firestore
-                          await _productss.add({"name": name, "price": price});
-                        }
-
-                        if (action == 'update') {
-                          // Update the product
-                          await _productss
-                              .doc(documentSnapshot!.id)
-                              .update({"name": name, "price": price});
-                        }
-
-                        // Clear the text fields
-                        _productNameController.text = '';
-                        _productPriceController.text = '';
-
-                        // Hide the bottom sheet
-                        Navigator.of(context).pop();
-                      }
-                    },
-                  )
-                ],
-              ),
-            );
-          });
-    }
 
     // Deleteing a product by id
-    Future<void> _deleteProduct(String productId) async {
-      await _productss.doc(productId).delete();
-
-      // Show a snackbar
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('You have successfully deleted a product')));
-    }
 
     var pheight = MediaQuery.of(context).size.height;
     var pwidth = MediaQuery.of(context).size.width;
@@ -267,7 +221,7 @@ class _ProductMainNewState extends State<ProductMainNew> {
         floatingActionButton: FloatingActionButton(
           onPressed: () => _createOrUpdate(),
          // onPressed: () {  },
-          child: const Icon(Icons.dangerous),
+          child: const Icon(Icons.add),
         ),
 
         body:
@@ -471,14 +425,14 @@ class _ProductMainNewState extends State<ProductMainNew> {
 
                                trailing: SizedBox(
                                  width: 100,
+                                 height: 200,
                                  child: Row(
                                    children: [
                                      // Press this button to edit a single product
                                      IconButton(
                                        icon: const Icon(Icons.edit),
                                        //  onPressed: () =>
-                                       onPressed: (){},
-                                       //  _createOrUpdate(documentSnapshot)
+                                       onPressed:()=> _createOrUpdate(documentSnapshot)
                                      ),
                                      // This icon button is used to delete a single product
                                      IconButton(
@@ -542,6 +496,8 @@ class _ProductMainNewState extends State<ProductMainNew> {
 
 
   }
+
+
 
 }
 

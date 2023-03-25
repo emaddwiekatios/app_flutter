@@ -368,18 +368,18 @@ super.initState();
                     ),
 
                     Padding(
-                        padding: const EdgeInsets.only(left:AppSize.s4,right: AppSize.s4),
+                        padding: const EdgeInsets.only(top:FontManagerSize.s2,left:AppSize.s4,right: AppSize.s4),
                         child:Container(
                           // color: Colors.red,
-                          height: getHeight(context) / FontManagerSize.s10,
+                          height: getHeight(context) / AppSize.s9,
                           width: getWidth(context),
                           child: ListView.builder(
                               scrollDirection: Axis.horizontal,
                               itemCount: instCatList.length,
                               itemBuilder: (context, int index) {
-                                return   SizedBox(
-                                  //color: Colors.red,
-                                  height: getHeight(context)/AppSize.s9,
+                                return   Container(
+                                 // color: Colors.red,
+                                  height: getHeight(context)/FontManagerSize.s3,
                                   child: Column(
                                     children: [
                                       Padding(
@@ -450,7 +450,7 @@ super.initState();
                           //color: Colors.red,
                             borderRadius: BorderRadius.circular(10)),
 
-                        height: getHeight(context) / AppSize.s6,
+                        height: getHeight(context) / FontManagerSize.s7,
                         width: getWidth(context),
                         child: GetCarouselSlider(),
                         //child:Cal

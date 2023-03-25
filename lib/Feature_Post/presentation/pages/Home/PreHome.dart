@@ -2,6 +2,7 @@
 import 'package:clean_arch_app/Feature_Post/presentation/pages/Home/Home.dart';
 import 'package:clean_arch_app/core/resource/ColorManger.dart';
 import 'package:clean_arch_app/core/resource/FontManager.dart';
+import 'package:clean_arch_app/core/resource/MediaQuery.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/resource/ValueManger.dart';
@@ -26,7 +27,9 @@ class _PreHomeState extends State<PreHome> {
 
       ][ _currentIndex],
       bottomNavigationBar:
-      SizedBox(height:FontManagerSize.s40, child:BottomNavigationBar(
+      SizedBox(height:getHeight(context)/FontManagerSize.s17
+
+        , child:BottomNavigationBar(
         selectedFontSize: AppSize.s10,
         unselectedFontSize: AppSize.s10,
 

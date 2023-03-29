@@ -1,7 +1,9 @@
 
 import 'package:clean_arch_app/Feature_Post/presentation/pages/Home/HomePage.dart';
 import 'package:clean_arch_app/Feature_Post/presentation/pages/Products/ProductsClass.dart';
+import 'package:clean_arch_app/core/resource/FontManager.dart';
 import 'package:clean_arch_app/core/resource/MediaQuery.dart';
+import 'package:clean_arch_app/core/resource/ValueManger.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -117,6 +119,7 @@ class _ProductMainNewState extends State<ProductMainNew> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+
                 TextField(
                   controller: _productNameController,
                   decoration: const InputDecoration(labelText: 'Name'),
@@ -216,25 +219,6 @@ class _ProductMainNewState extends State<ProductMainNew> {
     var pheight = MediaQuery.of(context).size.height;
     var pwidth = MediaQuery.of(context).size.width;
 
-/*
-    FloatingActionButton(
-      mini: true,
-      onPressed: () {
-        setState(() {
-          // _canShowfloating = !_canShowfloating;
-        });
-      },
-      materialTapTargetSize: MaterialTapTargetSize.padded,
-      backgroundColor:
-      Color(getColorHexFromStr('#FDD100')),
-      child: Icon(
-        Icons.details,
-        size: 26.0,
-        color: Colors.white,
-      ),
-      heroTag: null,
-    );
-    */
     return SafeArea(
 
 
@@ -410,13 +394,11 @@ class _ProductMainNewState extends State<ProductMainNew> {
                              productImage:documentSnapshot['productImage'],
                              productCat:documentSnapshot['productCat'],
                              productEntryDate:DateTime.now(),//DateTime.parse(documentSnapshot['productEntryDate']),
-                             productPrice:documentSnapshot['productPrice'].toString(),
+                             productPrice:documentSnapshot['productPrice'],
                              favoriteFlag:int.parse(documentSnapshot['favoriteFlag'])
                          );
 
-                         //    filteredData!.productId = dbData['prodouctId'];  //empty list
 
-                         print(documentSnapshot['productPrice']);
 
                          var  currentdate = formatDate(filteredData.productEntryDate,
                              [yyyy, '-', mm, '-', dd, ' ', hh, ':', nn, ':', ss, ' ', am]);
@@ -424,51 +406,98 @@ class _ProductMainNewState extends State<ProductMainNew> {
                          var a=documentSnapshot['productId'];
 
                          return Container(
-                           height: 150,
+                           height: getHeight(context)/FontManagerSize.s6,
                            width: double.infinity,
                            child: Card(
                              margin: const EdgeInsets.all(10),
-                             child: ListTile(
-                               title: Text('${filteredData.productId}'),
-                               subtitle: Column(
-                                 children: [
-                                   Text('${filteredData.productName}'),
-                                   Text('${filteredData.productPrice}')
-                                 ],
-                               ),
-                               leading:  Column(
-                                 children: [
-                                   // Text('${filteredData.productImage}'),
-                                   Text('${filteredData.favoriteFlag}'),
-                                   //   Text('${filteredData.productPrice}'),
-                                   Text('${formatDate(filteredData.productEntryDate,
-                                       [yyyy, '-', mm, '-', dd])}'),
-                                   Text('${filteredData.productCat}'),
-                                 ],
-                               ),
+                             child: Row(
+                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                               children: [
+                                 Padding(
+                                   padding: const EdgeInsets.all(AppSize.s6),
+                                   child: CircleAvatar(radius: FontManagerSize.s35,backgroundImage: NetworkImage(filteredData.productImage),),
 
-                               trailing: SizedBox(
-                                 width: 100,
-                                 height: 200,
-                                 child: Row(
+                                    ),
+                                 Column(
+                                   mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                      children: [
+                                             Text(filteredData.productName,style:const TextStyle(fontWeight: FontWeight.w500,fontSize: AppSize.s20),),
+                                              Text(filteredData.productPrice,style:const TextStyle(fontWeight: FontWeight.w300,fontSize: AppSize.s20),),
+                                      ],
+                                    ),
+
+                                 Column(
+                                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                                    children: [
-                                     // Press this button to edit a single product
-                                     IconButton(
-                                       icon: const Icon(Icons.edit),
-                                       //  onPressed: () =>
-                                       onPressed:()=> _createOrUpdate(documentSnapshot)
-                                     ),
-                                     // This icon button is used to delete a single product
-                                     IconButton(
-                                         icon: const Icon(Icons.delete),
-                                         ///onPressed: (){},
-                                         onPressed: () =>  _deleteProduct(documentSnapshot.id)
-                                     ),
-
+                                     Text(filteredData.productCat,style:const TextStyle(fontWeight: FontWeight.w500,fontSize: AppSize.s20),),
+                                     Text('${formatDate( filteredData.productEntryDate, [yyyy, '-', mm, '-', dd])}',style:const TextStyle(fontWeight: FontWeight.w200,fontSize: AppSize.s20),),
                                    ],
                                  ),
+                           Column(
+                             mainAxisAlignment: MainAxisAlignment.start,
+                             children: [
+                               // Press this button to edit a single product
+                               IconButton(
+                                 icon: const Icon(Icons.edit,size: AppSize.s20,),
+                                 //  onPressed: () =>
+                                 onPressed:()=> _createOrUpdate(documentSnapshot)
                                ),
-                             ),
+                               // This icon button is used to delete a single product
+                               IconButton(
+                                   icon: const Icon(Icons.delete,size: AppSize.s20,),
+                                   ///onPressed: (){},
+                                   onPressed: () =>  _deleteProduct(documentSnapshot.id)
+                               ),
+
+                             ],
+                           ),
+
+                                  ],
+                             )
+
+
+                             // ListTile(
+                             //
+                             //
+                             //   title: Text('${filteredData.productName}'),
+                             //   subtitle: Column(
+                             //     children: [
+                             //      Text('${filteredData.productName}'),
+                             //       Text('${filteredData.productPrice}')
+                             //     ],
+                             //   ),
+                             //   leading:  Column(
+                             //     children: [
+                             //       // Text('${filteredData.productImage}'),
+                             //       Text('${filteredData.favoriteFlag}'),
+                             //       //   Text('${filteredData.productPrice}'),
+                             //       Text('${formatDate(filteredData.productEntryDate,
+                             //           [yyyy, '-', mm, '-', dd])}'),
+                             //       Text('${filteredData.productCat}'),
+                             //     ],
+                             //   ),
+                             //   trailing: SizedBox(
+                             //     width: 100,
+                             //     height: 200,
+                             //     child: Row(
+                             //       children: [
+                             //         // Press this button to edit a single product
+                             //         IconButton(
+                             //           icon: const Icon(Icons.edit),
+                             //           //  onPressed: () =>
+                             //           onPressed:()=> _createOrUpdate(documentSnapshot)
+                             //         ),
+                             //         // This icon button is used to delete a single product
+                             //         IconButton(
+                             //             icon: const Icon(Icons.delete),
+                             //             ///onPressed: (){},
+                             //             onPressed: () =>  _deleteProduct(documentSnapshot.id)
+                             //         ),
+                             //
+                             //       ],
+                             //     ),
+                             //   ),
+                             // ),
                            ),
                          );
                        },
@@ -494,7 +523,7 @@ class _ProductMainNewState extends State<ProductMainNew> {
 
                   // _scaffoldKey.currentState.openDrawer();
 
-                  // Navigator.pushNamed(context, "/Types");
+                   Navigator.pushNamed(context, "/ProductAdd");
                 },
               ),
             ),
@@ -504,16 +533,7 @@ class _ProductMainNewState extends State<ProductMainNew> {
 
           ],
         ),
-       // floatingActionButton: FloatingActionButton(
-       //   onPressed: () {
-       //
-       //     // Add your onPressed code here!
-       //    // Navigator.pushNamed(context, "/Types");
-       //   },
-       //   child: Icon(Icons.add,color: Colors.white,),
-       //   backgroundColor: Colors.green,
-       // ),
-        
+
       ),
     );
 

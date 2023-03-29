@@ -80,7 +80,7 @@ class MyApp extends StatelessWidget {
                 print('authsnapshot connectionState${authsnapshot.connectionState}');
                  return
 
-                   authsnapshot.connectionState ==  ConnectionState.waiting
+                   authsnapshot.connectionState ==  ConnectionState.done
                         ? const login()
                        :const  Splash();
 

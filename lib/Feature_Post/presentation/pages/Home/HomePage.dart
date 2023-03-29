@@ -558,7 +558,7 @@ super.initState();
                                                       crossAxisAlignment: CrossAxisAlignment.start,
                                                       children: [
                                                         Text(' ${instProdList[index].productName}'
-                                                          ,style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
+                                                          ,style: TextStyle(fontSize: FontManagerSize.s14, fontWeight: FontWeight.bold),),
                                                         Text(' Price :${instProdList[index].productPrice} \$'
                                                           ,style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold,color: ColorManager.primary),),
 

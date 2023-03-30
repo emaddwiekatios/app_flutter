@@ -4,6 +4,7 @@ import 'package:clean_arch_app/Feature_Post/presentation/pages/Products/Products
 import 'package:clean_arch_app/core/resource/FontManager.dart';
 import 'package:clean_arch_app/core/resource/MediaQuery.dart';
 import 'package:clean_arch_app/core/resource/ValueManger.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -446,7 +447,16 @@ class _ProductMainNewState extends State<ProductMainNew> {
                                IconButton(
                                    icon: const Icon(Icons.delete,size: AppSize.s20,),
                                    ///onPressed: (){},
-                                   onPressed: () =>  _deleteProduct(documentSnapshot.id)
+                                   onPressed: () async{
+                                     _deleteProduct(documentSnapshot.id);
+                                     // Create a reference to the file to delete
+                                     FirebaseStorage.instance.refFromURL(documentSnapshot['productImage']).delete();
+// Child references can also take paths
+// spaceRef now points to "images/space.jpg
+// imagesRef still points to "images"
+
+                                   }
+
                                ),
 
                              ],

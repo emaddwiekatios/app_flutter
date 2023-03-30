@@ -291,6 +291,7 @@ class _ProductAddState extends State<ProductAdd> {
                           child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: <Widget>[
+
                                   Row(
                                     children: [
                                       Container(
@@ -525,7 +526,7 @@ class _ProductAddState extends State<ProductAdd> {
                                     height: 5,
                                   ),
 
-isSave ? CircularProgressIndicator(): Container(),
+                             isSave?     CircularProgressIndicator() :SizedBox(),
 
 
                                 Row(
@@ -732,15 +733,16 @@ isSave ? CircularProgressIndicator(): Container(),
                                           //color: Colors.red,
                                           onPressed: ()  {
                                             print('inside save');
-                                            setState(() {
-                                              isSave= true;
-                                              print('isSave=$isSave');
-                                            });
+                                            showDialog<void>(
+                                      context: context,
+                                      // false = user must tap button, true = tap outside dialog
+                                      builder: (BuildContext dialogContext) {
+                                        return Center(child: CircularProgressIndicator());
+                                      },
+                                    );
+
                                              uploadimage();
-                                            setState(() {
-                                              isSave= false;
-                                              print('isSave=$isSave');
-                                            });
+
 
 
 
@@ -952,6 +954,8 @@ isSave ? CircularProgressIndicator(): Container(),
 
 
     });
+    Navigator.of(context).pop();
+
   }
   ////emad  add new  testhhjhjn
 //  void readisubcollection() {

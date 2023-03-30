@@ -4,8 +4,28 @@ import 'package:clean_arch_app/core/resource/ColorManger.dart';
 import 'package:clean_arch_app/core/resource/FontManager.dart';
 import 'package:clean_arch_app/core/resource/MediaQuery.dart';
 import 'package:clean_arch_app/core/resource/ValueManger.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+
+
+
+Future<int> getDocumentMaxId(Doc_name,Field) async {
+  int MaxId=0;
+  print('inside getmax');
+ await  FirebaseFirestore.instance.collection('$Doc_name').orderBy('$Field', descending: true).limit(1).
+  get().then((QuerySnapshot querySnapshot) {
+    querySnapshot.docs.forEach((element)  {
+      //setState(() {
+        MaxId=   int.parse(element['$Field']);
+        print(int.parse(element['$Field']));
+    // });
+    });
+  });
+  return  MaxId;
+
+
+}
 
 // ignore: camel_case_types, must_be_immutable
 class getElevationButton extends StatelessWidget {

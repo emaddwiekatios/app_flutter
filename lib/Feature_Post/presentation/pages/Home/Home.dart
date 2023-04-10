@@ -92,18 +92,7 @@ Widget getDrawer(context) {
               const Divider(
                 height: FontManagerSize.s8,
               ),
-              ListTile(
-                  leading: Icon(
-                    Icons.generating_tokens,
-                    color: ColorManager.primary,
-                  ),
-                  title: Text('ProductMain'.tr),
-                  trailing: Text('ProductMain'.tr),
-                  onTap: () {
-                    // print('ontap');
-                    Get.toNamed('/ProductMain');
-                    //  Get.to(() => GetxManagement());
-                  }),
+             Text('Admin Tab'),
               const Divider(
                 height: FontManagerSize.s8,
               )
@@ -115,8 +104,8 @@ Widget getDrawer(context) {
                     Icons.generating_tokens,
                     color: ColorManager.primary,
                   ),
-                  title: Text('ProductMainNew'.tr),
-                  trailing: Text('ProductMainNew'.tr),
+                  title: Text('Product'.tr),
+                  trailing: Text('Product'.tr),
                   onTap: () {
                     // print('ontap');
                     Get.toNamed('/ProductMainNew');
@@ -132,11 +121,11 @@ Widget getDrawer(context) {
   Icons.generating_tokens,
   color: ColorManager.primary,
   ),
-  title: Text('ProductAdd'.tr),
-  trailing: Text('ProductAdd'.tr),
+  title: Text('Categorys'.tr),
+  trailing: Text('Categorys'.tr),
   onTap: () {
   // print('ontap');
-  Get.toNamed('/ProductAdd');
+  Get.toNamed('/CategoryMain');
   //  Get.to(() => GetxManagement());
   }),
   const Divider(
@@ -177,20 +166,6 @@ Widget getDrawer(context) {
                 }
 
                 Navigator.pop(context);
-              }),
-          const Divider(
-            height: FontManagerSize.s8,
-          ),
-          ListTile(
-              leading: Icon(
-                Icons.home,
-                color: ColorManager.primary,
-              ),
-              title: Text('Lang'.tr),
-              trailing: Text('Lang'.tr),
-              onTap: () {
-
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=>const LoginPage()));
               }),
           const Divider(
             height: FontManagerSize.s8,

@@ -1,6 +1,7 @@
 //import 'dart:html';
+import 'package:clean_arch_app/Feature_Post/presentation/pages/Category/CategoryMain.dart';
 import 'package:clean_arch_app/Feature_Post/presentation/pages/Products/ProductMain.dart';
-import 'package:clean_arch_app/Feature_Post/presentation/pages/Products/ProductMainNew.dart';
+import 'package:clean_arch_app/Feature_Post/presentation/pages/Products/ProductMain.dart';
 import 'package:clean_arch_app/core/resource/RoutesManager.dart';
 import 'package:device_preview/device_preview.dart';
 
@@ -92,9 +93,10 @@ class MyApp extends StatelessWidget {
             '/Home': (context) => const Home(),
             '/PreHome': (context) => PreHome(),
             '/Splash': (context) => const Splash(),
-            '/ProductMain': (context) =>  ProductMain(),
+            //'/ProductMain': (context) =>  ProductMain(),
             '/ProductMainNew': (context) =>  ProductMainNew(),
             '/ProductAdd': (context) =>  ProductAdd(),
+            '/CategoryMain': (context) =>  CategoryMain(),
 
 
             '/Onboarding': (context) => const OnBoarding(),

@@ -1,37 +1,54 @@
-
+import 'package:clean_arch_app/Feature_Post/presentation/pages/Home/HomePage.dart';
+import 'package:clean_arch_app/Feature_Post/presentation/pages/Login/view_login/view_login.dart';
+import 'package:clean_arch_app/Feature_Post/presentation/pages/Products/ProductAdd.dart';
+import 'package:clean_arch_app/Feature_Post/presentation/pages/Products/ProductDetails.dart';
+import 'package:clean_arch_app/Feature_Post/presentation/pages/Products/ProductDetailsEdit.dart';
 import 'package:clean_arch_app/Feature_Post/presentation/pages/Products/ProductsClass.dart';
+import 'package:clean_arch_app/core/resource/FontManager.dart';
 import 'package:clean_arch_app/core/resource/MediaQuery.dart';
+import 'package:clean_arch_app/core/resource/ValueManger.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_format/date_format.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
 
+import '../../../../core/resource/Construct.dart';
 
-class ProductMain extends StatefulWidget {
+class ProductMainNew extends StatefulWidget {
   @override
-  _ProductMainState createState() => _ProductMainState();
+  _ProductMainNewState createState() => _ProductMainNewState();
 }
 
 List<ProductClass> list = [];
-List<ProductClass>? listTemp ;
+
+List<ProductClass>? listTemp;
 List<ProductClass> duplicateItems = [];
 List<ProductClass> duplicateItems2 = [];
 var db = FirebaseFirestore.instance;
 
 QuerySnapshot? cars;
-//List<ProductClass> ProductMain= [];
+//List<ProductClass> ProductMainNew= [];
+final CollectionReference _productss =
+    FirebaseFirestore.instance.collection('Clean_App_Products_New');
+final TextEditingController _productIdController = TextEditingController();
+final TextEditingController _productNameController = TextEditingController();
+final TextEditingController _productImageController = TextEditingController();
+final TextEditingController _productPriceController = TextEditingController();
+final TextEditingController _productCatController = TextEditingController();
+final TextEditingController _productEntryDateController =
+    TextEditingController();
+final TextEditingController _favoriteFlagController = TextEditingController();
 
-class _ProductMainState extends State<ProductMain> {
-
-
-
+class _ProductMainNewState extends State<ProductMainNew> {
   void filterSearchResults(String query) {
     List<ProductClass> dummySearchList = [];
-    dummySearchList=duplicateItems;
+    dummySearchList = duplicateItems;
     if (query.isNotEmpty) {
       print('inside if');
-      List<ProductClass> dummyListData =[];
+      List<ProductClass> dummyListData = [];
       dummySearchList.forEach((item) {
         if (item.productName.toUpperCase().contains(query.toUpperCase())) {
           dummyListData.add(item);
@@ -41,100 +58,18 @@ class _ProductMainState extends State<ProductMain> {
         list = dummyListData;
       });
       return;
-    }
-    else {
-      setState(() {
-        list=duplicateItems;
-      });
-    }
-  }
-
-  getDatatypes() async {
-    return await FirebaseFirestore.instance.collection("Clean_App_Products").doc()
-        .get();
-
-  }
-
-
-  // Future getDocs() async {
-  //   QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection("Clean_App_Products").get();
-  //   for (int i = 0; i < querySnapshot..length; i++) {
-  //     var a = querySnapshot.documents[i];
-  //     print(a.documentID);
-  //   }
-  // }
-  call_get_datatype()
-  {
-    getDatatypes().then((results) {
-      setState(() {
-        print('resualt');
-        print(results);
-        //cars = results;
-
-        printlist();
-      });
-    });
-  }
-
-
-
-
-  printlist() {
-    if (cars != null) {
-      if(list.length>0)
-      {
-        list.clear();
-      }
-
-      //print(cars.);
-      /*
-      for (var i = 0; i < cars.docs.length; i++) {
-        var tempprice =cars.docs[i].data()['Typeprice'];
-        ProductClass _typeone = new ProductClass()
-          ..productId=cars.docs[i].data()['productId']
-          ..productName=cars.docs[i].data()['productName']
-          ..productEntryDate=cars.docs[i].data()['productEntryDate'].toDate()
-          ..productPrice=double.parse(tempprice.toString())
-          ..productImage=cars.docs[i].data()['productImage'];
-          //..Type_doc=cars.docs[i].id;
-
-        setState(() {
-          list.add(_typeone);
-        });
-
-
-      }
-*/
-      
-      
-      
-//      ProductMain.sort(
-//              (a, b) => a.id.compareTo(b.id));
-//      var array_len = ProductMain.length;
-//      setState(() {
-//        Type_id_max = (ProductMain[array_len - 1].id + 1);
-//        ProductMain.sort((b, a) =>
-//            a.id.compareTo(b.id));
-//        print('Type_id_max$Type_id_max');
-
-//      });
-      print(list);
-      setState(() {
-        duplicateItems = list;
-      });
     } else {
-      print("error");
+      setState(() {
+        list = duplicateItems;
+      });
     }
-
-    //gettypetotalprice();
   }
-
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    call_get_datatype();
+    //call_get_datatype();
     // _readdball();
   }
 
@@ -142,507 +77,21 @@ class _ProductMainState extends State<ProductMain> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   Color pyellow = Colors.red;
 
-
-
-
-  Widget build(BuildContext context) {
-    var pheight = MediaQuery.of(context).size.height;
-    var pwidth = MediaQuery.of(context).size.width;
-
-/*
-    FloatingActionButton(
-      mini: true,
-      onPressed: () {
-        setState(() {
-          // _canShowfloating = !_canShowfloating;
-        });
-      },
-      materialTapTargetSize: MaterialTapTargetSize.padded,
-      backgroundColor:
-      Color(getColorHexFromStr('#FDD100')),
-      child: Icon(
-        Icons.details,
-        size: 26.0,
-        color: Colors.white,
-      ),
-      heroTag: null,
-    );
-    */
-    return Scaffold(
-      key: _scaffoldKey,
-      // drawer: Appdrawer(),
-
-
-      body:
-      Stack(
-        children: <Widget>[
-          //header shape
-          Positioned(
-            top: 0,
-            left: 0,
-            child: Container(
-              height: MediaQuery
-                  .of(context)
-                  .size
-                  .height / 4,
-              width: MediaQuery
-                  .of(context)
-                  .size
-                  .width,
-              decoration: BoxDecoration(
-                //borderRadius: BorderRadius.circular(200),
-                color: Colors.yellow,
-              ),
-            ),
-          ),
-          Positioned(
-            top: 125,
-            left: -150,
-            child: Container(
-              height: 450, //MediaQuery.of(context).size.height / 4,
-              width: 450, //MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(250),
-                color:Colors.yellow,
-              ),
-            ),
-          ),
-          Positioned(
-            top: 100,
-            left: 115,
-            child: Container(
-              height: 350, //MediaQuery.of(context).size.height / 4,
-              width: 350, //MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(200),
-                color: Colors.yellow,),
-            ),
-          ),
-          //footer
-          Positioned(
-            bottom: -125,
-            left: -150,
-            child: Container(
-              height: 250, //MediaQuery.of(context).size.height / 4,
-              width: 250, //MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(250),
-                color:Colors.yellow,
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: -100,
-            right: -115,
-            child: Container(
-              height: 250, //MediaQuery.of(context).size.height / 4,
-              width: 250, //MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(200),
-                color: Colors.yellow,),
-            ),
-          ),
-          //menu
-          Positioned(
-            top: 30,
-            left: 20,
-            child: IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: () {
-                print('inside button');
-                // _scaffoldKey.currentState.openDrawer();
-                //Navigator.pushNamed(context, "/MainPage");
-                 Navigator.pop(context);
-                // Navigator.of(context).pushReplacement(
-                //   new MaterialPageRoute(builder: (BuildContext context) => new PaysMain()),
-                // );
-              },
-            ),
-          ),
-          Positioned(
-            top: 50,
-            left: MediaQuery.of(context).size.width / 2 - 70,
-            child: Text(
-              'List Types',
-              style: TextStyle(fontSize: 29, fontWeight: FontWeight.bold),
-            ),
-          ),
-          //body
-          Positioned(
-            top: 100,
-            left: 15,
-            right: 15,
-
-            // left: MediaQuery.of(context).size.width / 2 - 70,
-            child:
-
-            SingleChildScrollView(
-              child: Container(
-                height: 50,
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width - 30,
-                child: Material(
-
-                  elevation: 5.0,
-                  borderRadius: BorderRadius.circular(5.0),
-                  child: TextField(
-                      onChanged: (value) {
-                        print('inside change');
-                        filterSearchResults(value);
-                      },
-                      decoration: InputDecoration(
-                          border: InputBorder.none,
-                          prefixIcon: Icon(Icons.search,
-                              color:
-                              Colors.yellow,
-                              size: 30.0),
-                          contentPadding:
-                          EdgeInsets.only(left: 15.0, top: 15.0),
-                          hintText: 'Search',
-                          hintStyle: TextStyle(
-                              color: Colors.grey,
-                              fontFamily: 'Quicksand'))),
-                ),
-              ),
-            ),
-
-          ),
-          Positioned(
-            top: 160,
-            right: 0,
-            child: Container(
-
-              width: MediaQuery.of(context).size.width,
-              height: getHeight(context)/1.2,
-              // height: MediaQuery.of(context).size.height >= 775.0
-              //     ? MediaQuery.of(context).size.height
-              //     : 775.0,
-              /* decoration: new BoxDecoration(
-                      gradient: new LinearGradient(
-                          colors: [
-                            Colors.red,
-                          Colors.orange
-                          //Color(getColorHexFromStr('#FDD100')),
-                           //Color(getColorHexFromStr('#FDD120'))
-                          ],
-                          begin: const FractionalOffset(0.0, 0.0),
-                          end: const FractionalOffset(1.0, 1.0),
-                          stops: [0.0, 1.0],
-                          tileMode: TileMode.clamp),
-                    ),
-*/
-              child:HomePage()
-
-              // list.length > 0 ? ItemList(
-              //
-              // )
-              //     : new Center(
-              //   child: new CircularProgressIndicator(),
-              // ),
-              /*  child: new FutureBuilder<List>(
-                  future: helperglobel.ProductMain(),
-                  builder: (context, snapshot) {
-                   // print('the snapshot.hasData =${snapshot.data}');
-                    return snapshot.hasData
-                        ? new ItemList(
-                      list: snapshot.data,
-                    )
-                        : new Center(
-                      child: new CircularProgressIndicator(),
-                    );
-                  },
-                )
-                */
-/*
-FutureBuilder<List<UserModel>>(
-future: db.getUserModelData(),
-builder: (context, snapshot) {
-if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
-*/
-
-
-            ),
-          ),
-
-          Positioned(
-            top: pheight / 30,
-            right: pwidth / 20,
-            child: IconButton(
-              icon: Icon(Icons.add, size: 30),
-              onPressed: () {
-
-                // _scaffoldKey.currentState.openDrawer();
-
-               // Navigator.pushNamed(context, "/Types");
-              },
-            ),
-          ),
-
-
-
-
-        ],
-      ),
-//        floatingActionButton: FloatingActionButton(
-//          onPressed: () {
-//            // Add your onPressed code here!
-//            Navigator.pushNamed(context, "/Types");
-//          },
-//          child: Icon(Icons.add,color: Colors.white,),
-//          backgroundColor: Colors.green,
-//        ),
-
-    );
-
-
-
-  }
-
-}
-
-
-
-class ItemList extends StatefulWidget {
-
-
-  // final List<ProductClass> list;
-  //ItemList({this.list});
-
-  @override
-  _ItemListState createState() => _ItemListState();
-}
-
-class _ItemListState extends State<ItemList> {
-  @override
-  Widget build(BuildContext context) {
-    //Comparator<ProductClass> seqComparator = (b,a) => a.id.compareTo(b.id);
-    //  list.sort(seqComparator);
-
-    return new ListView.builder(
-      itemCount: list == null ? 0 : list.length,
-      itemBuilder: (context,i) {
-        return Text('eeeeeeeemmmmmm');
-        //   locationController.text=list[i]['address_name'];
-        // destinationController.text=list[i]['address_name_to'];
-
-        // final item = list[i].id;
-        // return Dismissible(
-        //   key: Key(item.toString()),
-        //
-        //   onDismissed: (DismissDirection direction) =>
-        //   {
-        //     if (direction == DismissDirection.endToStart){
-        //       setState(() {
-        //         //   helperglobel.deleteAllWords();
-        //        // print(' From:${ list[i].id}');
-        //        // deletetype(list[i].Type_doc.toString());
-        //         //list.removeAt(i);
-        //        // Scaffold.of(context).showSnackBar(
-        //        ///   new SnackBar(content: new Text("Item dismissed"),),
-        //        // );
-        //       }),
-        //     },
-        //     if (direction == DismissDirection.startToEnd){
-        //
-        //       //helperglobel. deleteWordWithId(list[i].id),
-        //       list.removeAt(i),
-        //       // Scaffold.of(context).showSnackBar(
-        //       //   new SnackBar(content: new Text("Item no action"),),
-        //       // ),
-        //     },
-        //   },
-        //   secondaryBackground:
-        //   new Container(
-        //       height: 50,
-        //       width: 50,
-        //       color: Colors.blue,
-        //       child: Column(
-        //           crossAxisAlignment: CrossAxisAlignment.end,
-        //           mainAxisAlignment: MainAxisAlignment.center,
-        //           children:
-        //           <Widget>[
-        //             // Text("delete"),
-        //             IconButton(icon: Icon(Icons.delete),onPressed: null)
-        //           ])
-        //   ),
-        //   background: new Container(color: Colors.red,
-        //       child: Column(
-        //           crossAxisAlignment: CrossAxisAlignment.end,
-        //           mainAxisAlignment: MainAxisAlignment.center,
-        //           children:
-        //           <Widget>[
-        //             // Text("delete"),
-        //             IconButton(icon: Icon(Icons.delete),onPressed: null)
-        //           ])
-        //   ),
-        //   child: Center(
-        //     child: Container(
-        //       padding: EdgeInsets.all(10.0),
-        //       child: new GestureDetector(
-        //         child: new GestureDetector(
-        //           //  onTap:()=> print('id=${widget.list[i].id}'),
-        //           onTap: () =>
-        //               Navigator.of(context).push(
-        //                 new MaterialPageRoute(
-        //                     builder: (BuildContext context) =>
-        //                     new TypeEdit(list[i])
-        //                   // builder: (BuildContext context)=> new Details(list: list,index:i)
-        //                 ),
-        //               ),
-        //
-        //           //  child : new Card(
-        //           child: Container(
-        //
-        //             decoration: BoxDecoration(
-        //               borderRadius: BorderRadius.circular(15),
-        //
-        //               color: Colors.white,
-        //
-        //               boxShadow: [
-        //                 BoxShadow(
-        //                     color: Colors.black,
-        //                     offset: Offset(1.0,5.0),
-        //                     blurRadius: 10,
-        //                     spreadRadius: 3)
-        //               ],
-        //             ),
-        //             height: MediaQuery
-        //                 .of(context)
-        //                 .size
-        //                 .height / 6,
-        //             width: MediaQuery
-        //                 .of(context)
-        //                 .size
-        //                 .width - 30,
-        //
-        //             // child: Card(
-        //
-        //             child: Column(
-        //               mainAxisAlignment: MainAxisAlignment.start,
-        //               crossAxisAlignment: CrossAxisAlignment.start,
-        //               children: <Widget>[
-        //                 SizedBox(height: 10,),
-        //                 Padding(
-        //                   padding: const EdgeInsets.only(left: 20,top: 0),
-        //                   child: Row(
-        //                       children:
-        //                       <Widget>[
-        //                         Icon(Icons.date_range,color: Colors.yellow,),
-        //
-        //                         //  Text('Seq : ${list[i]['seq']}'),
-        //                         Text('${ list[i].TypeName}',
-        //                             style: TextStyle(fontSize: 20)),
-        //                         SizedBox(width: 20,),
-        //
-        //                       ]),
-        //                 ),
-        //
-        //                 SizedBox(height: 5,),
-        //                 Padding(
-        //                   padding: const EdgeInsets.only(left: 20,top: 5),
-        //                   child: Row(
-        //                       children:
-        //                       <Widget>[
-        //                         Icon(Icons.format_indent_decrease,
-        //                           color: Colors.yellow,),
-        //                         Padding(
-        //                           padding: const EdgeInsets.all(8.0),
-        //                           child: Text('Price :${ list[i].TypePrice}'),
-        //                         ),
-        //                         SizedBox(width: 10,),
-        //
-        //                         Icon(Icons.date_range,color: Colors.yellow,),
-        //                         Text('Desc :${ list[i].Typedesc}'),
-        //
-        //
-        //
-        //                       ]),
-        //
-        //                 ),
-        //
-        //                 Padding(
-        //                   padding: const EdgeInsets.only(left: 20,top: 5),
-        //                   child: Row(
-        //                     children: [
-        //                       Icon(Icons.date_range,color: Colors.yellow,),
-        //                       Text('${formatDate(list[i].TypeEntryDate,
-        //                           [yyyy,'-',M,'-',dd,' '])
-        //                       }',
-        //                           style: TextStyle(fontSize: 17)),
-        //                     ],
-        //                   ),
-        //                 ),
-        //
-        //               ],
-        //             ),
-        //             // )
-        //
-        //
-        //           ),
-        //
-        //           /*
-        //           new Card(
-        //             child: new ListTile(
-        //               leading: Icon(Icons.widgets),
-        //               title: Text(list[i]['speed']),
-        //               subtitle: Text(list[i]['seq']),
-        //               trailing: Text(list[i]['id']),
-        //             ),
-        //           ),
-        //           */
-        //         ),
-        //       ),
-        //     ),
-        //   ),
-        // );
-      },
-    );
-  }
-
-
-  deletetype(String docId) async {
-    FirebaseFirestore.instance
-        .collection('Types')
-        .doc(docId)
-        .delete()
-        .catchError((e) {
-      print(e);
-    });
-
-//    Navigator.of(context).pushReplacement(
-//      new MaterialPageRoute(
-//          builder: (BuildContext context) => new SocialHome()),
-//    );
-  }
-}
-
-
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
-
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  // text fie_productsslds' controllers
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _priceController = TextEditingController();
-
-  final CollectionReference _productss =
-  FirebaseFirestore.instance.collection('Clean_App_Products');
-
-  // This function is triggered when the floatting button or one of the edit buttons is pressed
-  // Adding a product if no documentSnapshot is passed
-  // If documentSnapshot != null then update an existing product
   Future<void> _createOrUpdate([DocumentSnapshot? documentSnapshot]) async {
     String action = 'create';
+    print('inside _createOrUpdate');
     if (documentSnapshot != null) {
       action = 'update';
-      _nameController.text = documentSnapshot['name'];
-      _priceController.text = documentSnapshot['price'].toString();
+      _productIdController.text = documentSnapshot['productId'];
+      _productNameController.text = documentSnapshot['productName'];
+      _productImageController.text = documentSnapshot['productImage'];
+      _productCatController.text = documentSnapshot['productCat'];
+      _productEntryDateController.text = documentSnapshot['productEntryDate'];
+      _productPriceController.text = documentSnapshot['productPrice'];
+    } else {
+      _productNameController.text = '';
+      _productPriceController.text = '';
+      _productCatController.text = '';
     }
 
     await showModalBottomSheet(
@@ -661,41 +110,89 @@ class _HomePageState extends State<HomePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 TextField(
-                  controller: _nameController,
+                  controller: _productNameController,
                   decoration: const InputDecoration(labelText: 'Name'),
+                ),
+                const SizedBox(
+                  height: 10,
                 ),
                 TextField(
                   keyboardType:
-                  const TextInputType.numberWithOptions(decimal: true),
-                  controller: _priceController,
+                      const TextInputType.numberWithOptions(decimal: true),
+                  controller: _productPriceController,
                   decoration: const InputDecoration(
                     labelText: 'Price',
                   ),
                 ),
                 const SizedBox(
-                  height: 20,
+                  height: 10,
+                ),
+                TextField(
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true),
+                  controller: _productCatController,
+                  decoration: const InputDecoration(
+                    labelText: 'Cat',
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
                 ),
                 ElevatedButton(
                   child: Text(action == 'create' ? 'Create' : 'Update'),
                   onPressed: () async {
-                    final String? name = _nameController.text;
-                    final double? price = double.tryParse(_priceController.text);
-                    if (name != null && price != null) {
+                    final String? name = _productNameController.text;
+                    final String? price = _productPriceController.text;
+                    final String? cat = _productCatController.text;
+                    if (name != null && price != null && cat != null) {
                       if (action == 'create') {
+                        _productNameController.text = '';
+                        _productPriceController.text = '';
+                        _productCatController.text = '';
+                        final todayDate = DateTime.now();
+                        var currentdate = formatDate(todayDate, [
+                          yyyy,
+                          '-',
+                          mm,
+                          '-',
+                          dd,
+                          ' ',
+                          hh,
+                          ':',
+                          nn,
+                          ':',
+                          ss,
+                          ' ',
+                          am
+                        ]);
+
                         // Persist a new product to Firestore
-                        await _productss.add({"name": name, "price": price});
+                        await _productss.add({
+                          "productName": name,
+                          "productPrice": price,
+                          "productCat": cat,
+                          "productId": "13",
+                          "productImage": "IMAGEPAth",
+                          "productCat": "COLTHES",
+                          "productEntryDate": currentdate,
+                          "favoriteFlag": "0"
+                        });
                       }
 
                       if (action == 'update') {
+                        print(documentSnapshot!.id);
                         // Update the product
-                        await _productss
-                            .doc(documentSnapshot!.id)
-                            .update({"name": name, "price": price});
+                        await _productss.doc(documentSnapshot.id).update({
+                          "productName": name,
+                          "productPrice": price,
+                          "productCat": cat
+                        });
                       }
 
                       // Clear the text fields
-                      _nameController.text = '';
-                      _priceController.text = '';
+                      _productNameController.text = '';
+                      _productPriceController.text = '';
+                      _productCatController.text = '';
 
                       // Hide the bottom sheet
                       Navigator.of(context).pop();
@@ -708,7 +205,6 @@ class _HomePageState extends State<HomePage> {
         });
   }
 
-  // Deleteing a product by id
   Future<void> _deleteProduct(String productId) async {
     await _productss.doc(productId).delete();
 
@@ -717,60 +213,367 @@ class _HomePageState extends State<HomePage> {
         content: Text('You have successfully deleted a product')));
   }
 
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      // appBar: AppBar(
-      //   title: const Text('Kindacode.com'),
-      // ),
-      // Using StreamBuilder to display all products from Firestore in real-time
-      body: StreamBuilder(
-        stream: _productss.snapshots(),
-        builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
-          if (streamSnapshot.hasData) {
-            return ListView.builder(
-              itemCount: streamSnapshot.data!.docs.length,
-              itemBuilder: (context, index) {
-                final DocumentSnapshot documentSnapshot =
-                streamSnapshot.data!.docs[index];
-                return Card(
-                  margin: const EdgeInsets.all(10),
-                  child: ListTile(
-                    title: Text(documentSnapshot['name']),
-                    subtitle: Text(documentSnapshot['price'].toString()),
-                    trailing: SizedBox(
-                      width: 100,
-                      child: Row(
-                        children: [
-                          // Press this button to edit a single product
-                          IconButton(
-                              icon: const Icon(Icons.edit),
-                              onPressed: () =>
-                                  _createOrUpdate(documentSnapshot)),
-                          // This icon button is used to delete a single product
-                          IconButton(
-                              icon: const Icon(Icons.delete),
-                              onPressed: () =>
-                                  _deleteProduct(documentSnapshot.id)),
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              },
-            );
-          }
+    // Deleteing a product by id
 
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        },
-      ),
-      // Add new product
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _createOrUpdate(),
-        child: const Icon(Icons.add),
+    var pheight = MediaQuery.of(context).size.height;
+    var pwidth = MediaQuery.of(context).size.width;
+
+    return SafeArea(
+      child: Scaffold(
+        key: _scaffoldKey,
+        // drawer: Appdrawer(),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => _createOrUpdate(),
+          // onPressed: () {  },
+          child: const Icon(Icons.add),
+        ),
+
+        body: Stack(
+          children: <Widget>[
+            //header shape
+            Positioned(
+              top: 0,
+              left: 0,
+              child: Container(
+                height: MediaQuery.of(context).size.height / 4,
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  //borderRadius: BorderRadius.circular(200),
+                  color: Colors.yellow,
+                ),
+              ),
+            ),
+            Positioned(
+              top: 125,
+              left: -150,
+              child: Container(
+                height: 450, //MediaQuery.of(context).size.height / 4,
+                width: 450, //MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(250),
+                  color: Colors.yellow,
+                ),
+              ),
+            ),
+            Positioned(
+              top: 100,
+              left: 115,
+              child: Container(
+                height: 350, //MediaQuery.of(context).size.height / 4,
+                width: 350, //MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(200),
+                  color: Colors.yellow,
+                ),
+              ),
+            ),
+            //footer
+            Positioned(
+              bottom: -125,
+              left: -150,
+              child: Container(
+                height: 250, //MediaQuery.of(context).size.height / 4,
+                width: 250, //MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(250),
+                  color: Colors.yellow,
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: -100,
+              right: -115,
+              child: Container(
+                height: 250, //MediaQuery.of(context).size.height / 4,
+                width: 250, //MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(200),
+                  color: Colors.yellow,
+                ),
+              ),
+            ),
+            //menu
+            Positioned(
+              top: 30,
+              left: 20,
+              child: IconButton(
+                icon: Icon(Icons.arrow_back),
+                onPressed: () {
+                  print('inside button');
+                  // _scaffoldKey.currentState.openDrawer();
+                  //Navigator.pushNamed(context, "/MainPage");
+                  Navigator.pop(context);
+                  // Navigator.of(context).pushReplacement(
+                  //   new MaterialPageRoute(builder: (BuildContext context) => new PaysMain()),
+                  // );
+                },
+              ),
+            ),
+            Positioned(
+              top: 50,
+              left: MediaQuery.of(context).size.width / 2 - 70,
+              child: Text(
+                'List Products',
+                style: TextStyle(fontSize: 29, fontWeight: FontWeight.bold),
+              ),
+            ),
+            //body
+            Positioned(
+              top: 100,
+              left: 15,
+              right: 15,
+
+              // left: MediaQuery.of(context).size.width / 2 - 70,
+              child: SingleChildScrollView(
+                child: Container(
+                  height: 50,
+                  width: MediaQuery.of(context).size.width - 30,
+                  child: Material(
+                    elevation: 5.0,
+                    borderRadius: BorderRadius.circular(5.0),
+                    child: TextField(
+                        onChanged: (value) {
+                          print('inside change');
+                          filterSearchResults(value);
+                        },
+                        decoration: InputDecoration(
+                            border: InputBorder.none,
+                            prefixIcon: Icon(Icons.search,
+                                color: Colors.yellow, size: 30.0),
+                            contentPadding:
+                                EdgeInsets.only(left: 15.0, top: 15.0),
+                            hintText: 'Search',
+                            hintStyle: TextStyle(
+                                color: Colors.grey, fontFamily: 'Quicksand'))),
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              top: 160,
+              right: 0,
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                height: getHeight(context) / 1.2,
+                child: StreamBuilder(
+                  stream: _productss.snapshots(),
+                  builder:
+                      (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+                    if (streamSnapshot.hasData) {
+                      return ListView.builder(
+                        itemCount: streamSnapshot.data!.docs.length,
+                        itemBuilder: (context, index) {
+                          final DocumentSnapshot documentSnapshot =
+                              streamSnapshot.data!.docs[index];
+
+                          DocumentSnapshot dbData =
+                              streamSnapshot.data!.docs[index];
+                          print(documentSnapshot['productEntryDate'].toDate());
+                          ProductClass filteredData = ProductClass(
+                              productId:
+                                  int.parse(documentSnapshot['productId']),
+                              productName: documentSnapshot['productName'],
+                              productImage: documentSnapshot['productImage'],
+                              productCat: documentSnapshot['productCat'],
+                              productEntryDate:documentSnapshot['productEntryDate'].toDate(),//DateTime.parse(documentSnapshot['productEntryDate']),
+                             // DateTime.parse(  formatDate(documentSnapshot['productEntryDate'],
+                                //  [yyyy,'-',mm,'-',dd])),
+                             productPrice: documentSnapshot['productPrice'],
+                              favoriteFlag:
+                                  int.parse(documentSnapshot['favoriteFlag']),
+                              docsId: documentSnapshot.id);
+
+
+
+                          var a = documentSnapshot['productId'];
+
+                          return InkWell(
+                            onTap: ()
+                            {
+                              print(filteredData.productEntryDate);
+                              Get.to(() => ProductDetailsEdit(
+                                instProd: filteredData
+                             //   prodList: instProdListSimilar,
+                              ));
+                            },
+                            child: Container(
+                              height: getHeight(context) / FontManagerSize.s6,
+                              width: double.infinity,
+                              child: Card(
+                                  margin: const EdgeInsets.all(10),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(AppSize.s6),
+                                        child: CircleAvatar(
+                                          radius: FontManagerSize.s35,
+                                          backgroundImage: NetworkImage(
+                                              filteredData.productImage),
+                                        ),
+                                      ),
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          Text(
+                                            filteredData.productName,
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: AppSize.s20),
+                                          ),
+                                          Text(
+                                            filteredData.productPrice,
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.w300,
+                                                fontSize: AppSize.s20),
+                                          ),
+                                        ],
+                                      ),
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          Text(
+                                            filteredData.productCat,
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: AppSize.s20),
+                                          ),
+                                          Text(
+                                            '${formatDate(filteredData.productEntryDate, [
+                                                  yyyy,
+                                                  '-',
+                                                  mm,
+                                                  '-',
+                                                  dd
+                                                ])}',
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.w200,
+                                                fontSize: AppSize.s20),
+                                          ),
+                                        ],
+                                      ),
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          // Press this button to edit a single product
+                                          IconButton(
+                                              icon: const Icon(
+                                                Icons.edit,
+                                                size: AppSize.s20,
+                                              ),
+                                              //  onPressed: () =>
+                                              onPressed: () => _createOrUpdate(
+                                                  documentSnapshot)),
+                                          // This icon button is used to delete a single product
+                                          IconButton(
+                                              icon: const Icon(
+                                                Icons.delete,
+                                                size: AppSize.s20,
+                                              ),
+
+                                              ///onPressed: (){},
+                                              onPressed: () async {
+                                                _deleteProduct(
+                                                    documentSnapshot.id);
+                                                // Create a reference to the file to delete
+                                                FirebaseStorage.instance
+                                                    .refFromURL(documentSnapshot[
+                                                        'productImage'])
+                                                    .delete();
+// Child references can also take paths
+// spaceRef now points to "images/space.jpg
+// imagesRef still points to "images"
+                                              }),
+                                        ],
+                                      ),
+                                    ],
+                                  )
+
+                                  // ListTile(
+                                  //
+                                  //
+                                  //   title: Text('${filteredData.productName}'),
+                                  //   subtitle: Column(
+                                  //     children: [
+                                  //      Text('${filteredData.productName}'),
+                                  //       Text('${filteredData.productPrice}')
+                                  //     ],
+                                  //   ),
+                                  //   leading:  Column(
+                                  //     children: [
+                                  //       // Text('${filteredData.productImage}'),
+                                  //       Text('${filteredData.favoriteFlag}'),
+                                  //       //   Text('${filteredData.productPrice}'),
+                                  //       Text('${formatDate(filteredData.productEntryDate,
+                                  //           [yyyy, '-', mm, '-', dd])}'),
+                                  //       Text('${filteredData.productCat}'),
+                                  //     ],
+                                  //   ),
+                                  //   trailing: SizedBox(
+                                  //     width: 100,
+                                  //     height: 200,
+                                  //     child: Row(
+                                  //       children: [
+                                  //         // Press this button to edit a single product
+                                  //         IconButton(
+                                  //           icon: const Icon(Icons.edit),
+                                  //           //  onPressed: () =>
+                                  //           onPressed:()=> _createOrUpdate(documentSnapshot)
+                                  //         ),
+                                  //         // This icon button is used to delete a single product
+                                  //         IconButton(
+                                  //             icon: const Icon(Icons.delete),
+                                  //             ///onPressed: (){},
+                                  //             onPressed: () =>  _deleteProduct(documentSnapshot.id)
+                                  //         ),
+                                  //
+                                  //       ],
+                                  //     ),
+                                  //   ),
+                                  // ),
+                                  ),
+                            ),
+                          );
+                        },
+                      );
+                    }
+
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  },
+                ),
+              ),
+            ),
+
+            Positioned(
+              top: pheight / 30,
+              right: pwidth / 20,
+              child: IconButton(
+                icon: Icon(Icons.add, size: 30),
+                onPressed: () async {
+                  var maxProductId = await getDocumentMaxId(
+                      'Clean_App_Products_New', 'productId');
+
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => ProductAdd(
+                                Docs_max: maxProductId+1,
+                              )));
+
+                  //  }
+                  //pushNamed(context, "/ProductAdd");
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

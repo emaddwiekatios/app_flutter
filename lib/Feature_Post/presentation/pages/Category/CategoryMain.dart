@@ -1,3 +1,4 @@
+import 'package:clean_arch_app/Feature_Post/presentation/pages/Category/CategoryClass.dart';
 import 'package:clean_arch_app/Feature_Post/presentation/pages/Home/HomePage.dart';
 import 'package:clean_arch_app/Feature_Post/presentation/pages/Login/view_login/view_login.dart';
 import 'package:clean_arch_app/Feature_Post/presentation/pages/Products/ProductAdd.dart';
@@ -14,41 +15,42 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
 import '../../../../core/resource/Construct.dart';
+//import '../Products/CategoryClass.dart';
 
-class ProductMainNew extends StatefulWidget {
+class CategoryMain extends StatefulWidget {
   @override
-  _ProductMainNewState createState() => _ProductMainNewState();
+  _CategoryMainState createState() => _CategoryMainState();
 }
 
-List<ProductClass> list = [];
+  List<CategoryClass> list = [];
 
-List<ProductClass>? listTemp;
-List<ProductClass> duplicateItems = [];
-List<ProductClass> duplicateItems2 = [];
+List<CategoryClass>? listTemp;
+List<CategoryClass> duplicateItems = [];
+List<CategoryClass> duplicateItems2 = [];
 var db = FirebaseFirestore.instance;
 
 QuerySnapshot? cars;
-//List<ProductClass> ProductMainNew= [];
-final CollectionReference _productss =
-    FirebaseFirestore.instance.collection('Clean_App_Products_New');
-final TextEditingController _productIdController = TextEditingController();
-final TextEditingController _productNameController = TextEditingController();
-final TextEditingController _productImageController = TextEditingController();
-final TextEditingController _productPriceController = TextEditingController();
-final TextEditingController _productCatController = TextEditingController();
-final TextEditingController _productEntryDateController =
+//List<CategoryClass> CategoryMain= [];
+final CollectionReference _Categoryss_Main =
+    FirebaseFirestore.instance.collection('Categorys');
+final TextEditingController _catIdController = TextEditingController();
+final TextEditingController _catNameController = TextEditingController();
+final TextEditingController _catImageController = TextEditingController();
+final TextEditingController _catPriceController = TextEditingController();
+final TextEditingController _catCatController = TextEditingController();
+final TextEditingController _catEntryDateController =
     TextEditingController();
 final TextEditingController _favoriteFlagController = TextEditingController();
 
-class _ProductMainNewState extends State<ProductMainNew> {
+class _CategoryMainState extends State<CategoryMain> {
   void filterSearchResults(String query) {
-    List<ProductClass> dummySearchList = [];
+    List<CategoryClass> dummySearchList = [];
     dummySearchList = duplicateItems;
     if (query.isNotEmpty) {
       print('inside if');
-      List<ProductClass> dummyListData = [];
+      List<CategoryClass> dummyListData = [];
       dummySearchList.forEach((item) {
-        if (item.productName.toUpperCase().contains(query.toUpperCase())) {
+        if (item.Cat_Name.toUpperCase().contains(query.toUpperCase())) {
           dummyListData.add(item);
         }
       });
@@ -80,16 +82,16 @@ class _ProductMainNewState extends State<ProductMainNew> {
     print('inside _createOrUpdate');
     if (documentSnapshot != null) {
       action = 'update';
-      _productIdController.text = documentSnapshot['productId'];
-      _productNameController.text = documentSnapshot['productName'];
-      _productImageController.text = documentSnapshot['productImage'];
-      _productCatController.text = documentSnapshot['productCat'];
-      _productEntryDateController.text = documentSnapshot['productEntryDate'];
-      _productPriceController.text = documentSnapshot['productPrice'];
+      _catIdController.text = documentSnapshot['productId'];
+      _catNameController.text = documentSnapshot['productName'];
+      _catImageController.text = documentSnapshot['productImage'];
+      _catCatController.text = documentSnapshot['productCat'];
+      _catEntryDateController.text = documentSnapshot['productEntryDate'];
+      _catPriceController.text = documentSnapshot['productPrice'];
     } else {
-      _productNameController.text = '';
-      _productPriceController.text = '';
-      _productCatController.text = '';
+      _catNameController.text = '';
+      _catPriceController.text = '';
+      _catCatController.text = '';
     }
 
     await showModalBottomSheet(
@@ -108,7 +110,7 @@ class _ProductMainNewState extends State<ProductMainNew> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 TextField(
-                  controller: _productNameController,
+                  controller: _catNameController,
                   decoration: const InputDecoration(labelText: 'Name'),
                 ),
                 const SizedBox(
@@ -117,7 +119,7 @@ class _ProductMainNewState extends State<ProductMainNew> {
                 TextField(
                   keyboardType:
                       const TextInputType.numberWithOptions(decimal: true),
-                  controller: _productPriceController,
+                  controller: _catPriceController,
                   decoration: const InputDecoration(
                     labelText: 'Price',
                   ),
@@ -128,7 +130,7 @@ class _ProductMainNewState extends State<ProductMainNew> {
                 TextField(
                   keyboardType:
                       const TextInputType.numberWithOptions(decimal: true),
-                  controller: _productCatController,
+                  controller: _catCatController,
                   decoration: const InputDecoration(
                     labelText: 'Cat',
                   ),
@@ -139,14 +141,14 @@ class _ProductMainNewState extends State<ProductMainNew> {
                 ElevatedButton(
                   child: Text(action == 'create' ? 'Create' : 'Update'),
                   onPressed: () async {
-                    final String? name = _productNameController.text;
-                    final String? price = _productPriceController.text;
-                    final String? cat = _productCatController.text;
+                    final String? name = _catNameController.text;
+                    final String? price = _catPriceController.text;
+                    final String? cat = _catCatController.text;
                     if (name != null && price != null && cat != null) {
                       if (action == 'create') {
-                        _productNameController.text = '';
-                        _productPriceController.text = '';
-                        _productCatController.text = '';
+                        _catNameController.text = '';
+                        _catPriceController.text = '';
+                        _catCatController.text = '';
                         final todayDate = DateTime.now();
                         var currentdate = formatDate(todayDate, [
                           yyyy,
@@ -165,31 +167,31 @@ class _ProductMainNewState extends State<ProductMainNew> {
                         ]);
 
                         // Persist a new product to Firestore
-                        await _productss.add({
-                          "productName": name,
-                          "productPrice": price,
-                          "productCat": cat,
-                          "productId": "13",
-                          "productImage": "IMAGEPAth",
-                          "productCat": "COLTHES",
-                          "productEntryDate": currentdate,
+                        await _Categoryss_Main.add({
+                          "Cat_Name": name,
+                          "Cat_Price": price,
+                          "Cat_Desc": cat,
+                          "Cat_Id": "13",
+                          "Cat_image": "IMAGEPAth",
+                          "Cat_Desc": "COLTHES",
+                          "Cat_Date": currentdate,
                           "favoriteFlag": "0"
                         });
                       }
 
                       if (action == 'update') {
-                        // Update the product
-                        await _productss.doc(documentSnapshot!.id).update({
-                          "productName": name,
-                          "productPrice": price,
-                          "productCat": cat
+                        // Update the Cat_
+                        await _Categoryss_Main.doc(documentSnapshot!.id).update({
+                          "Cat_Name": name,
+                          "Cat_Price": price,
+                          "Cat_Desc": cat
                         });
                       }
 
                       // Clear the text fields
-                      _productNameController.text = '';
-                      _productPriceController.text = '';
-                      _productCatController.text = '';
+                      _catNameController.text = '';
+                      _catPriceController.text = '';
+                      _catCatController.text = '';
 
                       // Hide the bottom sheet
                       Navigator.of(context).pop();
@@ -202,16 +204,16 @@ class _ProductMainNewState extends State<ProductMainNew> {
         });
   }
 
-  Future<void> _deleteProduct(String productId) async {
-    await _productss.doc(productId).delete();
+  Future<void> _deleteProduct(String Cat_Id) async {
+    await _Categoryss_Main.doc(Cat_Id).delete();
 
     // Show a snackbar
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('You have successfully deleted a product')));
+        content: Text('You have successfully deleted a Cat_')));
   }
 
   Widget build(BuildContext context) {
-    // Deleteing a product by id
+    // Deleteing a Cat_ by id
 
     var pheight = MediaQuery.of(context).size.height;
     var pwidth = MediaQuery.of(context).size.width;
@@ -311,7 +313,7 @@ class _ProductMainNewState extends State<ProductMainNew> {
               top: 50,
               left: MediaQuery.of(context).size.width / 2 - 70,
               child: Text(
-                'List Products',
+                'List Cat_s',
                 style: TextStyle(fontSize: 29, fontWeight: FontWeight.bold),
               ),
             ),
@@ -354,7 +356,7 @@ class _ProductMainNewState extends State<ProductMainNew> {
                 width: MediaQuery.of(context).size.width,
                 height: getHeight(context) / 1.2,
                 child: StreamBuilder(
-                  stream: _productss.snapshots(),
+                  stream: _Categoryss_Main.snapshots(),
                   builder:
                       (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
                     if (streamSnapshot.hasData) {
@@ -363,25 +365,22 @@ class _ProductMainNewState extends State<ProductMainNew> {
                         itemBuilder: (context, index) {
                           final DocumentSnapshot documentSnapshot =
                               streamSnapshot.data!.docs[index];
-                          print('documentSnapshot==');
-                          //late ProductClass instpc;
+
+                          //late CategoryClass instpc;
                           //Raw form data
                           DocumentSnapshot dbData =
                               streamSnapshot.data!.docs[index];
-                          ProductClass filteredData = ProductClass(
-                              productId:
-                                  int.parse(documentSnapshot['productId']),
-                              productName: documentSnapshot['productName'],
-                              productImage: documentSnapshot['productImage'],
-                              productCat: documentSnapshot['productCat'],
-                              productEntryDate: DateTime
-                                  .now(), //DateTime.parse(documentSnapshot['productEntryDate']),
-                              productPrice: documentSnapshot['productPrice'],
-                              favoriteFlag:
-                                  int.parse(documentSnapshot['favoriteFlag']));
+                          CategoryClass filteredData = CategoryClass(
+                              Cat_Id: int.parse(documentSnapshot['Cat_Id']),
+                              Cat_Name: documentSnapshot['Cat_Name'],
+                              Cat_image: documentSnapshot['Cat_image'],
+                              Cat_Desc: documentSnapshot['Cat_Desc'],
+                              Cat_Date: DateTime
+                                  .now(), //DateTime.parse(documentSnapshot['Cat_Date']),
+                              Cat_Price: documentSnapshot['Cat_Price']);
 
                           var currentdate = formatDate(
-                              filteredData.productEntryDate, [
+                              filteredData.Cat_Date, [
                             yyyy,
                             '-',
                             mm,
@@ -397,7 +396,7 @@ class _ProductMainNewState extends State<ProductMainNew> {
                             am
                           ]);
 
-                          var a = documentSnapshot['productId'];
+                          var a = documentSnapshot['Cat_Id'];
 
                           return Container(
                             height: getHeight(context) / FontManagerSize.s6,
@@ -413,7 +412,7 @@ class _ProductMainNewState extends State<ProductMainNew> {
                                       child: CircleAvatar(
                                         radius: FontManagerSize.s35,
                                         backgroundImage: NetworkImage(
-                                            filteredData.productImage),
+                                            filteredData.Cat_image),
                                       ),
                                     ),
                                     Column(
@@ -421,13 +420,13 @@ class _ProductMainNewState extends State<ProductMainNew> {
                                           MainAxisAlignment.spaceAround,
                                       children: [
                                         Text(
-                                          filteredData.productName,
+                                          filteredData.Cat_Name,
                                           style: const TextStyle(
                                               fontWeight: FontWeight.w500,
                                               fontSize: AppSize.s20),
                                         ),
                                         Text(
-                                          filteredData.productPrice,
+                                          filteredData.Cat_Price,
                                           style: const TextStyle(
                                               fontWeight: FontWeight.w300,
                                               fontSize: AppSize.s20),
@@ -439,13 +438,13 @@ class _ProductMainNewState extends State<ProductMainNew> {
                                           MainAxisAlignment.spaceAround,
                                       children: [
                                         Text(
-                                          filteredData.productCat,
+                                          filteredData.Cat_Desc,
                                           style: const TextStyle(
                                               fontWeight: FontWeight.w500,
                                               fontSize: AppSize.s20),
                                         ),
                                         Text(
-                                          '${formatDate(filteredData.productEntryDate, [
+                                          '${formatDate(filteredData.Cat_Date, [
                                                 yyyy,
                                                 '-',
                                                 mm,
@@ -462,7 +461,7 @@ class _ProductMainNewState extends State<ProductMainNew> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
                                       children: [
-                                        // Press this button to edit a single product
+                                        // Press this button to edit a single Cat_
                                         IconButton(
                                             icon: const Icon(
                                               Icons.edit,
@@ -471,7 +470,7 @@ class _ProductMainNewState extends State<ProductMainNew> {
                                             //  onPressed: () =>
                                             onPressed: () => _createOrUpdate(
                                                 documentSnapshot)),
-                                        // This icon button is used to delete a single product
+                                        // This icon button is used to delete a single Cat_
                                         IconButton(
                                             icon: const Icon(
                                               Icons.delete,
@@ -485,7 +484,7 @@ class _ProductMainNewState extends State<ProductMainNew> {
                                               // Create a reference to the file to delete
                                               FirebaseStorage.instance
                                                   .refFromURL(documentSnapshot[
-                                                      'productImage'])
+                                                      'Cat_image'])
                                                   .delete();
 // Child references can also take paths
 // spaceRef now points to "images/space.jpg
@@ -499,21 +498,21 @@ class _ProductMainNewState extends State<ProductMainNew> {
                                 // ListTile(
                                 //
                                 //
-                                //   title: Text('${filteredData.productName}'),
+                                //   title: Text('${filteredData.Cat_Name}'),
                                 //   subtitle: Column(
                                 //     children: [
-                                //      Text('${filteredData.productName}'),
-                                //       Text('${filteredData.productPrice}')
+                                //      Text('${filteredData.Cat_Name}'),
+                                //       Text('${filteredData.Cat_Price}')
                                 //     ],
                                 //   ),
                                 //   leading:  Column(
                                 //     children: [
-                                //       // Text('${filteredData.productImage}'),
+                                //       // Text('${filteredData.Cat_image}'),
                                 //       Text('${filteredData.favoriteFlag}'),
-                                //       //   Text('${filteredData.productPrice}'),
-                                //       Text('${formatDate(filteredData.productEntryDate,
+                                //       //   Text('${filteredData.Cat_Price}'),
+                                //       Text('${formatDate(filteredData.Cat_Date,
                                 //           [yyyy, '-', mm, '-', dd])}'),
-                                //       Text('${filteredData.productCat}'),
+                                //       Text('${filteredData.Cat_Desc}'),
                                 //     ],
                                 //   ),
                                 //   trailing: SizedBox(
@@ -521,17 +520,17 @@ class _ProductMainNewState extends State<ProductMainNew> {
                                 //     height: 200,
                                 //     child: Row(
                                 //       children: [
-                                //         // Press this button to edit a single product
+                                //         // Press this button to edit a single Cat_
                                 //         IconButton(
                                 //           icon: const Icon(Icons.edit),
                                 //           //  onPressed: () =>
                                 //           onPressed:()=> _createOrUpdate(documentSnapshot)
                                 //         ),
-                                //         // This icon button is used to delete a single product
+                                //         // This icon button is used to delete a single Cat_
                                 //         IconButton(
                                 //             icon: const Icon(Icons.delete),
                                 //             ///onPressed: (){},
-                                //             onPressed: () =>  _deleteProduct(documentSnapshot.id)
+                                //             onPressed: () =>  _deleteCat_(documentSnapshot.id)
                                 //         ),
                                 //
                                 //       ],
@@ -558,18 +557,18 @@ class _ProductMainNewState extends State<ProductMainNew> {
               child: IconButton(
                 icon: Icon(Icons.add, size: 30),
                 onPressed: () async {
-                  var maxProductId = await getDocumentMaxId(
-                      'Clean_App_Products_New', 'productId');
+                  var maxCat_Id = await getDocumentMaxId(
+                      'Categorys', 'Cat_Id');
 
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => ProductAdd(
-                                Docs_max: maxProductId+1,
-                              )));
+                  // Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //         builder: (_) => Cat_Add(
+                  //               Docs_max: maxCat_Id+1,
+                  //             )));
 
                   //  }
-                  //pushNamed(context, "/ProductAdd");
+                  //pushNamed(context, "/Cat_Add");
                 },
               ),
             ),

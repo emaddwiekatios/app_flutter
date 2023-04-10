@@ -21,12 +21,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:provider/provider.dart';
 
-///import 'package:paychalet/AppLocalizations.dart';
-//import 'package:paychalet/Invoices/Invoices_Class.dart';
-//import '../main_page.dart';
-//import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-//import  'package:keyboard_actions/keyboard_actions.dart';
-//import 'package:paychalet/KeyBoard/KeyBoard.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:http/http.dart' as http;
 
 class ProductAdd extends StatefulWidget {
@@ -357,30 +352,20 @@ class _ProductAddState extends State<ProductAdd> {
                                     child: ElevatedButton(
                                       //elevation: 0,
                                       onPressed: () {
-                                        //  Navigator.of(context).pushReplacementNamed('/MainPage');
-//                                               DatePicker.showDatePicker(context,
-//                                                   showTitleActions: true,
-//                                                   minTime: DateTime(2018,3,5),
-//                                                   maxTime: DateTime(2025,6,7),
-//                                                   onChanged: (date) {
-//                                                     print('change $date');
-//                                                   },
-//                                                   onConfirm: (date) {
-//                                                     setState(() {
-//                                                       _date = date;
-//
-// //                                                  _day = formatDate(date,
-// //                                                      [ dd]);
-// //                                                  _due_date = formatDate(
-// //                                                      date.add(new Duration(
-// //                                                          days: 30)),
-// //                                                      [yyyy,'-',M,'-',dd]);
-//                                                     });
-//                                                     print('confirm $date');
-//                                                   },
-//                                                   currentTime: DateTime.now(),
-//                                                  // locale: LocaleType.ar
-//                                               );
+                                       //  Navigator.of(context).pushReplacementNamed('/MainPage');
+                                         DatePicker.showDatePicker(context,
+                                             showTitleActions: true,
+                                             minTime: DateTime(2020, 1, 1),
+                                             maxTime: DateTime(2024, 12, 31),
+                                        onChanged: (date) {_date=date;},
+                                        onConfirm: (date) {date=date;},
+                                        currentTime: DateTime.now()
+                                        //, locale: LocaleType.en
+
+                                                       );
+
+
+
                                       },
                                       //  color: Colors.white,
                                       //padding: EdgeInsets.only(left: (5.0), top: 5.0),
@@ -403,28 +388,14 @@ class _ProductAddState extends State<ProductAdd> {
                                   ),
                                   InkWell(
                                     onTap: () {
-//                                             DatePicker.showDatePicker(context,
-//                                                 showTitleActions: true,
-//                                                 minTime: DateTime(2018,3,5),
-//                                                 maxTime: DateTime(2025,6,7),
-//                                                 onChanged: (date) {
-//                                                   print('change $date');
-//                                                 },
-//                                                 onConfirm: (date) {
-//                                                   setState(() {
-//                                                     _date = date;
-// //                                                  _day = formatDate(date,
-// //                                                      [ dd]);
-// //                                                  _due_date = formatDate(
-// //                                                      date.add(new Duration(
-// //                                                          days: 30)),
-// //                                                      [yyyy,'-',M,'-',dd]);
-//                                                   });
-//                                                   print('confirm $date');
-//                                                 },
-//                                                 currentTime: DateTime.now(),
-//                                              //   locale: LocaleType.ar
-//                                             );
+                                             //   locale: LocaleType.ar
+                                      DatePicker.showDatePicker(context,
+                                          showTitleActions: true,
+                                          minTime: DateTime(2020, 1, 1),
+                                      maxTime: DateTime(2024, 12, 31),
+                                      onChanged: (date) {_date=date;},
+                                      onConfirm: (date) {date=date;},
+                                      currentTime: DateTime.now(),);
                                     },
                                     child: Icon(Icons.edit),
                                   ),
@@ -837,7 +808,7 @@ class _ProductAddState extends State<ProductAdd> {
       "productImage": url2,
       "productPrice": contProductAmt.text,
       "productCat": _selectedCat ,//contProductcat.text,
-      "productEntryDate": currentdate,
+      "productEntryDate": DateTime.now(),
       "favoriteFlag": "0", //contProductfav.text
     });
     Navigator.of(context).pop();

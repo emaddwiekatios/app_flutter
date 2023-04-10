@@ -141,61 +141,11 @@ class _CartsState extends State<Carts> {
 @override
   void initState() {
     // TODO: implement initState
-  loadCartsinit();
+
   //get_sumitem();
     super.initState();
   }
-  void loadCartsinit() {
-    instCartsList.clear();
-    instCartsList.add(ProductClass(productId: 1,
-        productName: 'T-shirt',
-        productImage: AssetManager.mancat,
-        productPrice: "16",
-        productCat: 'Clothes',
-        productEntryDate: DateTime.now(),favoriteFlag:1 ));
-    instCartsList.add(ProductClass(productId: 2,
-        productName: 'Jaket',
-        productImage: AssetManager.mancat3,
-        productPrice: "50",
-        productCat: 'Clothes',
-        productEntryDate: DateTime.now(),favoriteFlag:1 ));
-    instCartsList.add(ProductClass(productId: 3,
-        productName: 'Jeans',
-        productImage: AssetManager.mancat4,
-        productPrice: "100",
-        productCat: 'Clothes',
-        productEntryDate: DateTime.now(),favoriteFlag:1 ));
-    instCartsList.add(ProductClass(productId: 4,
-        productName: 'Body',
-        productImage: AssetManager.mancat5,
-        productPrice: "400",
-        productCat: 'Clothes',
-        productEntryDate: DateTime.now(),favoriteFlag:0 ));
-    instCartsList.add(ProductClass(productId: 5,
-        productName: 'T-shttirt',
-        productImage: AssetManager.mancat,
-        productPrice: "616",
-        productCat: 'Clothes',
-        productEntryDate: DateTime.now(),favoriteFlag:0 ));
-    instCartsList.add(ProductClass(productId: 6,
-        productName: 'Jaketttt',
-        productImage: AssetManager.mancat3,
-        productPrice: "560",
-        productCat: 'Clothes',
-        productEntryDate: DateTime.now(),favoriteFlag:1 ));
-    instCartsList.add(ProductClass(productId: 7,
-        productName: 'Jeattns',
-        productImage: AssetManager.mancat4,
-        productPrice: "1600",
-        productCat: 'Clothes',
-        productEntryDate: DateTime.now(),favoriteFlag:1 ));
-    instCartsList.add(ProductClass(productId: 8,
-        productName: 'Bodtty',
-        productImage: AssetManager.mancat5,
-        productPrice: "4060",
-        productCat: 'Clothes',
-        productEntryDate: DateTime.now(),favoriteFlag:1 ));
-  }
+
   var sumItem=0.0;
   var noItem=0;
   // void get_sumitem()

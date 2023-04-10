@@ -187,7 +187,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                               margin: const EdgeInsets.all(AppSize.s6),
                               //elevation: 20,
                               child: Hero(
-                                tag: widget.instProd.productId,
+                                tag: widget.instProd.productName,
                                 child: Container(
                                   height:
                                       getHeight(context) / FontManagerSize.s2_5,
@@ -197,7 +197,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                       image: DecorationImage(
                                           fit: BoxFit.fill,
                                           // image: AssetImage(AssetManager.mancat4)
-                                          image: AssetImage(
+                                          image: NetworkImage(
                                               widget.instProd.productImage))),
                                 ),
                               ),

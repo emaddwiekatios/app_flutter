@@ -141,10 +141,11 @@ class _CartsState extends State<Carts> {
 @override
   void initState() {
     // TODO: implement initState
-  loadCartsinit();
+  //loadCartsinit();
   //get_sumitem();
     super.initState();
   }
+  /*
   void loadCartsinit() {
     instCartsList.clear();
     instCartsList.add(ProductClass(productId: 1,
@@ -196,6 +197,8 @@ class _CartsState extends State<Carts> {
         productCat: 'Clothes',
         productEntryDate: DateTime.now(),favoriteFlag:1 ));
   }
+
+  */
   var sumItem=0.0;
   var noItem=0;
   // void get_sumitem()

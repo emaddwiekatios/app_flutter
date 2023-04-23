@@ -6,10 +6,13 @@ import 'package:clean_arch_app/core/resource/Construct.dart';
 import 'package:clean_arch_app/core/resource/FontManager.dart';
 import 'package:clean_arch_app/core/resource/MediaQuery.dart';
 import 'package:clean_arch_app/core/resource/ValueManger.dart';
-import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 
+
 import '../../../../core/resource/AssetManager.dart';
+import '../../../../core/resource/StringManager.dart';
 import '../Products/ProductsClass.dart';
 
 class Carts extends StatefulWidget {
@@ -25,7 +28,7 @@ const avatarDiameter = avatarRadius * 2;
 Color colorOne = Colors.amber;
 Color colorTwo = ColorManager.primary;
 Color colorThree = ColorManager.primary;
-
+var _carts=getCollectionReference(StringManager.collection_Carts);
 class _CartsState extends State<Carts> {
   final GlobalKey<ScaffoldState> _scaffoldKey =  GlobalKey<ScaffoldState>();
   // Color pyellow = Color(Colors.amber);
@@ -56,7 +59,7 @@ class _CartsState extends State<Carts> {
   //             onTap: () => node.unfocus(),
   //             child: Padding(
   //               padding: EdgeInsets.all(8.0),
-  //               child: Icon(Icons.close),
+  //               child: const Icon(Icons.close),
   //             ),
   //           );
   //         }
@@ -157,7 +160,7 @@ class _CartsState extends State<Carts> {
   //
   //     }
   //   noItem=instCartsList.length;
-  //   print('The total price $sumItem');
+  
   // }
     @override
   Widget build(BuildContext context) {
@@ -252,7 +255,7 @@ class _CartsState extends State<Carts> {
               child: IconButton(
                 icon: const Icon(Icons.arrow_back_ios),
                 onPressed: () {
-                  // print('inside button');
+                  ////print('inside button');
                   // _scaffoldKey.currentState.openDrawer();
 
                   Navigator.pushReplacementNamed(context, "/PreHome");
@@ -285,34 +288,183 @@ class _CartsState extends State<Carts> {
                       ? MediaQuery.of(context).size.height
                       : 775.0,
                   child:  Center(
-                      child: ListView.builder(
-                      itemCount: instCartsList.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        //print('insdie int ');
-                        return   CartsCeil(instCarts: instCartsList[index],);
-                      },
-                    ),
+                      child: StreamBuilder(
+                        stream: getCollectionReference(StringManager.collection_Carts).snapshots(),
+                        builder: (BuildContext context, AsyncSnapshot snapshot) {
+
+
+
+
+                          if (snapshot.hasData) {
+
+                            instCartsList.clear();
+                              for (int i = 0; i <
+                                  snapshot.data!.docs.length; i++) {
+                                final DocumentSnapshot documentSnapshot = snapshot
+                                    .data!.docs[i];
+                                ProductClass filteredData = ProductClass(
+                                    productId:
+                                        documentSnapshot['productId'],
+                                    productName: documentSnapshot['productName'],
+                                    productImage: documentSnapshot['productImage'],
+                                    productCat: documentSnapshot['productCat'],
+                                    productEntryDate: DateTime.now(),
+                                    //DateTime.parse(documentSnapshot['productEntryDate']),
+                                    productPrice: documentSnapshot['productPrice'],
+                                    favoriteFlag:
+                                    documentSnapshot['favoriteFlag'],
+                                    docsId: documentSnapshot.id,
+                                    productCount: documentSnapshot['productCount']);
+                                instCartsList.add(filteredData);
+
+                              }
+
+
+
+                            return ListView.builder(
+                              itemCount: instCartsList.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                //print('insdie int ');
+                                return     GestureDetector(
+                                  onTap: ()
+                                  {
+                                    //print(instCartsList[index].productName);
+                                  },
+                                  child: Container(
+                                    margin:const  EdgeInsets.all(AppSize.s6),
+                                    height: getHeight(context)/FontManagerSize.s7,
+                                    width: getWidth(context)/FontManagerSize.s3,
+                                    decoration: BoxDecoration(
+                                      // border: Border.all(
+                                      //   color: ColorManager.primary,
+                                      //   width: 1,
+                                      // ),
+                                      borderRadius: BorderRadius.circular(AppSize.s10),
+                                    ),
+                                    child:
+                                    Stack(
+                                      children: [
+                                        Card(
+                                          color: Colors.grey[100],
+                                          margin: EdgeInsets.all(FontManagerSize.s5),
+                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppSize.s10)),
+                                          elevation: .5,
+                                          child:
+                                          Padding(
+                                            padding: const EdgeInsets.all(AppSize.s10),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                                  children: [
+                                                    CircleAvatar(
+                                                      radius: FontManagerSize.s50,
+                                                      backgroundImage: NetworkImage(instCartsList[index].productImage),
+                                                      //  child: Image.asset(instCartsList[index].productImage,fit:BoxFit.cover),
+                                                    ),
+                                                    SizedBox(
+                                                      width: getWidth(context)/AppSize.s12,
+
+                                                    ),
+                                                    Column(
+                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: [
+                                                        Text(instCartsList[index].productName),
+                                                        Text("Price  ${instCartsList[index].productPrice}\$"),
+                                                        Text('${formatDate(instCartsList[index].productEntryDate, [yyyy, '-', mm, '-', dd])}'),
+
+
+                                                      ],
+                                                    ),
+
+
+                                                    Row(
+                                                      children: [
+                                                        IconButton(onPressed: (){
+                                                          updateIntField(StringManager.collection_Carts,'productCount',instCartsList[index].docsId,instCartsList[index].productCount-1);
+
+                                                        },
+                                                            icon:  Icon(Icons.remove_circle,color:Colors.grey[300], )),
+                                                        Text('${instCartsList[index].productCount}'),
+                                                        IconButton(onPressed: (){
+                                                          setState(() {
+                                                            var tempProductCount =instCartsList[index].productCount+1;
+                                                         
+                                                          });
+
+                                                          updateIntField(StringManager.collection_Carts,'productCount',instCartsList[index].docsId,instCartsList[index].productCount+1);
+
+                                                        }, icon:  Icon(Icons.add_circle,color: ColorManager.primary, )),
+                                                      ],
+                                                    )
+
+
+                                                  ],
+                                                ),
+
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        Positioned(
+                                          top:2,
+                                          right: 2,
+                                          child:
+                                          IconButton(onPressed: (){
+                                            deleteProduct(
+                                                context,
+                                                StringManager.collection_Carts,
+                                                instCartsList[index].docsId,null
+                                            );
+
+                                          }, icon:const Icon(Icons.cancel_outlined )),)
+                                      ],
+                                    ),
+                                  ),
+
+
+
+
+                                );
+
+                              },
+                             );
+                          } else if (snapshot.hasError) {
+                            return const Icon(Icons.error_outline);
+                          } else {
+                            return CircularProgressIndicator();
+                          }
+                        }),
+
+                      ),
                   )//hgjghjg   hj
 
 
               ),
-            ),
+
+
+
+
+
             //bottom shhet
 
             Positioned(
               bottom: AppSize.s0,
               right: 0,//MediaQuery.of(context).size.width / 2 -50,
               child:  ElevatedButton(
-                style:ButtonStyle(backgroundColor:MaterialStateProperty.all(ColorManager.secondary)) ,
+                style:ButtonStyle(backgroundColor:MaterialStateProperty.all(Colors.cyanAccent)) ,
                 child: Text('Check out'),
                 onPressed: () {
                   showModalBottomSheet(
                     context: context,
                     builder: (context) {
                       return Container(
-                        margin: EdgeInsets.only(left:AppSize.s10,top: FontManagerSize.s5),
+                        margin:const EdgeInsets.only(left:AppSize.s10,top: FontManagerSize.s5),
                         height: getHeight(context)/FontManagerSize.s8,
-                        decoration:  BoxDecoration(
+                        decoration: const BoxDecoration(
                           borderRadius: BorderRadius.only(topRight: Radius.circular(200))
                         )
                         ,
@@ -368,7 +520,7 @@ class _CartsState extends State<Carts> {
                                 parBorderWidth: AppSize.s1,
                                 nameButton: 'Check Out',
                                 onTabButton: (){
-                                  print('inside checkout');
+                                 //print('inside checkout');
                                 },
                                 parBackGroundColor: ColorManager.primary,
                                 parForegroundColor: Colors.white)
@@ -394,9 +546,11 @@ class _CartsState extends State<Carts> {
                 style: TextStyle(fontSize: 29, fontWeight: FontWeight.bold),
               ),
             ),
-          ],
-        ),
+
+      ],
       ),
+      ),
+
     );
   }
 }

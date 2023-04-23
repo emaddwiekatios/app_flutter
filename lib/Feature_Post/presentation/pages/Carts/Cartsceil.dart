@@ -1,10 +1,12 @@
 
 
 import 'package:clean_arch_app/core/resource/MediaQuery.dart';
+import 'package:clean_arch_app/core/resource/StringManager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/resource/ColorManger.dart';
+import '../../../../core/resource/Construct.dart';
 import '../../../../core/resource/FontManager.dart';
 import '../../../../core/resource/ValueManger.dart';
 import '../Products/ProductsClass.dart';
@@ -25,11 +27,11 @@ class _CartsCeilState extends State<CartsCeil> {
       GestureDetector(
           onTap: ()
           {
-            print(widget.instCarts.productName);
+            ///print(widget.instCarts.productName);
           },
           child: Container(
           margin:const  EdgeInsets.all(AppSize.s6),
-          height: getHeight(context)/AppSize.s8,
+          height: getHeight(context)/FontManagerSize.s7,
           width: getWidth(context)/FontManagerSize.s3,
           decoration: BoxDecoration(
             // border: Border.all(
@@ -57,8 +59,8 @@ class _CartsCeilState extends State<CartsCeil> {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           CircleAvatar(
-                            radius: AppSize.s40,
-                            backgroundImage: AssetImage(widget.instCarts.productImage),
+                            radius: AppSize.s65,
+                            backgroundImage: NetworkImage(widget.instCarts.productImage),
                             //  child: Image.asset(widget.instCarts.productImage,fit:BoxFit.cover),
                           ),
                           SizedBox(
@@ -80,10 +82,18 @@ class _CartsCeilState extends State<CartsCeil> {
 
                           Row(
                             children: [
-                             IconButton(onPressed: (){ },
-                                 icon: Icon(Icons.remove_circle,color:Colors.grey[300], )),
-                              Text('Cnt'),
-                               IconButton(onPressed: (){ }, icon: Icon(Icons.add_circle,color: ColorManager.primary, )),
+                             IconButton(onPressed: (){
+                               updateIntField(StringManager.collection_Carts,'productCount',widget.instCarts.docsId,widget.instCarts.productCount-1);
+
+                             },
+                                 icon:  Icon(Icons.remove_circle,color:Colors.grey[300], )),
+                              Text('${widget.instCarts.productCount}'),
+                               IconButton(onPressed: (){
+                                 var tempProductCount =widget.instCarts.productCount+1;
+                                 //print(tempProductCount);
+                                 updateIntField(StringManager.collection_Carts,'productCount',widget.instCarts.docsId,widget.instCarts.productCount+1);
+
+                               }, icon:  Icon(Icons.add_circle,color: ColorManager.primary, )),
                             ],
                           )
 
@@ -99,7 +109,14 @@ class _CartsCeilState extends State<CartsCeil> {
                 top:2,
                 right: 2,
                 child:
-              IconButton(onPressed: (){ }, icon:Icon(Icons.cancel_outlined )),)
+              IconButton(onPressed: (){
+                deleteProduct(
+                   context,
+                   StringManager.collection_Carts,
+                  widget.instCarts.docsId,null
+                   );
+
+              }, icon:const Icon(Icons.cancel_outlined )),)
             ],
           ),
     ),

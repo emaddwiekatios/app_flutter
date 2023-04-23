@@ -1,23 +1,23 @@
+import 'package:clean_arch_app/Feature_Post/presentation/pages/Category/CategoryAdd.dart';
 import 'package:clean_arch_app/Feature_Post/presentation/pages/Category/CategoryClass.dart';
 import 'package:clean_arch_app/Feature_Post/presentation/pages/Home/HomePage.dart';
-import 'package:clean_arch_app/Feature_Post/presentation/pages/Login/view_login/view_login.dart';
-import 'package:clean_arch_app/Feature_Post/presentation/pages/Products/ProductAdd.dart';
-import 'package:clean_arch_app/Feature_Post/presentation/pages/Products/ProductsClass.dart';
 import 'package:clean_arch_app/core/resource/FontManager.dart';
 import 'package:clean_arch_app/core/resource/MediaQuery.dart';
+import 'package:clean_arch_app/core/resource/StringManager.dart';
 import 'package:clean_arch_app/core/resource/ValueManger.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+
 import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_format/date_format.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
 import '../../../../core/resource/Construct.dart';
-//import '../Products/CategoryClass.dart';
+import 'CategoryDetailsEdit.dart';
 
 class CategoryMain extends StatefulWidget {
+  const CategoryMain({super.key});
+
   @override
   _CategoryMainState createState() => _CategoryMainState();
 }
@@ -31,8 +31,8 @@ var db = FirebaseFirestore.instance;
 
 QuerySnapshot? cars;
 //List<CategoryClass> CategoryMain= [];
-final CollectionReference _Categoryss_Main =
-    FirebaseFirestore.instance.collection('Categorys');
+final CollectionReference categoryMain =
+    FirebaseFirestore.instance.collection("Categorys");
 final TextEditingController _catIdController = TextEditingController();
 final TextEditingController _catNameController = TextEditingController();
 final TextEditingController _catImageController = TextEditingController();
@@ -40,20 +40,19 @@ final TextEditingController _catPriceController = TextEditingController();
 final TextEditingController _catCatController = TextEditingController();
 final TextEditingController _catEntryDateController =
     TextEditingController();
-final TextEditingController _favoriteFlagController = TextEditingController();
 
 class _CategoryMainState extends State<CategoryMain> {
   void filterSearchResults(String query) {
     List<CategoryClass> dummySearchList = [];
     dummySearchList = duplicateItems;
     if (query.isNotEmpty) {
-      print('inside if');
+      //print('inside if');
       List<CategoryClass> dummyListData = [];
-      dummySearchList.forEach((item) {
-        if (item.Cat_Name.toUpperCase().contains(query.toUpperCase())) {
+      for (var item in dummySearchList) {
+        if (item.catName.toUpperCase().contains(query.toUpperCase())) {
           dummyListData.add(item);
         }
-      });
+      }
       setState(() {
         list = dummyListData;
       });
@@ -69,25 +68,23 @@ class _CategoryMainState extends State<CategoryMain> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    //call_get_datatype();
-    // _readdball();
+  
   }
 
-  @override
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  Color pyellow = Colors.red;
+  final GlobalKey<ScaffoldState> _scaffoldKey =  GlobalKey<ScaffoldState>();
+  Color pYellow = Colors.red;
 
-  Future<void> _createOrUpdate([DocumentSnapshot? documentSnapshot]) async {
+  Future<void> _createOrUpdate([CategoryClass? documentSnapshot]) async {
     String action = 'create';
-    print('inside _createOrUpdate');
+   //print('inside _createOrUpdate');
     if (documentSnapshot != null) {
       action = 'update';
-      _catIdController.text = documentSnapshot['productId'];
-      _catNameController.text = documentSnapshot['productName'];
-      _catImageController.text = documentSnapshot['productImage'];
-      _catCatController.text = documentSnapshot['productCat'];
-      _catEntryDateController.text = documentSnapshot['productEntryDate'];
-      _catPriceController.text = documentSnapshot['productPrice'];
+      _catIdController.text = documentSnapshot.catId.toString();
+      _catNameController.text = documentSnapshot.catName;
+      _catImageController.text = documentSnapshot.catImage;
+      _catCatController.text = documentSnapshot.catDesc;
+      _catEntryDateController.text = documentSnapshot.catDate.toString();
+      _catPriceController.text = documentSnapshot.catPrice;
     } else {
       _catNameController.text = '';
       _catPriceController.text = '';
@@ -141,61 +138,57 @@ class _CategoryMainState extends State<CategoryMain> {
                 ElevatedButton(
                   child: Text(action == 'create' ? 'Create' : 'Update'),
                   onPressed: () async {
-                    final String? name = _catNameController.text;
-                    final String? price = _catPriceController.text;
-                    final String? cat = _catCatController.text;
-                    if (name != null && price != null && cat != null) {
-                      if (action == 'create') {
-                        _catNameController.text = '';
-                        _catPriceController.text = '';
-                        _catCatController.text = '';
-                        final todayDate = DateTime.now();
-                        var currentdate = formatDate(todayDate, [
-                          yyyy,
-                          '-',
-                          mm,
-                          '-',
-                          dd,
-                          ' ',
-                          hh,
-                          ':',
-                          nn,
-                          ':',
-                          ss,
-                          ' ',
-                          am
-                        ]);
-
-                        // Persist a new product to Firestore
-                        await _Categoryss_Main.add({
-                          "Cat_Name": name,
-                          "Cat_Price": price,
-                          "Cat_Desc": cat,
-                          "Cat_Id": "13",
-                          "Cat_image": "IMAGEPAth",
-                          "Cat_Desc": "COLTHES",
-                          "Cat_Date": currentdate,
-                          "favoriteFlag": "0"
-                        });
-                      }
-
-                      if (action == 'update') {
-                        // Update the Cat_
-                        await _Categoryss_Main.doc(documentSnapshot!.id).update({
-                          "Cat_Name": name,
-                          "Cat_Price": price,
-                          "Cat_Desc": cat
-                        });
-                      }
-
-                      // Clear the text fields
+                    final String name = _catNameController.text;
+                    final String price = _catPriceController.text;
+                    final String cat = _catCatController.text;
+                    if (action == 'create') {
                       _catNameController.text = '';
                       _catPriceController.text = '';
                       _catCatController.text = '';
+                      final todayDate = DateTime.now();
+                      var currentdate = formatDate(todayDate, [
+                        yyyy,
+                        '-',
+                        mm,
+                        '-',
+                        dd,
+                        ' ',
+                        hh,
+                        ':',
+                        nn,
+                        ':',
+                        ss,
+                        ' ',
+                        am
+                      ]);
 
-                      // Hide the bottom sheet
-                      Navigator.of(context).pop();
+                      await categoryMain.add({
+                        "catName": name,
+                        "catPrice": price,
+                        "catDesc": cat,
+                        "catId": "13",
+                        "catImage": "IMAGEAth",
+                        "catDate": currentdate,
+                        "favoriteFlag": "0"
+                      });
                     }
+
+                    if (action == 'update') {
+                      // Update the cat
+                      await categoryMain.doc(documentSnapshot!.docsId).update({
+                        "catName": name,
+                        "catPrice": price,
+                        "catDesc": cat
+                      });
+                    }
+
+                    // Clear the text fields
+                    _catNameController.text = '';
+                    _catPriceController.text = '';
+                    _catCatController.text = '';
+
+                    // Hide the bottom sheet
+                    Navigator.of(context).pop();
                   },
                 )
               ],
@@ -204,24 +197,23 @@ class _CategoryMainState extends State<CategoryMain> {
         });
   }
 
-  Future<void> _deleteProduct(String Cat_Id) async {
-    await _Categoryss_Main.doc(Cat_Id).delete();
-
-    // Show a snackbar
+  Future<void> deleteProductMain(String CatId) async {
+    await categoryMain.doc(CatId).delete();
+    
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('You have successfully deleted a Cat_')));
+        content: Text('You have successfully deleted a cat')));
   }
 
+  @override
   Widget build(BuildContext context) {
-    // Deleteing a Cat_ by id
-
+   
     var pheight = MediaQuery.of(context).size.height;
     var pwidth = MediaQuery.of(context).size.width;
 
     return SafeArea(
       child: Scaffold(
         key: _scaffoldKey,
-        // drawer: Appdrawer(),
+       
         floatingActionButton: FloatingActionButton(
           onPressed: () => _createOrUpdate(),
           // onPressed: () {  },
@@ -237,7 +229,7 @@ class _CategoryMainState extends State<CategoryMain> {
               child: Container(
                 height: MediaQuery.of(context).size.height / 4,
                 width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   //borderRadius: BorderRadius.circular(200),
                   color: Colors.yellow,
                 ),
@@ -299,7 +291,7 @@ class _CategoryMainState extends State<CategoryMain> {
               child: IconButton(
                 icon: Icon(Icons.arrow_back),
                 onPressed: () {
-                  print('inside button');
+                 
                   // _scaffoldKey.currentState.openDrawer();
                   //Navigator.pushNamed(context, "/MainPage");
                   Navigator.pop(context);
@@ -312,8 +304,8 @@ class _CategoryMainState extends State<CategoryMain> {
             Positioned(
               top: 50,
               left: MediaQuery.of(context).size.width / 2 - 70,
-              child: Text(
-                'List Cat_s',
+              child: const Text(
+                'List Category',
                 style: TextStyle(fontSize: 29, fontWeight: FontWeight.bold),
               ),
             ),
@@ -325,7 +317,7 @@ class _CategoryMainState extends State<CategoryMain> {
 
               // left: MediaQuery.of(context).size.width / 2 - 70,
               child: SingleChildScrollView(
-                child: Container(
+                child: SizedBox(
                   height: 50,
                   width: MediaQuery.of(context).size.width - 30,
                   child: Material(
@@ -333,7 +325,7 @@ class _CategoryMainState extends State<CategoryMain> {
                     borderRadius: BorderRadius.circular(5.0),
                     child: TextField(
                         onChanged: (value) {
-                          print('inside change');
+                          //print('inside change');
                           filterSearchResults(value);
                         },
                         decoration: InputDecoration(
@@ -356,188 +348,184 @@ class _CategoryMainState extends State<CategoryMain> {
                 width: MediaQuery.of(context).size.width,
                 height: getHeight(context) / 1.2,
                 child: StreamBuilder(
-                  stream: _Categoryss_Main.snapshots(),
+                  stream: categoryMain.snapshots(),
                   builder:
                       (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
                     if (streamSnapshot.hasData) {
+
+
+    instCatList.clear();
+    for (int i =0 ;i<streamSnapshot.data!.docs.length;i++) {
+      final DocumentSnapshot documentSnapshot = streamSnapshot
+          .data!.docs[i];
+      CategoryClass filteredData = CategoryClass(
+          catId: int.parse(documentSnapshot['catId']),
+          catName: documentSnapshot['catName'],
+          catImage: documentSnapshot['catImage'],
+          catPrice: documentSnapshot['catPrice'],
+          catDesc: documentSnapshot['catDesc'],
+          catDate: DateTime
+              .now(),
+          docsId: documentSnapshot.id //documentSnapshot['catDate']
+      );
+
+
+      instCatList.add(filteredData);
+    }
                       return ListView.builder(
                         itemCount: streamSnapshot.data!.docs.length,
                         itemBuilder: (context, index) {
-                          final DocumentSnapshot documentSnapshot =
-                              streamSnapshot.data!.docs[index];
 
-                          //late CategoryClass instpc;
-                          //Raw form data
-                          DocumentSnapshot dbData =
-                              streamSnapshot.data!.docs[index];
-                          CategoryClass filteredData = CategoryClass(
-                              Cat_Id: int.parse(documentSnapshot['Cat_Id']),
-                              Cat_Name: documentSnapshot['Cat_Name'],
-                              Cat_image: documentSnapshot['Cat_image'],
-                              Cat_Desc: documentSnapshot['Cat_Desc'],
-                              Cat_Date: DateTime
-                                  .now(), //DateTime.parse(documentSnapshot['Cat_Date']),
-                              Cat_Price: documentSnapshot['Cat_Price']);
-
-                          var currentdate = formatDate(
-                              filteredData.Cat_Date, [
-                            yyyy,
-                            '-',
-                            mm,
-                            '-',
-                            dd,
-                            ' ',
-                            hh,
-                            ':',
-                            nn,
-                            ':',
-                            ss,
-                            ' ',
-                            am
-                          ]);
-
-                          var a = documentSnapshot['Cat_Id'];
-
-                          return Container(
-                            height: getHeight(context) / FontManagerSize.s6,
-                            width: double.infinity,
-                            child: Card(
-                                margin: const EdgeInsets.all(10),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(AppSize.s6),
-                                      child: CircleAvatar(
-                                        radius: FontManagerSize.s35,
-                                        backgroundImage: NetworkImage(
-                                            filteredData.Cat_image),
+                          return InkWell(
+                            onTap: ()
+                            {
+                              Get.to(() => CategoryDetailsEdit(
+                                  instProd: instCatList[index]
+                                //   prodList: instProdListSimilar,
+                              ));
+                            },
+                            child: Container(
+                              height: getHeight(context) / FontManagerSize.s6,
+                              width: double.infinity,
+                              child: Card(
+                                  margin: const EdgeInsets.all(10),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(AppSize.s6),
+                                        child: CircleAvatar(
+                                          radius: FontManagerSize.s35,
+                                          backgroundImage: NetworkImage(
+                                              instCatList[index].catImage),
+                                        ),
                                       ),
-                                    ),
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
-                                      children: [
-                                        Text(
-                                          filteredData.Cat_Name,
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: AppSize.s20),
-                                        ),
-                                        Text(
-                                          filteredData.Cat_Price,
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.w300,
-                                              fontSize: AppSize.s20),
-                                        ),
-                                      ],
-                                    ),
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
-                                      children: [
-                                        Text(
-                                          filteredData.Cat_Desc,
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: AppSize.s20),
-                                        ),
-                                        Text(
-                                          '${formatDate(filteredData.Cat_Date, [
-                                                yyyy,
-                                                '-',
-                                                mm,
-                                                '-',
-                                                dd
-                                              ])}',
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.w200,
-                                              fontSize: AppSize.s20),
-                                        ),
-                                      ],
-                                    ),
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        // Press this button to edit a single Cat_
-                                        IconButton(
-                                            icon: const Icon(
-                                              Icons.edit,
-                                              size: AppSize.s20,
-                                            ),
-                                            //  onPressed: () =>
-                                            onPressed: () => _createOrUpdate(
-                                                documentSnapshot)),
-                                        // This icon button is used to delete a single Cat_
-                                        IconButton(
-                                            icon: const Icon(
-                                              Icons.delete,
-                                              size: AppSize.s20,
-                                            ),
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          Text(
+                                            instCatList[index].catName,
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: AppSize.s20),
+                                          ),
+                                          Text(
+                                            instCatList[index].catPrice,
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.w300,
+                                                fontSize: AppSize.s20),
+                                          ),
+                                        ],
+                                      ),
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          Text(
+                                            instCatList[index].catDesc,
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: AppSize.s20),
+                                          ),
+                                          Text(
+                                            '${formatDate(instCatList[index].catDate, [
+                                                  yyyy,
+                                                  '-',
+                                                  mm,
+                                                  '-',
+                                                  dd
+                                                ])}',
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.w200,
+                                                fontSize: AppSize.s20),
+                                          ),
+                                        ],
+                                      ),
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          // Press this button to edit a single cat
+                                          IconButton(
+                                              icon: const Icon(
+                                                Icons.edit,
+                                                size: AppSize.s20,
+                                              ),
+                                              //  onPressed: () =>
+                                              onPressed: () => _createOrUpdate(
+                                                  instCatList[index])),
+                                          // This icon button is used to delete a single cat
+                                          IconButton(
+                                              icon: const Icon(
+                                                Icons.delete,
+                                                size: AppSize.s20,
+                                              ),
 
-                                            ///onPressed: (){},
-                                            onPressed: () async {
-                                              _deleteProduct(
-                                                  documentSnapshot.id);
-                                              // Create a reference to the file to delete
-                                              FirebaseStorage.instance
-                                                  .refFromURL(documentSnapshot[
-                                                      'Cat_image'])
-                                                  .delete();
+                                              ///onPressed: (){},
+                                              onPressed: () async {
+                                              
+                                                deleteProduct(context,StringManager.collection_Categorys,
+                                                    instCatList[index].docsId,instCatList[index].catImage);
+                                                // Create a reference to the file to delete
+                                                // FirebaseStorage.instance
+                                                //     .refFromURL(documentSnapshot[
+                                                // 'catImage'])
+                                                //     .delete();
 // Child references can also take paths
 // spaceRef now points to "images/space.jpg
 // imagesRef still points to "images"
-                                            }),
-                                      ],
-                                    ),
-                                  ],
-                                )
+                                              }),
+                                        ],
+                                      ),
+                                    ],
+                                  )
 
-                                // ListTile(
-                                //
-                                //
-                                //   title: Text('${filteredData.Cat_Name}'),
-                                //   subtitle: Column(
-                                //     children: [
-                                //      Text('${filteredData.Cat_Name}'),
-                                //       Text('${filteredData.Cat_Price}')
-                                //     ],
-                                //   ),
-                                //   leading:  Column(
-                                //     children: [
-                                //       // Text('${filteredData.Cat_image}'),
-                                //       Text('${filteredData.favoriteFlag}'),
-                                //       //   Text('${filteredData.Cat_Price}'),
-                                //       Text('${formatDate(filteredData.Cat_Date,
-                                //           [yyyy, '-', mm, '-', dd])}'),
-                                //       Text('${filteredData.Cat_Desc}'),
-                                //     ],
-                                //   ),
-                                //   trailing: SizedBox(
-                                //     width: 100,
-                                //     height: 200,
-                                //     child: Row(
-                                //       children: [
-                                //         // Press this button to edit a single Cat_
-                                //         IconButton(
-                                //           icon: const Icon(Icons.edit),
-                                //           //  onPressed: () =>
-                                //           onPressed:()=> _createOrUpdate(documentSnapshot)
-                                //         ),
-                                //         // This icon button is used to delete a single Cat_
-                                //         IconButton(
-                                //             icon: const Icon(Icons.delete),
-                                //             ///onPressed: (){},
-                                //             onPressed: () =>  _deleteCat_(documentSnapshot.id)
-                                //         ),
-                                //
-                                //       ],
-                                //     ),
-                                //   ),
-                                // ),
-                                ),
+                                  // ListTile(
+                                  //
+                                  //
+                                  //   title: Text('${filteredData.catName}'),
+                                  //   subtitle: Column(
+                                  //     children: [
+                                  //      Text('${filteredData.catName}'),
+                                  //       Text('${filteredData.catPrice}')
+                                  //     ],
+                                  //   ),
+                                  //   leading:  Column(
+                                  //     children: [
+                                  //       // Text('${filteredData.catImage}'),
+                                  //       Text('${filteredData.favoriteFlag}'),
+                                  //       //   Text('${filteredData.catPrice}'),
+                                  //       Text('${formatDate(filteredData.catDate,
+                                  //           [yyyy, '-', mm, '-', dd])}'),
+                                  //       Text('${filteredData.catDesc}'),
+                                  //     ],
+                                  //   ),
+                                  //   trailing: SizedBox(
+                                  //     width: 100,
+                                  //     height: 200,
+                                  //     child: Row(
+                                  //       children: [
+                                  //         // Press this button to edit a single cat
+                                  //         IconButton(
+                                  //           icon: const Icon(Icons.edit),
+                                  //           //  onPressed: () =>
+                                  //           onPressed:()=> _createOrUpdate(documentSnapshot)
+                                  //         ),
+                                  //         // This icon button is used to delete a single cat
+                                  //         IconButton(
+                                  //             icon: const Icon(Icons.delete),
+                                  //             ///onPressed: (){},
+                                  //             onPressed: () =>  _deletecat(documentSnapshot.id)
+                                  //         ),
+                                  //
+                                  //       ],
+                                  //     ),
+                                  //   ),
+                                  // ),
+                                  ),
+                            ),
                           );
                         },
                       );
@@ -555,21 +543,24 @@ class _CategoryMainState extends State<CategoryMain> {
               top: pheight / 30,
               right: pwidth / 20,
               child: IconButton(
-                icon: Icon(Icons.add, size: 30),
+                icon: const Icon(Icons.add, size: 30),
                 onPressed: () async {
-                  var maxCat_Id = await getDocumentMaxId(
-                      'Categorys', 'Cat_Id');
+                  //print('go to cat add');
+                  var maxCatId = await getDocumentMaxId(
+                      'Categorys', 'catId');
 
-                  // Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //         builder: (_) => Cat_Add(
-                  //               Docs_max: maxCat_Id+1,
-                  //             )));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => CategoryAdd(
+                                Docs_max: maxCatId+1,
+                              ),
+                             ),
+                          );
 
-                  //  }
-                  //pushNamed(context, "/Cat_Add");
-                },
+                   }
+                  //pushNamed(context, "/catAdd");
+
               ),
             ),
           ],

@@ -12,26 +12,28 @@ import 'package:get/get.dart';
 import '../../../../core/resource/ColorManger.dart';
 import '../../../../core/resource/FontManager.dart';
 import '../../../../core/resource/MediaQuery.dart';
-import '../../../../core/resource/StringManager.dart';
 import '../../../../core/resource/ValueManger.dart';
 import 'package:flutter_lorem/flutter_lorem.dart';
 
+import 'CategoryClass.dart';
+import 'CategoryEdit.dart';
+
 // ignore: must_be_immutable
-class ProductDetailsEdit extends StatefulWidget {
-  ProductDetailsEdit({Key? key, required this.instProd}) : super(key: key);
-  ProductClass instProd;
-  //List<ProductClass> prodList=[];
+class CategoryDetailsEdit extends StatefulWidget {
+  CategoryDetailsEdit({Key? key, required this.instProd}) : super(key: key);
+  CategoryClass instProd;
+  //List<CategoryClass> prodList=[];
   @override
-  State<ProductDetailsEdit> createState() => _ProductDetailsEditState();
+  State<CategoryDetailsEdit> createState() => _CategoryDetailsEditState();
 }
 bool showSimilarProductFlg=false;
 String showSimilarProduct='Show Similar Product';
 List<Color> colorList = [Colors.black, Colors.red, Colors.blue, Colors.yellow];
 late int _selectedRadio;
 int _selectedSized = 0;
-//final CollectionReference _productss = FirebaseFirestore.instance.collection(StringManager.collection_Products);
-var _productss=getCollectionReference(StringManager.collection_Products);
-class _ProductDetailsEditState extends State<ProductDetailsEdit> {
+final CollectionReference _Categoryss =FirebaseFirestore.instance.collection('Categorys');
+
+class _CategoryDetailsEditState extends State<CategoryDetailsEdit> {
   @override
   void initState() {
     super.initState();
@@ -137,7 +139,7 @@ class _ProductDetailsEditState extends State<ProductDetailsEdit> {
                 top: AppSize.s4,
                 left: -AppSize.s4,
                 child: IconButton(
-                  icon: Icon(
+                  icon:  Icon(
                     Icons.arrow_back_ios,
                     color: ColorManager.grey2,
                   ),
@@ -160,10 +162,14 @@ class _ProductDetailsEditState extends State<ProductDetailsEdit> {
                   ),
                   onPressed: () {
 
-                    Get.to(() => ProductEdit(
-                        instProd: widget.instProd
+                    Get.to(() => CategoryEdit(
+                        Intcategory: widget.instProd
                       //   prodList: instProdListSimilar,
                     ));
+
+
+
+
                   },
                 ),
               ),
@@ -171,7 +177,7 @@ class _ProductDetailsEditState extends State<ProductDetailsEdit> {
                 top: AppSize.s20,
                 right: getWidth(context) / FontManagerSize.s2_5,
                 child: Text(
-                  widget.instProd.productName,
+                  widget.instProd.catName,
                   style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
                 ),
               ),
@@ -210,7 +216,7 @@ class _ProductDetailsEditState extends State<ProductDetailsEdit> {
                           margin: const EdgeInsets.all(AppSize.s6),
                           //elevation: 20,
                           child: Hero(
-                            tag: widget.instProd.productName,
+                            tag: widget.instProd.catName,
                             child: Container(
                               height:
                               getHeight(context) / FontManagerSize.s2_5,
@@ -221,7 +227,7 @@ class _ProductDetailsEditState extends State<ProductDetailsEdit> {
                                       fit: BoxFit.fill,
                                       // image: AssetImage(AssetManager.mancat4)
                                       image: NetworkImage(
-                                          widget.instProd.productImage))),
+                                          widget.instProd.catImage))),
                             ),
                           ),
                         ),
@@ -235,13 +241,13 @@ class _ProductDetailsEditState extends State<ProductDetailsEdit> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                widget.instProd.productName,
+                                widget.instProd.catName,
                                 style: const TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.w500),
                               ),
                               Text(
-                                '${widget.instProd.productPrice}\$',
+                                '${widget.instProd.catPrice}\$',
                                 style: const TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.w500),
@@ -635,7 +641,7 @@ class _ProductDetailsEditState extends State<ProductDetailsEdit> {
                               parForegroundColor: Colors.white,
                               parBackGroundColor: ColorManager.primary,
                               onTabButton: () {
-                                deleteProduct(context,'',widget.instProd.docsId,widget.instProd.productImage);
+                                _deleteProduct(widget.instProd.docsId,widget.instProd.catImage);
                                 Navigator.pop(context);},
                               nameButton: 'Delete',
                             )
@@ -669,7 +675,7 @@ class _ProductDetailsEditState extends State<ProductDetailsEdit> {
                         //         onTap: () {
                         //           //(index);
                         //
-                        //           // Get.to(() =>  ProductDetailsEdit( instProd: instProdList[index]));
+                        //           // Get.to(() =>  CategoryDetailsEdit( instProd: instProdList[index]));
                         //         },
                         //         child: Stack(
                         //           children: [
@@ -838,17 +844,17 @@ class _ProductDetailsEditState extends State<ProductDetailsEdit> {
     );
   }
 
-  // Future<void> _deleteProduct(String productId,String Img) async {
-  //   await _productss.doc(productId).delete();
-  //
-  //
-  //   FirebaseStorage.instance
-  //       .refFromURL(Img)
-  //       .delete();
-  //   // Show a snackbar
-  //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-  //       content: Text('You have successfully deleted a product')));
-  // }
+  Future<void> _deleteProduct(String productId,String image) async {
+    await _Categoryss.doc(productId).delete();
+
+
+    FirebaseStorage.instance
+        .refFromURL(image)
+        .delete();
+    // Show a snackbar
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('You have successfully deleted a product')));
+  }
 
 }
 

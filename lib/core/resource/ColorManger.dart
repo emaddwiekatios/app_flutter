@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class ColorManager {
   static Color primary = HexColor.fromHex("#FF8B8B");
-  static Color secondary = HexColor.fromHex("#FDF6EBFF");
+  static Color secondary = Colors.grey[400]!;
   static Color section = HexColor.fromHex("#FF8B8B");
 
   static Color darkGrey = HexColor.fromHex("#525252");

@@ -281,14 +281,14 @@ class _loginState extends State<login> {
                                                       } else if (controller
                                                               .userId!.isNotEmpty &&
                                                           !controller.isSignup) {
-                                                        // print('inside go to home ');
-                                                        // print(controller.userId);
-                                                        // print(    !controller.isSignup);
+                                                        ////print('inside go to home ');
+                                                        ////print(controller.userId);
+                                                        ////print(    !controller.isSignup);
 
                                                         Get.to(() => const Home());
                                                       }
 
-                                                      // print(' after if 3');
+                                                      ////print(' after if 3');
                                                     }
                                                   : null,
                                               child: Text(
@@ -322,7 +322,7 @@ class _loginState extends State<login> {
                                                               : ColorManager.grey)),
                                               onPressed: (snapshot.data ?? false)
                                                   ? () async {
-                                                      //  print('insiude button sign in');
+                                                      // //print('insiude button sign in');
                                                       String user =
                                                           controllerLoginUserName
                                                               .text
@@ -331,8 +331,8 @@ class _loginState extends State<login> {
                                                           controllerLoginPassword
                                                               .text
                                                               .toString();
-                                                      // print(user);
-                                                      // print(password);
+                                                      ////print(user);
+                                                      ////print(password);
                                                       await controller.signin(
                                                           user, password);
 
@@ -396,14 +396,14 @@ class _loginState extends State<login> {
                                                       } else if (controller
                                                               .userId!.isNotEmpty &&
                                                           !controller.isSignup) {
-                                                        // print('inside go to home ');
-                                                        // print(controller.userId);
-                                                        // print(    !controller.isSignup);
+                                                        ////print('inside go to home ');
+                                                        ////print(controller.userId);
+                                                        ////print(    !controller.isSignup);
 
                                                         //Get.to(() => const Home());
                                                       }
 
-                                                      //  print(' after if 3');
+                                                      // //print(' after if 3');
                                                     }
                                                   : null,
                                               child: Text(

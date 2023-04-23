@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
+import '../../../../core/resource/Construct.dart';
 import '../../../../core/resource/StringManager.dart';
 import '../Category/CategoryClass.dart';
 import '../Login/view_login/Auth.dart';
@@ -37,9 +38,9 @@ late CategoryClass instCat;
 List<CategoryClass> instCatList = [];
 List<ProductClass> instProdListSimilar = [];
 
-final CollectionReference _productss =FirebaseFirestore.instance.collection('Clean_App_Products_New');
-final CollectionReference _categoryss =FirebaseFirestore.instance.collection('Categorys');
-List<ProductClass> instProdList = [];
+//final CollectionReference _productss =FirebaseFirestore.instance.collection(StringManager.collection_Products);
+//final CollectionReference _categoryss =FirebaseFirestore.instance.collection('Categorys');
+List<ProductClass> instProdList=[] ;
 List<ProductClass> dummyListData = [];
 List<ProductClass> duplicateItems2 = [];
 List<ProductClass> duplicateItems = [];
@@ -59,12 +60,12 @@ class _HomePageState extends State<HomePage> {
     if (query.isNotEmpty) {
       dummyListData.clear();
       // List<Clients> dummyListData = List<Clients>();
-      dummySearchList.forEach((item) {
+      for (var item in dummySearchList) {
         if (item.productCat.toUpperCase().contains(query.toUpperCase()) ||
             item.productCat.contains(query)) {
           dummyListData.add(item);
         }
-      });
+      }
       setState(() {
         instProdListSimilar = dummyListData;
       });
@@ -82,20 +83,20 @@ class _HomePageState extends State<HomePage> {
     });
     dummySearchList = duplicateItems;
     dummyListData=[];
-    print('instProdList=${instProdList.length}');
+  // //print('instProdList=${instProdList.length}');
     if (query.isNotEmpty) {
       for (var item in dummySearchList) {
         if (item.productCat.toUpperCase().contains(query.toUpperCase()) ||
             item.productCat.contains(query)) {
           dummyListData.add(item);
-          print('dummyListData=$dummyListData');
+         //print('dummyListData=$dummyListData');
         }
       }
 
 
     }
     else {
-      print("inside else");
+      //print("inside else");
       setState(() {
         instProdList = duplicateItems;
         indexParameter = null;
@@ -108,7 +109,7 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       instProdList = dummyListData;
     });
-    print('instProdList=${instProdList.length}');
+   ////print('instProdList=${instProdList.length}');
   }
 
 
@@ -118,20 +119,22 @@ class _HomePageState extends State<HomePage> {
     });
     dummySearchList = duplicateItems;
     dummyListData=[];
-    print('instProdList=${instProdList.length}');
+
     if (query.isNotEmpty) {
       for (var item in dummySearchList) {
         if (item.productName.toUpperCase().contains(query.toUpperCase()) ||
             item.productName.contains(query)) {
           dummyListData.add(item);
-          print('dummyListData=$dummyListData');
+          //print('dummyListData=$dummyListData');
         }
       }
-
+      setState(() {
+        instProdList = dummyListData;
+      });
 
     }
     else {
-      print("inside else");
+
       setState(() {
         instProdList = duplicateItems;
         indexParameter = null;
@@ -141,14 +144,15 @@ class _HomePageState extends State<HomePage> {
 
       });
     }
-    setState(() {
-      instProdList = dummyListData;
-    });
-    print('instProdList=${instProdList.length}');
+
+
   }
 
   @override
   void initState() {
+    instProdList.add(ProductClass(productId: 1, productName: "1", productImage: "",
+        productPrice: "0", productCat: "0", productEntryDate: DateTime.now(), favoriteFlag: 0,
+        docsId: "",productCount: 1));
     super.initState();
   }
 
@@ -171,7 +175,7 @@ class _HomePageState extends State<HomePage> {
               top: AppSize.s4,
               left: -AppSize.s4,
               child: IconButton(
-                icon: Icon(
+                icon:  Icon(
                   Icons.menu,
                   color: ColorManager.grey2,
                 ),
@@ -190,12 +194,12 @@ class _HomePageState extends State<HomePage> {
               child: Row(
                 children: [
                   IconButton(
-                    icon: Icon(
+                    icon:  Icon(
                       Icons.notification_add_sharp,
                       color: ColorManager.grey2,
                     ),
                     onPressed: () {
-                      send_data_firestore();
+                      sendDataFireStore();
                       // Navigator.pop(context);
                       //  Navigator.popAndPushNamed(context, "/SignIn");
 
@@ -203,7 +207,7 @@ class _HomePageState extends State<HomePage> {
                     },
                   ),
                   IconButton(
-                    icon: Icon(
+                    icon:  Icon(
                       Icons.shopping_cart_outlined,
                       color: ColorManager.grey2,
                     ),
@@ -256,7 +260,7 @@ class _HomePageState extends State<HomePage> {
                           hintText: StringManager.search.tr,
                           //  prefix: Text(StringManager.userName),
                           prefixIcon: IconButton(
-                            icon: Icon(Icons.search),
+                            icon: const Icon(Icons.search),
                             onPressed: () =>
                                 filterSearchResults(controllerSearch.text),
                           ),
@@ -286,47 +290,36 @@ class _HomePageState extends State<HomePage> {
                         width: getWidth(context),
 
                         child: StreamBuilder(
-                          stream: _categoryss.snapshots(),
+                          stream: getCollectionReference('Categorys').snapshots(),
                           builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
 
-                            instCatList.clear();
-                            for (int i =0 ;i<streamSnapshot.data!.docs.length;i++)
-                            {
-                              final DocumentSnapshot documentSnapshot = streamSnapshot.data!.docs[i];
-                              CategoryClass filteredData = CategoryClass(
-                                  Cat_Id:int.parse(documentSnapshot['Cat_Id']) ,
-                                  Cat_Name:documentSnapshot['Cat_Name'] ,
-                                  Cat_image:documentSnapshot['Cat_image'] ,
-                                  Cat_Price:documentSnapshot['Cat_Price'] ,
-                                  Cat_Desc:documentSnapshot['Cat_Desc'] ,
-                                  Cat_Date:DateTime.now(),//documentSnapshot['Cat_Date']
-                              );
 
 
 
-
-                              // var currentdate = formatDate(filteredData.productEntryDate, [
-                              //   yyyy,
-                              //   '-',
-                              //   mm,
-                              //   '-',
-                              //   dd,
-                              //   ' ',
-                              //   hh,
-                              //   ':',
-                              //   nn,
-                              //   ':',
-                              //   ss,
-                              //   ' ',
-                              //   am
-                              // ]);
-                              instCatList.add(filteredData);
-
-                            }
-
-                           // print("inside _categoryss");
+                           ////print("inside _categoryss");
                             if (streamSnapshot.hasData) {
-                             // print("inside if");
+
+                              instCatList.clear();
+                              for (int i =0 ;i<streamSnapshot.data!.docs.length;i++) {
+                                final DocumentSnapshot documentSnapshot = streamSnapshot
+                                    .data!.docs[i];
+                                CategoryClass filteredData = CategoryClass(
+                                  catId: int.parse(documentSnapshot['catId']),
+                                  catName: documentSnapshot['catName'],
+                                  catImage: documentSnapshot['catImage'],
+                                  catPrice: documentSnapshot['catPrice'],
+                                  catDesc: documentSnapshot['catDesc'],
+                                  catDate: DateTime
+                                      .now(),
+                                    docsId:documentSnapshot.id//documentSnapshot['catDate']
+                                );
+
+
+
+
+                                instCatList.add(filteredData);
+                              }
+                             ////print("inside if");
                               return ListView.builder(
                                 scrollDirection: Axis.horizontal,
                                 itemCount:instCatList.length,// streamSnapshot.data!.docs.length,
@@ -342,15 +335,15 @@ class _HomePageState extends State<HomePage> {
                                               left: AppSize.s8, right: AppSize.s8),
                                           child: GestureDetector(
                                             onTap: () {
-                                              print('ontp');
+                                              //print('ontp');
                                               setState(() {
                                                 indexParameter = index;
                                               });
-                                              print('indexParameter=$indexParameter');
+                                             //print('indexParameter=$indexParameter');
 
                                               filterSearchResultsCat(
-                                                  instCatList[index].Cat_Name);
-                                              print(instCatList[index].Cat_Name);
+                                                  instCatList[index].catName);
+                                            
                                             },
                                             child: Stack(
                                               children: [
@@ -374,15 +367,15 @@ class _HomePageState extends State<HomePage> {
                                                        decoration: BoxDecoration(
                                                          borderRadius: BorderRadius.circular(250),
                                                          image: DecorationImage(
-                                                           image: NetworkImage( instCatList[index].Cat_image,
+                                                           image: NetworkImage( instCatList[index].catImage,
                                                          )
-                                                         //  image:Image.network( documentSnapshot['Cat_image'])
+                                                         //  image:Image.network( documentSnapshot['catImage'])
                                                        ),
 
 
                                                   ),),
 
-                                                       //   image: Image.network( documentSnapshot['Cat_image'])),
+                                                       //   image: Image.network( documentSnapshot['catImage'])),
 
 
 
@@ -405,7 +398,7 @@ class _HomePageState extends State<HomePage> {
                                             ),
                                           ),
                                         ),
-                                        Text('${instCatList[index].Cat_Name}'),
+                                        Text('${instCatList[index].catName}'),
                                         //  backgroundImage:  (AssetManager.onBoarding3,fit: BoxFit.cover))
                                       ],
                                     ),
@@ -445,7 +438,7 @@ class _HomePageState extends State<HomePage> {
                         Padding(
                           padding: const EdgeInsets.only(left: 15.0),
                           child: Text(
-                            'Newest${instProdList.length}',
+                            'Newest',
                             style: TextStyle(
                                 fontSize: 15, fontWeight: FontWeight.w400),
                           ),
@@ -488,49 +481,37 @@ class _HomePageState extends State<HomePage> {
                           width: getWidth(context),
                           height: getHeight(context), //FontManagerSize.s3,
                           child: StreamBuilder(
-                            stream: _productss.snapshots(),
+                            stream:getCollectionReference(StringManager.collection_Products).snapshots(),
                             builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
 
-                              if (updateDataFlag) {
-                                instProdList.clear();
-                                for (int i = 0; i <
-                                    streamSnapshot.data!.docs.length; i++) {
-                                  final DocumentSnapshot documentSnapshot = streamSnapshot
-                                      .data!.docs[i];
-                                  ProductClass filteredData = ProductClass(
-                                      productId: int.parse(
-                                          documentSnapshot['productId']),
-                                      productName: documentSnapshot['productName'],
-                                      productImage: documentSnapshot['productImage'],
-                                      productCat: documentSnapshot['productCat'],
-                                      productEntryDate: DateTime.now(),
-                                      //DateTime.parse(documentSnapshot['productEntryDate']),
-                                      productPrice: documentSnapshot['productPrice'],
-                                      favoriteFlag: int.parse(
-                                          documentSnapshot['favoriteFlag']),
-                                      docsId: documentSnapshot.id);
 
-                                  // var currentdate = formatDate(filteredData.productEntryDate, [
-                                  //   yyyy,
-                                  //   '-',
-                                  //   mm,
-                                  //   '-',
-                                  //   dd,
-                                  //   ' ',
-                                  //   hh,
-                                  //   ':',
-                                  //   nn,
-                                  //   ':',
-                                  //   ss,
-                                  //   ' ',
-                                  //   am
-                                  // ]);
-                                  instProdList.add(filteredData);
-                                  duplicateItems = instProdList;
-                                }
-                              }
-                                  print('before if instProdList.length${instProdList.length}');
+
                               if (streamSnapshot.hasData) {
+                                if (updateDataFlag) {
+                                  instProdList.clear();
+                                  for (int i = 0; i <
+                                      streamSnapshot.data!.docs.length; i++) {
+                                    final DocumentSnapshot documentSnapshot = streamSnapshot
+                                        .data!.docs[i];
+                                    ProductClass filteredData = ProductClass(
+                                        productId:
+                                            documentSnapshot['productId'],
+                                        productName: documentSnapshot['productName'],
+                                        productImage: documentSnapshot['productImage'],
+                                        productCat: documentSnapshot['productCat'],
+                                        productEntryDate: DateTime.now(),
+                                        //DateTime.parse(documentSnapshot['productEntryDate']),
+                                        productPrice: documentSnapshot['productPrice'],
+                                        favoriteFlag:
+                                            documentSnapshot['favoriteFlag'],
+                                        docsId: documentSnapshot.id
+                                    ,productCount: 1);
+
+
+                                    instProdList.add(filteredData);
+                                    duplicateItems = instProdList;
+                                  }
+                                }
                               //  return ProdcutCeil( instProdList: instProdList,);
                               return   GridView.builder(
                                 itemCount:instProdList.length,//streamSnapshot.data!.docs.length,
@@ -539,7 +520,7 @@ class _HomePageState extends State<HomePage> {
                                 itemBuilder: (context, int index) {
                                   return InkWell(
                                     onTap: () {
-                                      print('inside tabbbbb=  $index');
+                                      
                                       //(index);
                                       // instProdListSimilar.clear();
                                       filterSearchResultsCatSimilar(
@@ -612,7 +593,7 @@ class _HomePageState extends State<HomePage> {
                                                       height:
                                                       getHeight(context) /
                                                           FontManagerSize
-                                                              .s24,
+                                                              .s20,
                                                       child: Column(
                                                         mainAxisAlignment:
                                                         MainAxisAlignment
@@ -621,7 +602,7 @@ class _HomePageState extends State<HomePage> {
                                                         CrossAxisAlignment
                                                             .start,
                                                         children: [
-                                                          Text('${instProdList[index].productName}+ ${instProdList.length } ',
+                                                          Text('${instProdList[index].productName} ',
                                                             //  Text(' ${filteredData.productName}',
                                                             style: TextStyle(
                                                                 fontSize:
@@ -638,8 +619,7 @@ class _HomePageState extends State<HomePage> {
                                                                 fontWeight:
                                                                 FontWeight
                                                                     .bold,
-                                                                color: ColorManager
-                                                                    .primary),
+                                                                color: Colors.black),
                                                           ),
                                                         ],
                                                       )),
@@ -671,122 +651,6 @@ class _HomePageState extends State<HomePage> {
                                                     ),
                                                   )
 
-                                                // Column(
-
-                                                //   children: [
-
-                                                //     Card(
-
-                                                //       elevation: 0,
-
-                                                //       shape: const OutlineInputBorder(
-
-                                                //         borderSide: BorderSide(
-
-                                                //             color: Colors.transparent,
-
-                                                //             width: AppSize.s0_5),
-
-                                                //         borderRadius: BorderRadius.all(
-
-                                                //           Radius.circular(AppSize.s8),
-
-                                                //         ),
-
-                                                //       ),
-
-                                                //       child: Stack(
-
-                                                //         children: [
-
-                                                //           Positioned(
-
-                                                //             child: Container(
-
-                                                //               height: 90,
-
-                                                //               //width: 80,
-
-                                                //               decoration: BoxDecoration(
-
-                                                //                 borderRadius: BorderRadius.circular(5),
-
-                                                //                 image: const DecorationImage(
-
-                                                //                     fit: BoxFit.fill,
-
-                                                //             ';]        image: AssetImage(
-
-                                                //                       AssetManager.mancat4,
-
-                                                //                     )),
-
-                                                //                 color: Colors.green,
-
-                                                //               ),
-
-                                                //             ),
-
-                                                //           ),
-
-                                                //           Positioned(
-
-                                                //               bottom: AppSize.s0,
-
-                                                //               left: AppSize.s0,
-
-                                                //               right: AppSize.s0,
-
-                                                //               child: Container(
-
-                                                //                   height:
-
-                                                //                       get_height(context) / AppSize.s40,
-
-                                                //                   color: ColorManager.primary
-
-                                                //                       .withOpacity(.4),
-
-                                                //                   child: const Center(
-
-                                                //                       child: Text('T-shirt')))),
-
-                                                //           const Positioned(
-
-                                                //             right: AppSize.s4,
-
-                                                //             child: Icon(
-
-                                                //               Icons.favorite_border_outlined,
-
-                                                //               color: Colors.red,
-
-                                                //             ),
-
-                                                //           ),
-
-                                                //         ],
-
-                                                //       ),
-
-                                                //     ),
-
-                                                //     Column(
-
-                                                //       children: [
-
-                                                //         const Text('Price :50'),
-
-                                                //       ],
-
-                                                //     ),
-
-                                                //     // Text('price : ${23}\$'),
-
-                                                //   ],
-
-                                                // ),
-
                                               ),
                                             ),
                                           ),
@@ -795,31 +659,25 @@ class _HomePageState extends State<HomePage> {
                                             right: AppSize.s4,
                                             child: IconButton(
                                                 onPressed: () {
-                                                  // setState(() {
-                                                  //   int temp = instProdList[index]
-                                                  //       .favoriteFlag ==
-                                                  //       0
-                                                  //       ? 1
-                                                  //       : 0;
-                                                  //
-                                                  //   print('temp=$temp');
-                                                  //
-                                                  //   instProdList[index]
-                                                  //       .favoriteFlag = temp;
-                                                  //
-                                                  //   print(instProdList[index]
-                                                  //       .favoriteFlag);
-                                                  // });
+
+                                                  setState(() {
+                                                    int temp = instProdList[index].favoriteFlag ==0
+                                                        ? 1
+                                                        : 0;
+                                                   // instProdList[index].favoriteFlag = temp;
+
+                                                    updateIntField(StringManager.collection_Products,'favoriteFlag',instProdList[index].docsId,temp);
+                                                  });
                                                 },
                                                 icon: instProdList[index]
                                                     .favoriteFlag ==
                                                     1
-                                                    ? Icon(
+                                                    ? const Icon(
                                                   Icons
                                                       .favorite_outlined,
                                                   color: Colors.red,
                                                 )
-                                                    : Icon(
+                                                    : const Icon(
                                                   Icons.favorite_border,
                                                   color: Colors.red,
                                                 )))
@@ -861,12 +719,15 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void send_data_firestore() {
+  void sendDataFireStore() {
     FirebaseFirestore.instance.collection("Clean_App_Products").doc().set({
       'name': "rmsd",
       'price': "10",
     });
   }
+
+
+
 }
 
 class MyPainter extends CustomPainter {
@@ -983,7 +844,7 @@ class CatListCiel extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Hero(
-              tag: instCatClass.Cat_Name,
+              tag: instCatClass.catName,
               child: Card(
                 color: Colors.red,
                 shape: RoundedRectangleBorder(
@@ -1021,7 +882,7 @@ class CatListCiel extends StatelessWidget {
                                         .s4),
                             child: Text(
                                 instCatClass
-                                    .Cat_Desc),
+                                    .catDesc),
                           )),
                     ),
                     footer: Container(
@@ -1053,7 +914,7 @@ class CatListCiel extends StatelessWidget {
                                   .start,
                           children: [
                             Text(
-                              ' ${instCatClass.Cat_Name}',
+                              ' ${instCatClass.catName}',
                               style: TextStyle(
                                   fontSize:
                                       FontManagerSize
@@ -1063,7 +924,7 @@ class CatListCiel extends StatelessWidget {
                                           .bold),
                             ),
                             Text(
-                              ' Price :${instCatClass.Cat_Price} \$',
+                              ' Price :${instCatClass.catPrice} \$',
                               style: TextStyle(
                                   fontSize: 12,
                                   fontWeight:
@@ -1091,7 +952,7 @@ class CatListCiel extends StatelessWidget {
                               //AssetManager.mancat
 
                               instCatClass
-                                  .Cat_image,
+                                  .catImage,
                             )),
                         color: ColorManager
                             .primary
@@ -1183,7 +1044,7 @@ class CatListCiel extends StatelessWidget {
 
                     //             right: AppSize.s4,
 
-                    //             child: Icon(
+                    //             child: const Icon(
 
                     //               Icons.favorite_border_outlined,
 
@@ -1225,33 +1086,33 @@ class CatListCiel extends StatelessWidget {
                   onPressed: () {
                     // setState(() {
                     //   int temp = filteredData
-                    //               .Cat_Price ==
+                    //               .catPrice ==
                     //           0
                     //       ? 1
                     //       : 0;
                     //
-                    //   print('temp=$temp');
+                    //  //print('temp=$temp');
                     //
-                    //   filteredData.Cat_Price =
+                    //   filteredData.catPrice =
                     //       temp.toString();
                     //
-                    //   print(
-                    //       filteredData.Cat_Price);
+                    //  //print(
+                    //       filteredData.catPrice);
                     // });
                   },
-                  icon: instCatClass.Cat_Price ==
+                  icon: instCatClass.catPrice ==
                           1
-                      ? Icon(
+                      ? const Icon(
                           Icons.favorite_outlined,
                           color: Colors.red,
                         )
-                      : Icon(
+                      : const Icon(
                           Icons.favorite_border,
                           color: Colors.red,
                         )))
         ],
       );
-    ;
+
   }
 }
 
@@ -1268,10 +1129,10 @@ List<ProductClass> instProdList;
           crossAxisCount: 2),
       itemBuilder: (context, int index) {
 
-        // print(instProdList.length);
+        ////print(instProdList.length);
         return InkWell(
           onTap: () {
-            print('inside tabbbbb=  $index');
+           ////print('inside tabbbbb=  $index');
             //(index);
             // instProdListSimilar.clear();
             // filterSearchResultsCatSimilar(
@@ -1347,8 +1208,8 @@ List<ProductClass> instProdList;
                             height:
                             getHeight(context) /
                                 FontManagerSize
-                                    .s24,
-                            child: Column(
+                                    .s20,
+                            child: Row(
                               mainAxisAlignment:
                               MainAxisAlignment
                                   .center,
@@ -1406,122 +1267,6 @@ List<ProductClass> instProdList;
                           ),
                         )
 
-                      // Column(
-
-                      //   children: [
-
-                      //     Card(
-
-                      //       elevation: 0,
-
-                      //       shape: const OutlineInputBorder(
-
-                      //         borderSide: BorderSide(
-
-                      //             color: Colors.transparent,
-
-                      //             width: AppSize.s0_5),
-
-                      //         borderRadius: BorderRadius.all(
-
-                      //           Radius.circular(AppSize.s8),
-
-                      //         ),
-
-                      //       ),
-
-                      //       child: Stack(
-
-                      //         children: [
-
-                      //           Positioned(
-
-                      //             child: Container(
-
-                      //               height: 90,
-
-                      //               //width: 80,
-
-                      //               decoration: BoxDecoration(
-
-                      //                 borderRadius: BorderRadius.circular(5),
-
-                      //                 image: const DecorationImage(
-
-                      //                     fit: BoxFit.fill,
-
-                      //             ';]        image: AssetImage(
-
-                      //                       AssetManager.mancat4,
-
-                      //                     )),
-
-                      //                 color: Colors.green,
-
-                      //               ),
-
-                      //             ),
-
-                      //           ),
-
-                      //           Positioned(
-
-                      //               bottom: AppSize.s0,
-
-                      //               left: AppSize.s0,
-
-                      //               right: AppSize.s0,
-
-                      //               child: Container(
-
-                      //                   height:
-
-                      //                       get_height(context) / AppSize.s40,
-
-                      //                   color: ColorManager.primary
-
-                      //                       .withOpacity(.4),
-
-                      //                   child: const Center(
-
-                      //                       child: Text('T-shirt')))),
-
-                      //           const Positioned(
-
-                      //             right: AppSize.s4,
-
-                      //             child: Icon(
-
-                      //               Icons.favorite_border_outlined,
-
-                      //               color: Colors.red,
-
-                      //             ),
-
-                      //           ),
-
-                      //         ],
-
-                      //       ),
-
-                      //     ),
-
-                      //     Column(
-
-                      //       children: [
-
-                      //         const Text('Price :50'),
-
-                      //       ],
-
-                      //     ),
-
-                      //     // Text('price : ${23}\$'),
-
-                      //   ],
-
-                      // ),
-
                     ),
                   ),
                 ),
@@ -1537,24 +1282,24 @@ List<ProductClass> instProdList;
                         //       ? 1
                         //       : 0;
                         //
-                        //   print('temp=$temp');
+                        //  //print('temp=$temp');
                         //
                         //   instProdList[index]
                         //       .favoriteFlag = temp;
                         //
-                        //   print(instProdList[index]
+                        //  //print(instProdList[index]
                         //       .favoriteFlag);
                         // });
                       },
                       icon: instProdList[index]
                           .favoriteFlag ==
                           1
-                          ? Icon(
+                          ? const Icon(
                         Icons
                             .favorite_outlined,
                         color: Colors.red,
                       )
-                          : Icon(
+                          : const Icon(
                         Icons.favorite_border,
                         color: Colors.red,
                       )))

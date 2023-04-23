@@ -223,7 +223,7 @@ class _TemplateState extends State<Template> {
               child: IconButton(
                 icon: const Icon(Icons.menu),
                 onPressed: () {
-                  // print('inside button');
+                  ////print('inside button');
                   // _scaffoldKey.currentState.openDrawer();
 
                   Navigator.pushReplacementNamed(context, "/ProductsMain");

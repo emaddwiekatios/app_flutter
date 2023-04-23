@@ -61,8 +61,7 @@ class Auth extends GetxController {
   }
 
   bool get isAuth {
-   // print('inside auth ${token?.length}');
-   // print('inside auth ${token != null}');
+  
     return token != null;
    // return token!.isEmpty ?  false:true ;
   }
@@ -127,7 +126,7 @@ class Auth extends GetxController {
         changeErrorMessage(responsedata['error']['message'].toString());
         // errorMessage = (responsedata['error']['message']).obs;
 
-       // print(responsedata['error']['message']);
+       ////print(responsedata['error']['message']);
       }
 
       //print('responsedata[email]');
@@ -137,7 +136,7 @@ class Auth extends GetxController {
       changeisuserId(responsedata['localId'].toString());
         changeExpiryDate(DateTime.now().add(const Duration(seconds: 36000))); //int.parse(responsedata['expiresIn']))));
 
-  // print(_userId);
+  ////print(_userId);
         saveUserInfo(_token!,_userId,_expiryDate.toString());
 
 
@@ -168,7 +167,7 @@ class Auth extends GetxController {
 changeistoken(info.token.toString());
     changeisuserId(info.userId.toString());
     changeExpiryDate(DateTime.parse(info.expiryDate));
-   // print(info);
+   ////print(info);
     return info;
   }
 

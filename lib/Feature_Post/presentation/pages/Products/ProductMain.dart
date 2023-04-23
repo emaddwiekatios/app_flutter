@@ -1,23 +1,22 @@
 import 'package:clean_arch_app/Feature_Post/presentation/pages/Home/HomePage.dart';
-import 'package:clean_arch_app/Feature_Post/presentation/pages/Login/view_login/view_login.dart';
 import 'package:clean_arch_app/Feature_Post/presentation/pages/Products/ProductAdd.dart';
-import 'package:clean_arch_app/Feature_Post/presentation/pages/Products/ProductDetails.dart';
 import 'package:clean_arch_app/Feature_Post/presentation/pages/Products/ProductDetailsEdit.dart';
 import 'package:clean_arch_app/Feature_Post/presentation/pages/Products/ProductsClass.dart';
 import 'package:clean_arch_app/core/resource/FontManager.dart';
 import 'package:clean_arch_app/core/resource/MediaQuery.dart';
 import 'package:clean_arch_app/core/resource/ValueManger.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_format/date_format.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
 import '../../../../core/resource/Construct.dart';
+import '../../../../core/resource/StringManager.dart';
 
 class ProductMainNew extends StatefulWidget {
+  const ProductMainNew({super.key});
+
   @override
   _ProductMainNewState createState() => _ProductMainNewState();
 }
@@ -31,8 +30,8 @@ var db = FirebaseFirestore.instance;
 
 QuerySnapshot? cars;
 //List<ProductClass> ProductMainNew= [];
-final CollectionReference _productss =
-    FirebaseFirestore.instance.collection('Clean_App_Products_New');
+//final CollectionReference _productss =FirebaseFirestore.instance.collection(StringManager.collection_Products);
+var _productss=getCollectionReference(StringManager.collection_Products);
 final TextEditingController _productIdController = TextEditingController();
 final TextEditingController _productNameController = TextEditingController();
 final TextEditingController _productImageController = TextEditingController();
@@ -40,20 +39,19 @@ final TextEditingController _productPriceController = TextEditingController();
 final TextEditingController _productCatController = TextEditingController();
 final TextEditingController _productEntryDateController =
     TextEditingController();
-final TextEditingController _favoriteFlagController = TextEditingController();
 
 class _ProductMainNewState extends State<ProductMainNew> {
   void filterSearchResults(String query) {
     List<ProductClass> dummySearchList = [];
     dummySearchList = duplicateItems;
     if (query.isNotEmpty) {
-      print('inside if');
+  
       List<ProductClass> dummyListData = [];
-      dummySearchList.forEach((item) {
+      for (var item in dummySearchList) {
         if (item.productName.toUpperCase().contains(query.toUpperCase())) {
           dummyListData.add(item);
         }
-      });
+      }
       setState(() {
         list = dummyListData;
       });
@@ -77,17 +75,17 @@ class _ProductMainNewState extends State<ProductMainNew> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   Color pyellow = Colors.red;
 
-  Future<void> _createOrUpdate([DocumentSnapshot? documentSnapshot]) async {
+  Future<void> _createOrUpdate([ProductClass? documentSnapshot]) async {
     String action = 'create';
-    print('inside _createOrUpdate');
+
     if (documentSnapshot != null) {
       action = 'update';
-      _productIdController.text = documentSnapshot['productId'];
-      _productNameController.text = documentSnapshot['productName'];
-      _productImageController.text = documentSnapshot['productImage'];
-      _productCatController.text = documentSnapshot['productCat'];
-      _productEntryDateController.text = documentSnapshot['productEntryDate'];
-      _productPriceController.text = documentSnapshot['productPrice'];
+      _productIdController.text = documentSnapshot.productId.toString();
+      _productNameController.text = documentSnapshot.productName;
+      _productImageController.text = documentSnapshot.productImage;
+      _productCatController.text = documentSnapshot.productCat;
+      _productEntryDateController.text = documentSnapshot.productEntryDate.toString();
+      _productPriceController.text = documentSnapshot.productPrice;
     } else {
       _productNameController.text = '';
       _productPriceController.text = '';
@@ -141,62 +139,59 @@ class _ProductMainNewState extends State<ProductMainNew> {
                 ElevatedButton(
                   child: Text(action == 'create' ? 'Create' : 'Update'),
                   onPressed: () async {
-                    final String? name = _productNameController.text;
-                    final String? price = _productPriceController.text;
-                    final String? cat = _productCatController.text;
-                    if (name != null && price != null && cat != null) {
-                      if (action == 'create') {
-                        _productNameController.text = '';
-                        _productPriceController.text = '';
-                        _productCatController.text = '';
-                        final todayDate = DateTime.now();
-                        var currentdate = formatDate(todayDate, [
-                          yyyy,
-                          '-',
-                          mm,
-                          '-',
-                          dd,
-                          ' ',
-                          hh,
-                          ':',
-                          nn,
-                          ':',
-                          ss,
-                          ' ',
-                          am
-                        ]);
-
-                        // Persist a new product to Firestore
-                        await _productss.add({
-                          "productName": name,
-                          "productPrice": price,
-                          "productCat": cat,
-                          "productId": "13",
-                          "productImage": "IMAGEPAth",
-                          "productCat": "COLTHES",
-                          "productEntryDate": currentdate,
-                          "favoriteFlag": "0"
-                        });
-                      }
-
-                      if (action == 'update') {
-                        print(documentSnapshot!.id);
-                        // Update the product
-                        await _productss.doc(documentSnapshot.id).update({
-                          "productName": name,
-                          "productPrice": price,
-                          "productCat": cat
-                        });
-                      }
-
-                      // Clear the text fields
+                    final String name = _productNameController.text;
+                    final String price = _productPriceController.text;
+                    final String cat = _productCatController.text;
+                    if (action == 'create') {
                       _productNameController.text = '';
                       _productPriceController.text = '';
                       _productCatController.text = '';
+                      final todayDate = DateTime.now();
+                      var currentdate = formatDate(todayDate, [
+                        yyyy,
+                        '-',
+                        mm,
+                        '-',
+                        dd,
+                        ' ',
+                        hh,
+                        ':',
+                        nn,
+                        ':',
+                        ss,
+                        ' ',
+                        am
+                      ]);
 
-                      // Hide the bottom sheet
-                      Navigator.of(context).pop();
+                      // Persist a new product to Firestore
+                      await _productss.add({
+                        "productName": name,
+                        "productPrice": price,
+                        "productCat": cat,
+                        "productId": "13",
+                        "productImage": "IMAGEPAth",
+                        "productEntryDate": currentdate,
+                        "favoriteFlag": 0
+                      });
                     }
+
+                    if (action == 'update') {
+                     
+                      // Update the product
+                      await _productss.doc(documentSnapshot?.docsId).update({
+                        "productName": name,
+                        "productPrice": price,
+                        "productCat": cat
+                      });
+                    }
+
+                    // Clear the text fields
+                    _productNameController.text = '';
+                    _productPriceController.text = '';
+                    _productCatController.text = '';
+
+                    // Hide the bottom sheet
+                    Navigator.of(context).pop();
                   },
                 )
               ],
@@ -205,17 +200,10 @@ class _ProductMainNewState extends State<ProductMainNew> {
         });
   }
 
-  Future<void> _deleteProduct(String productId) async {
-    await _productss.doc(productId).delete();
-
-    // Show a snackbar
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('You have successfully deleted a product')));
-  }
-
+ 
+  @override
   Widget build(BuildContext context) {
-    // Deleteing a product by id
-
+   
     var pheight = MediaQuery.of(context).size.height;
     var pwidth = MediaQuery.of(context).size.width;
 
@@ -300,7 +288,7 @@ class _ProductMainNewState extends State<ProductMainNew> {
               child: IconButton(
                 icon: Icon(Icons.arrow_back),
                 onPressed: () {
-                  print('inside button');
+         
                   // _scaffoldKey.currentState.openDrawer();
                   //Navigator.pushNamed(context, "/MainPage");
                   Navigator.pop(context);
@@ -334,17 +322,17 @@ class _ProductMainNewState extends State<ProductMainNew> {
                     borderRadius: BorderRadius.circular(5.0),
                     child: TextField(
                         onChanged: (value) {
-                          print('inside change');
+                          //print('inside change');
                           filterSearchResults(value);
                         },
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                             border: InputBorder.none,
                             prefixIcon: Icon(Icons.search,
                                 color: Colors.yellow, size: 30.0),
                             contentPadding:
                                 EdgeInsets.only(left: 15.0, top: 15.0),
                             hintText: 'Search',
-                            hintStyle: TextStyle(
+                            hintStyle:  TextStyle(
                                 color: Colors.grey, fontFamily: 'Quicksand'))),
                   ),
                 ),
@@ -361,39 +349,38 @@ class _ProductMainNewState extends State<ProductMainNew> {
                   builder:
                       (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
                     if (streamSnapshot.hasData) {
+
+                      instProdList.clear();
+                      for (int i = 0; i < streamSnapshot.data!.docs.length; i++) {
+                        final DocumentSnapshot documentSnapshot = streamSnapshot.data!.docs[i];
+                        ProductClass filteredData = ProductClass(
+                            productId: documentSnapshot['productId'],
+                            productName: documentSnapshot['productName'],
+                            productImage: documentSnapshot['productImage'],
+                            productCat: documentSnapshot['productCat'],
+                            productEntryDate: DateTime.now(),
+                            //DateTime.parse(documentSnapshot['productEntryDate']),
+                            productPrice: documentSnapshot['productPrice'],
+                            favoriteFlag:
+                            documentSnapshot['favoriteFlag'],
+                            docsId: documentSnapshot.id
+                            ,productCount: 1);
+
+
+                        instProdList.add(filteredData);
+                        duplicateItems = instProdList;
+                      }
+                      
                       return ListView.builder(
                         itemCount: streamSnapshot.data!.docs.length,
                         itemBuilder: (context, index) {
-                          final DocumentSnapshot documentSnapshot =
-                              streamSnapshot.data!.docs[index];
-
-                          DocumentSnapshot dbData =
-                              streamSnapshot.data!.docs[index];
-                          print(documentSnapshot['productEntryDate'].toDate());
-                          ProductClass filteredData = ProductClass(
-                              productId:
-                                  int.parse(documentSnapshot['productId']),
-                              productName: documentSnapshot['productName'],
-                              productImage: documentSnapshot['productImage'],
-                              productCat: documentSnapshot['productCat'],
-                              productEntryDate:documentSnapshot['productEntryDate'].toDate(),//DateTime.parse(documentSnapshot['productEntryDate']),
-                             // DateTime.parse(  formatDate(documentSnapshot['productEntryDate'],
-                                //  [yyyy,'-',mm,'-',dd])),
-                             productPrice: documentSnapshot['productPrice'],
-                              favoriteFlag:
-                                  int.parse(documentSnapshot['favoriteFlag']),
-                              docsId: documentSnapshot.id);
-
-
-
-                          var a = documentSnapshot['productId'];
 
                           return InkWell(
                             onTap: ()
                             {
-                              print(filteredData.productEntryDate);
+                             //print(instProdList[index].productEntryDate);
                               Get.to(() => ProductDetailsEdit(
-                                instProd: filteredData
+                                instProd: instProdList[index]
                              //   prodList: instProdListSimilar,
                               ));
                             },
@@ -411,7 +398,7 @@ class _ProductMainNewState extends State<ProductMainNew> {
                                         child: CircleAvatar(
                                           radius: FontManagerSize.s35,
                                           backgroundImage: NetworkImage(
-                                              filteredData.productImage),
+                                              instProdList[index].productImage),
                                         ),
                                       ),
                                       Column(
@@ -419,13 +406,13 @@ class _ProductMainNewState extends State<ProductMainNew> {
                                             MainAxisAlignment.spaceAround,
                                         children: [
                                           Text(
-                                            filteredData.productName,
+                                            instProdList[index].productName,
                                             style: const TextStyle(
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: AppSize.s20),
                                           ),
                                           Text(
-                                            filteredData.productPrice,
+                                            instProdList[index].productPrice,
                                             style: const TextStyle(
                                                 fontWeight: FontWeight.w300,
                                                 fontSize: AppSize.s20),
@@ -437,13 +424,13 @@ class _ProductMainNewState extends State<ProductMainNew> {
                                             MainAxisAlignment.spaceAround,
                                         children: [
                                           Text(
-                                            filteredData.productCat,
+                                            instProdList[index].productCat,
                                             style: const TextStyle(
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: AppSize.s20),
                                           ),
                                           Text(
-                                            '${formatDate(filteredData.productEntryDate, [
+                                            '${formatDate(instProdList[index].productEntryDate, [
                                                   yyyy,
                                                   '-',
                                                   mm,
@@ -468,7 +455,7 @@ class _ProductMainNewState extends State<ProductMainNew> {
                                               ),
                                               //  onPressed: () =>
                                               onPressed: () => _createOrUpdate(
-                                                  documentSnapshot)),
+                                                  instProdList[index])),
                                           // This icon button is used to delete a single product
                                           IconButton(
                                               icon: const Icon(
@@ -478,13 +465,13 @@ class _ProductMainNewState extends State<ProductMainNew> {
 
                                               ///onPressed: (){},
                                               onPressed: () async {
-                                                _deleteProduct(
-                                                    documentSnapshot.id);
+                                                deleteProduct(context,StringManager.collection_Products,
+                                                    instProdList[index].docsId,instProdList[index].productImage);
                                                 // Create a reference to the file to delete
-                                                FirebaseStorage.instance
-                                                    .refFromURL(documentSnapshot[
-                                                        'productImage'])
-                                                    .delete();
+                                                // FirebaseStorage.instance
+                                                //     .refFromURL(documentSnapshot[
+                                                //         'productImage'])
+                                                //     .delete();
 // Child references can also take paths
 // spaceRef now points to "images/space.jpg
 // imagesRef still points to "images"
@@ -497,21 +484,21 @@ class _ProductMainNewState extends State<ProductMainNew> {
                                   // ListTile(
                                   //
                                   //
-                                  //   title: Text('${filteredData.productName}'),
+                                  //   title: Text('${instProdList[index].productName}'),
                                   //   subtitle: Column(
                                   //     children: [
-                                  //      Text('${filteredData.productName}'),
-                                  //       Text('${filteredData.productPrice}')
+                                  //      Text('${instProdList[index].productName}'),
+                                  //       Text('${instProdList[index].productPrice}')
                                   //     ],
                                   //   ),
                                   //   leading:  Column(
                                   //     children: [
-                                  //       // Text('${filteredData.productImage}'),
-                                  //       Text('${filteredData.favoriteFlag}'),
-                                  //       //   Text('${filteredData.productPrice}'),
-                                  //       Text('${formatDate(filteredData.productEntryDate,
+                                  //       // Text('${instProdList[index].productImage}'),
+                                  //       Text('${instProdList[index].favoriteFlag}'),
+                                  //       //   Text('${instProdList[index].productPrice}'),
+                                  //       Text('${formatDate(instProdList[index].productEntryDate,
                                   //           [yyyy, '-', mm, '-', dd])}'),
-                                  //       Text('${filteredData.productCat}'),
+                                  //       Text('${instProdList[index].productCat}'),
                                   //     ],
                                   //   ),
                                   //   trailing: SizedBox(
@@ -557,14 +544,12 @@ class _ProductMainNewState extends State<ProductMainNew> {
               child: IconButton(
                 icon: Icon(Icons.add, size: 30),
                 onPressed: () async {
-                  var maxProductId = await getDocumentMaxId(
-                      'Clean_App_Products_New', 'productId');
 
                   Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (_) => ProductAdd(
-                                Docs_max: maxProductId+1,
+
                               )));
 
                   //  }

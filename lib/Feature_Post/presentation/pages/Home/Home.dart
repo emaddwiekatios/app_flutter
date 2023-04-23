@@ -12,6 +12,7 @@ import '../../manager/Language/LocaleController.dart';
 //import '../Products/ProductsClass.dart';
 //import 'HomePage.dart' as home;
 
+import '../LayoutBuilder/LayoutBuilder.dart';
 ///import '../../../../core/resource/template.dart';
 import 'HomePage.dart';
 
@@ -79,7 +80,7 @@ Widget getDrawer(context) {
                 //  ),
               ),
               ListTile(
-                  leading: Icon(
+                  leading:  Icon(
                     Icons.home,
                     color: ColorManager.primary,
                   ),
@@ -89,7 +90,7 @@ Widget getDrawer(context) {
                     //print('ontap');
                     Navigator.pop(context);
                   }),
-              const Divider(
+               Divider(
                 height: FontManagerSize.s8,
               ),
              Text('Admin Tab'),
@@ -107,7 +108,7 @@ Widget getDrawer(context) {
                   title: Text('Product'.tr),
                   trailing: Text('Product'.tr),
                   onTap: () {
-                    // print('ontap');
+                    ////print('ontap');
                     Get.toNamed('/ProductMainNew');
                     //  Get.to(() => GetxManagement());
                   }),
@@ -124,7 +125,7 @@ Widget getDrawer(context) {
   title: Text('Categorys'.tr),
   trailing: Text('Categorys'.tr),
   onTap: () {
-  // print('ontap');
+  ////print('ontap');
   Get.toNamed('/CategoryMain');
   //  Get.to(() => GetxManagement());
   }),
@@ -143,7 +144,7 @@ Widget getDrawer(context) {
                   trailing: Text('Layout'.tr),
                   onTap: () {
                     //Get.toNamed(RoutesManager.layoutbuilderRoute);
-                    // Get.to(() => RoutesManager.layoutbuilderRoute);
+                    Get.to(() => GetLayoutBuilder());
                   }),
               const Divider(
                 height: FontManagerSize.s8,

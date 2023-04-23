@@ -25,7 +25,7 @@ class _CartsCeilState extends State<CartsCeil> {
       GestureDetector(
           onTap: ()
           {
-            print(widget.instCarts.productName);
+            //print(widget.instCarts.productName);
           },
           child: Container(
           margin:const  EdgeInsets.all(AppSize.s6),

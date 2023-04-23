@@ -3,6 +3,8 @@
 import 'package:clean_arch_app/Feature_Post/presentation/pages/Products/ProductsClass.dart';
 
 import 'package:clean_arch_app/core/resource/Construct.dart';
+import 'package:clean_arch_app/core/resource/StringManager.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/resource/ColorManger.dart';
@@ -599,7 +601,10 @@ class _ProductDetailsState extends State<ProductDetails> {
                                    parBorderRadius: AppSize.s10,
                                   parForegroundColor: ColorManager.primary,
                                   parBackGroundColor: Colors.white,
-                                  onTabButton: () {print('add');},
+                                  onTabButton: () {
+                                    addProducttoCart();
+
+                                    },
                                   nameButton: 'ADD To Carts',
                                 ),
                                 getElevationButton(
@@ -808,6 +813,22 @@ class _ProductDetailsState extends State<ProductDetails> {
         ),
       ),
     );
+  }
+
+
+  void addProducttoCart() {
+
+    FirebaseFirestore.instance.collection(StringManager.collection_Carts).add({
+      "productId":  widget.instProd.productId,
+      "productName":  widget.instProd.productName,
+      "productImage":  widget.instProd.productImage,
+      "productPrice":  widget.instProd.productPrice,
+      "productCat":  widget.instProd.productCat ,//contProductcat.text,
+      "productEntryDate": DateTime.now(),
+      "favoriteFlag":  widget.instProd.favoriteFlag,
+      "productCount":1//contProductfav.text
+    });
+    Navigator.of(context).pop();
   }
 }
 

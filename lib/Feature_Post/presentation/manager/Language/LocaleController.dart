@@ -19,7 +19,7 @@ class  LocaleController extends GetxController
 
     currentLanguage=langCode;
      prefs!.setString('Lang', langCode.toString());
-   // print('prefs =${prefs!.getString('Lang')}');
+
     Get.updateLocale(langCode);
   }
 

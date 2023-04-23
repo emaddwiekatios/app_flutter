@@ -1,6 +1,10 @@
 class StringManager {
   // class AppStrings {
 
+  static const String collection_Products = "Clean_App_Products_New";
+  static const String collection_Categorys = "Categorys";
+  static const String collection_Carts = "Carts";
+
   static const String noRouteFound = "no_route_found";
   static const String onBoardingTitle1 = "on_boarding_title1";
   static const String onBoardingTitle2 = "on_boarding_title2";

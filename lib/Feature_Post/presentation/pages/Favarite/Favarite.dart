@@ -1,237 +1,242 @@
-// ignore_for_file: library_private_types_in_public_api
 
-import 'package:clean_arch_app/Feature_Post/presentation/pages/Carts/Cartsceil.dart';
-import 'package:clean_arch_app/core/resource/ColorManger.dart';
-import 'package:clean_arch_app/core/resource/Construct.dart';
+import 'package:clean_arch_app/Feature_Post/presentation/pages/Products/ProductDetails.dart';
+import 'package:clean_arch_app/Feature_Post/presentation/pages/Products/ProductDetailsEdit.dart';
+import 'package:clean_arch_app/Feature_Post/presentation/pages/Products/ProductsClass.dart';
 import 'package:clean_arch_app/core/resource/FontManager.dart';
 import 'package:clean_arch_app/core/resource/MediaQuery.dart';
 import 'package:clean_arch_app/core/resource/ValueManger.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
 
-import '../../../../core/resource/AssetManager.dart';
-import '../Products/ProductsClass.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:date_format/date_format.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
 
-class Carts extends StatefulWidget {
-  const Carts({super.key});
+import 'package:clean_arch_app/core/resource/Construct.dart' as cons;
 
+import '../../../../core/resource/Construct.dart';
+import '../../../../core/resource/StringManager.dart';
+import '../Home/HomePage.dart';
+
+class Favarite extends StatefulWidget {
   @override
-  _CartsState createState() => _CartsState();
+  _FavariteState createState() => _FavariteState();
 }
 
-const curveHeight = 160.0;
-const avatarRadius = curveHeight * 0.28;
-const avatarDiameter = avatarRadius * 2;
-Color colorOne = Colors.amber;
-Color colorTwo = ColorManager.primary;
-Color colorThree = ColorManager.primary;
+List<ProductClass> listProductFav = [];
 
-class _CartsState extends State<Carts> {
-  final GlobalKey<ScaffoldState> _scaffoldKey =  GlobalKey<ScaffoldState>();
-  // Color pyellow = Color(Colors.amber);
+List<ProductClass>? listTemp;
+List<ProductClass> duplicateItems = [];
+List<ProductClass> duplicateItems2 = [];
+var db = FirebaseFirestore.instance;
 
-  ////  add  keyboard action
+QuerySnapshot? cars;
+var _productss=getCollectionReference(StringManager.collection_Products);
+//List<ProductClass> Favarite= [];
+//final CollectionReference _productss = FirebaseFirestore.instance.collection(StringManager.collection_Products);
+final TextEditingController _productIdController = TextEditingController();
+final TextEditingController _productNameController = TextEditingController();
+final TextEditingController _productImageController = TextEditingController();
+final TextEditingController _productPriceController = TextEditingController();
+final TextEditingController _productCatController = TextEditingController();
+final TextEditingController _productEntryDateController =
+TextEditingController();
+final TextEditingController _favoriteFlagController = TextEditingController();
 
-  // final FocusNode _nodeText1 = FocusNode();
-  // final FocusNode _nodeText2 = FocusNode();
-  // final FocusNode _nodeText3 = FocusNode();
-  // final FocusNode _nodeText4 = FocusNode();
-  // final FocusNode _nodeText5 = FocusNode();
-  // final FocusNode _nodeText6 = FocusNode();
+class _FavariteState extends State<Favarite> {
+  void filterSearchResults(String query) {
+    List<ProductClass> dummySearchList = [];
+    dummySearchList = duplicateItems;
+    if (query.isNotEmpty) {
+ 
+      List<ProductClass> dummyListData = [];
+      for (var item in dummySearchList) {
+        if (item.productName.toUpperCase().contains(query.toUpperCase())) {
+          dummyListData.add(item);
+        }
+      }
+      setState(() {
+        listProductFav = dummyListData;
+      });
+      return;
+    } else {
+      setState(() {
+        listProductFav = duplicateItems;
+      });
+    }
+  }
 
-  /// Creates the [KeyboardActionsConfig] to hook up the fields
-  /// and their focus nodes to our [FormKeyboardActions].
-  // KeyboardActionsConfig _buildConfig(BuildContext context) {
-  //   return KeyboardActionsConfig(
-  //     keyboardActionsPlatform: KeyboardActionsPlatform.ALL,
-  //     keyboardBarColor: Colors.grey[200],
-  //     nextFocus: true,
-  //     actions: [
-  //       KeyboardActionsItem(
-  //         focusNode: _nodeText1,
-  //       ),
-  //       KeyboardActionsItem(focusNode: _nodeText2, toolbarButtons: [
-  //             (node) {
-  //           return GestureDetector(
-  //             onTap: () => node.unfocus(),
-  //             child: Padding(
-  //               padding: EdgeInsets.all(8.0),
-  //               child: Icon(Icons.close),
-  //             ),
-  //           );
-  //         }
-  //       ]),
-  //       KeyboardActionsItem(
-  //         focusNode: _nodeText3,
-  //         onTapAction: () {
-  //           showDialog(
-  //               context: context,
-  //               builder: (context) {
-  //                 return AlertDialog(
-  //                   content: Text("Custom Action"),
-  //                   actions: <Widget>[
-  //                     FlatButton(
-  //                       child: Text("OK"),
-  //                       onPressed: () => Navigator.of(context).pop(),
-  //                     )
-  //                   ],
-  //                 );
-  //               });
-  //         },
-  //       ),
-  //       KeyboardActionsItem(
-  //         focusNode: _nodeText4,
-  //         // displayCloseWidget: false,
-  //       ),
-  //       KeyboardActionsItem(
-  //         focusNode: _nodeText5,
-  //         toolbarButtons: [
-  //           //button 1
-  //               (node) {
-  //             return GestureDetector(
-  //               onTap: () => node.unfocus(),
-  //               child: Container(
-  //                 color: Colors.white,
-  //                 padding: EdgeInsets.all(8.0),
-  //                 child: Text(
-  //                   "CLOSE",
-  //                   style: TextStyle(color: Colors.black),
-  //                 ),
-  //               ),
-  //             );
-  //           },
-  //           //button 2
-  //               (node) {
-  //             return GestureDetector(
-  //               onTap: () => node.unfocus(),
-  //               child: Container(
-  //                 color: Colors.black,
-  //                 padding: EdgeInsets.all(8.0),
-  //                 child: Text(
-  //                   "DONE",
-  //                   style: TextStyle(color: Colors.white),
-  //                 ),
-  //               ),
-  //             );
-  //           }
-  //         ],
-  //       ),
-  //       KeyboardActionsItem(
-  //         focusNode: _nodeText6,
-  //         footerBuilder: (_) => PreferredSize(
-  //             child: SizedBox(
-  //                 height: 40,
-  //                 child: Center(
-  //                   child: Text('Custom Footer'),
-  //                 )),
-  //             preferredSize: Size.fromHeight(40)),
-  //       ),
-  //     ],
-  //   );
-  // }
-
-//note  add  code on text field
-//  KeyboardActions(
-//  config: _buildConfig(context),
-  //child:widget
-  // add on text field  focusNode: _nodeText1,
-
-  ///// end add  keyboard action
-  List<ProductClass> instCartsList=[];
-@override
+  @override
   void initState() {
     // TODO: implement initState
-  //loadCartsinit();
-  //get_sumitem();
     super.initState();
-  }
-  /*
-  void loadCartsinit() {
-    instCartsList.clear();
-    instCartsList.add(ProductClass(productId: 1,
-        productName: 'T-shirt',
-        productImage: AssetManager.mancat,
-        productPrice: "16",
-        productCat: 'Clothes',
-        productEntryDate: DateTime.now(),favoriteFlag:1 ));
-    instCartsList.add(ProductClass(productId: 2,
-        productName: 'Jaket',
-        productImage: AssetManager.mancat3,
-        productPrice: "50",
-        productCat: 'Clothes',
-        productEntryDate: DateTime.now(),favoriteFlag:1 ));
-    instCartsList.add(ProductClass(productId: 3,
-        productName: 'Jeans',
-        productImage: AssetManager.mancat4,
-        productPrice: "100",
-        productCat: 'Clothes',
-        productEntryDate: DateTime.now(),favoriteFlag:1 ));
-    instCartsList.add(ProductClass(productId: 4,
-        productName: 'Body',
-        productImage: AssetManager.mancat5,
-        productPrice: "400",
-        productCat: 'Clothes',
-        productEntryDate: DateTime.now(),favoriteFlag:0 ));
-    instCartsList.add(ProductClass(productId: 5,
-        productName: 'T-shttirt',
-        productImage: AssetManager.mancat,
-        productPrice: "616",
-        productCat: 'Clothes',
-        productEntryDate: DateTime.now(),favoriteFlag:0 ));
-    instCartsList.add(ProductClass(productId: 6,
-        productName: 'Jaketttt',
-        productImage: AssetManager.mancat3,
-        productPrice: "560",
-        productCat: 'Clothes',
-        productEntryDate: DateTime.now(),favoriteFlag:1 ));
-    instCartsList.add(ProductClass(productId: 7,
-        productName: 'Jeattns',
-        productImage: AssetManager.mancat4,
-        productPrice: "1600",
-        productCat: 'Clothes',
-        productEntryDate: DateTime.now(),favoriteFlag:1 ));
-    instCartsList.add(ProductClass(productId: 8,
-        productName: 'Bodtty',
-        productImage: AssetManager.mancat5,
-        productPrice: "4060",
-        productCat: 'Clothes',
-        productEntryDate: DateTime.now(),favoriteFlag:1 ));
+    //call_get_datatype();
+    // _readdball();
   }
 
-  */
-  var sumItem=0.0;
-  var noItem=0;
-  // void get_sumitem()
-  // {
-  //
-  //   for(int i =0 ;i<instCartsList.length;i++)
-  //     {
-  //       sumItem=(sumItem+ instCartsList[i].productPrice) ;
-  //
-  //     }
-  //   noItem=instCartsList.length;
-  //   print('The total price $sumItem');
-  // }
-    @override
+  @override
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  Color pyellow = Colors.red;
+
+  Future<void> _createOrUpdate([DocumentSnapshot? documentSnapshot]) async {
+    String action = 'create';
+
+    if (documentSnapshot != null) {
+      action = 'update';
+      _productIdController.text = documentSnapshot['productId'];
+      _productNameController.text = documentSnapshot['productName'];
+      _productImageController.text = documentSnapshot['productImage'];
+      _productCatController.text = documentSnapshot['productCat'];
+      _productEntryDateController.text = documentSnapshot['productEntryDate'];
+      _productPriceController.text = documentSnapshot['productPrice'];
+    } else {
+      _productNameController.text = '';
+      _productPriceController.text = '';
+      _productCatController.text = '';
+    }
+
+    await showModalBottomSheet(
+        isScrollControlled: true,
+        context: context,
+        builder: (BuildContext ctx) {
+          return Padding(
+            padding: EdgeInsets.only(
+                top: 20,
+                left: 20,
+                right: 20,
+                // prevent the soft keyboard from covering text fields
+                bottom: MediaQuery.of(ctx).viewInsets.bottom + 20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextField(
+                  controller: _productNameController,
+                  decoration: const InputDecoration(labelText: 'Name'),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                TextField(
+                  keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
+                  controller: _productPriceController,
+                  decoration: const InputDecoration(
+                    labelText: 'Price',
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                TextField(
+                  keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
+                  controller: _productCatController,
+                  decoration: const InputDecoration(
+                    labelText: 'Cat',
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                ElevatedButton(
+                  child: Text(action == 'create' ? 'Create' : 'Update'),
+                  onPressed: () async {
+                    final String? name = _productNameController.text;
+                    final String? price = _productPriceController.text;
+                    final String? cat = _productCatController.text;
+                    if (name != null && price != null && cat != null) {
+                      if (action == 'create') {
+                        _productNameController.text = '';
+                        _productPriceController.text = '';
+                        _productCatController.text = '';
+                        final todayDate = DateTime.now();
+                        var currentdate = formatDate(todayDate, [
+                          yyyy,
+                          '-',
+                          mm,
+                          '-',
+                          dd,
+                          ' ',
+                          hh,
+                          ':',
+                          nn,
+                          ':',
+                          ss,
+                          ' ',
+                          am
+                        ]);
+
+                        // Persist a new product to Firestore
+                        await _productss.add({
+                          "productName": name,
+                          "productPrice": price,
+                          "productCat": cat,
+                          "productId": "13",
+                          "productImage": "IMAGEPAth",
+                          "productCat": "COLTHES",
+                          "productEntryDate": currentdate,
+                          "favoriteFlag": "0"
+                        });
+                      }
+
+                      if (action == 'update') {
+
+
+                        await _productss.doc(documentSnapshot?.id).update({
+                          "productName": name,
+                          "productPrice": price,
+                          "productCat": cat
+                        });
+                      }
+
+                      // Clear the text fields
+                      _productNameController.text = '';
+                      _productPriceController.text = '';
+                      _productCatController.text = '';
+
+                      // Hide the bottom sheet
+                      // ignore: use_build_context_synchronously
+                      Navigator.of(context).pop();
+                    }
+                  },
+                )
+              ],
+            ),
+          );
+        });
+  }
+
+  Future<void> _deleteProduct(String productId) async {
+    await _productss.doc(productId).delete();
+
+    // Show a snackbar
+    showMessage(context, 'You have successfully deleted a product');
+
+  }
+
+  @override
   Widget build(BuildContext context) {
-    var pHeight = MediaQuery.of(context).size.height;
-    var pWidth = MediaQuery.of(context).size.width;
+    // Deleteing a product by id
 
-    return Scaffold(
-      key: _scaffoldKey,
+    var pheight = MediaQuery.of(context).size.height;
+    var pwidth = MediaQuery.of(context).size.width;
 
-      body: GestureDetector(
-        onTap: () {
-          FocusScopeNode currentFocus = FocusScope.of(context);
+    return SafeArea(
+      child: Scaffold(
+        key: _scaffoldKey,
+        // drawer: Appdrawer(),
+        // floatingActionButton: FloatingActionButton(
+        //   onPressed: () => _createOrUpdate(),
+        //   // onPressed: () {  },
+        //   child: const const Icon(Icons.add),
+        // ),
 
-          if (!currentFocus.hasPrimaryFocus) {
-            currentFocus.unfocus();
-          }
-        },
-        child: Stack(
+        body: Stack(
           children: <Widget>[
             //header shape
-      /*  Positioned(
+            Positioned(
               top: 0,
               left: 0,
               child: Container(
@@ -239,17 +244,10 @@ class _CartsState extends State<Carts> {
                 width: MediaQuery.of(context).size.width,
                 decoration: const BoxDecoration(
                   //borderRadius: BorderRadius.circular(200),
-                  //  color: Colors.amber,
-                ),
-                child: CustomPaint(
-                  painter: _MyPainter(),
-                  child: Container(
-                    height: 400.0,
-                  ),
+                  color: Colors.yellow,
                 ),
               ),
             ),
-
             Positioned(
               top: 125,
               left: -150,
@@ -258,7 +256,7 @@ class _CartsState extends State<Carts> {
                 width: 450, //MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(250),
-                  color: Colors.amber,
+                  color: Colors.yellow,
                 ),
               ),
             ),
@@ -269,12 +267,12 @@ class _CartsState extends State<Carts> {
                 height: 350, //MediaQuery.of(context).size.height / 4,
                 width: 350, //MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(200),
-                    color: Colors.amber),
+                  borderRadius: BorderRadius.circular(200),
+                  color: Colors.yellow,
+                ),
               ),
             ),
-            */
-            //a
+            //footer
             Positioned(
               bottom: -125,
               left: -150,
@@ -283,7 +281,7 @@ class _CartsState extends State<Carts> {
                 width: 250, //MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(250),
-                  color: ColorManager.primary,
+                  color: Colors.yellow,
                 ),
               ),
             ),
@@ -294,186 +292,234 @@ class _CartsState extends State<Carts> {
                 height: 250, //MediaQuery.of(context).size.height / 4,
                 width: 250, //MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(200),
-                    color: ColorManager.primary),
-              ),
-            ),
-            //menu
-            Positioned(
-              top: pHeight / 25,
-              left: pWidth / 20,
-              child: IconButton(
-                icon: const Icon(Icons.arrow_back_ios),
-                onPressed: () {
-                  // print('inside button');
-                  // _scaffoldKey.currentState.openDrawer();
-
-                  Navigator.pushReplacementNamed(context, "/PreHome");
-                },
-              ),
-            ),
-            // Positioned(
-            //   top: pHeight / 25,
-            //   right: pWidth / 20,
-            //   child: IconButton(
-            //     icon: const Icon(Icons.arrow_back),
-            //     onPressed: () {
-            //       //print('inside button');
-            //       // FirebaseAuth.instance.signOut();
-            //       Navigator.pop(context);
-            //       //  Navigator.popAndPushNamed(context, "/SignIn");
-            //
-            //       //Navigator.pushReplacementNamed(context, "/SignIn");
-            //     },
-            //   ),
-            // ),
-            //body
-            Positioned(
-              top: pHeight / 10,
-              right: 0,
-              bottom: 20,
-              child: SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height >= 775.0
-                      ? MediaQuery.of(context).size.height
-                      : 775.0,
-                  child:  Center(
-                      child: ListView.builder(
-                      itemCount: instCartsList.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        //print('insdie int ');
-                        return   CartsCeil(instCarts: instCartsList[index],);
-                      },
-                    ),
-                  )//hgjghjg   hj
-
-
-              ),
-            ),
-            //bottom shhet
-
-            Positioned(
-              bottom: AppSize.s0,
-              right: 0,//MediaQuery.of(context).size.width / 2 -50,
-              child:  ElevatedButton(
-                style:ButtonStyle(backgroundColor:MaterialStateProperty.all(ColorManager.secondary)) ,
-                child: Text('Check out'),
-                onPressed: () {
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (context) {
-                      return Container(
-                        margin: EdgeInsets.only(left:AppSize.s10,top: FontManagerSize.s5),
-                        height: getHeight(context)/FontManagerSize.s8,
-                        decoration:  BoxDecoration(
-                          borderRadius: BorderRadius.only(topRight: Radius.circular(200))
-                        )
-                        ,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Column
-
-                              (
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text('Item : ',style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
-                                    Text('$noItem',style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
-
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Text('Total : ',style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
-                                    Text('$sumItem\$',style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
-
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text('Tax : ',style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
-                                    Text('${sumItem*.16}\$',style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
-
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Text('G Total : ',style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
-                                    Text('${sumItem*1.16}\$',style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
-
-                                  ],
-                                ),
-                              ],
-                            ),
-
-                            getElevationButton(
-                                parFontSize: AppSize.s20,
-                                parBorderRadius: AppSize.s10,
-                                parBorderWidth: AppSize.s1,
-                                nameButton: 'Check Out',
-                                onTabButton: (){
-                                  print('inside checkout');
-                                },
-                                parBackGroundColor: ColorManager.primary,
-                                parForegroundColor: Colors.white)
-                          ],
-                        ),
-
-
-                      );
-                    },
-                  );
-                },
+                  borderRadius: BorderRadius.circular(200),
+                  color: Colors.yellow,
+                ),
               ),
             ),
 
-            //header title
             Positioned(
-              top: MediaQuery.of(context).size.height / 18,
-              left: MediaQuery.of(context).size.width / 2 - 50,
+              top: 50,
+              left: MediaQuery.of(context).size.width / 2 - 70,
               child: const Text(
-                'Carts'
-                //AppLocalizations.of(context).translate('Details'),
-                ,
+                'List Favarite',
                 style: TextStyle(fontSize: 29, fontWeight: FontWeight.bold),
               ),
             ),
+            //body
+            Positioned(
+              top: 100,
+              left: 15,
+              right: 15,
+
+              // left: MediaQuery.of(context).size.width / 2 - 70,
+              child: SingleChildScrollView(
+                child: Container(
+                  height: 50,
+                  width: MediaQuery.of(context).size.width - 30,
+                  child: Material(
+                    elevation: 5.0,
+                    borderRadius: BorderRadius.circular(5.0),
+                    child: TextField(
+                        onChanged: (value) {
+
+                          filterSearchResults(value);
+                        },
+                        decoration:const  InputDecoration(
+                            border: InputBorder.none,
+                            prefixIcon:  Icon(Icons.search,
+                                color: Colors.yellow, size: 30.0),
+                            contentPadding:
+                            EdgeInsets.only(left: 15.0, top: 15.0),
+                            hintText: 'Search',
+                            hintStyle: TextStyle(
+                                color: Colors.grey, fontFamily: 'Quicksand'))),
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              top: 160,
+              right: 0,
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                height: getHeight(context) / 1.2,
+                child: StreamBuilder(
+                  //stream: _productss.snapshots(),
+
+                    stream: _productss.where('favoriteFlag', isEqualTo: 1).snapshots(),
+                  builder:
+                      (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+
+
+
+                    if (streamSnapshot.hasData) {
+
+                        instProdList.clear();
+                        for (int i = 0; i <
+                            streamSnapshot.data!.docs.length; i++) {
+                          final DocumentSnapshot documentSnapshot = streamSnapshot
+                              .data!.docs[i];
+                          ProductClass filteredData = ProductClass(
+                              productId: int.parse(
+                                  documentSnapshot['productId']),
+                              productName: documentSnapshot['productName'],
+                              productImage: documentSnapshot['productImage'],
+                              productCat: documentSnapshot['productCat'],
+                              productEntryDate: DateTime.now(),
+                              //DateTime.parse(documentSnapshot['productEntryDate']),
+                              productPrice: documentSnapshot['productPrice'],
+                              favoriteFlag:
+                              documentSnapshot['favoriteFlag'],
+                              docsId: documentSnapshot.id
+                              ,productCount: 1);
+
+
+                          instProdList.add(filteredData);
+                          duplicateItems = instProdList;
+                        }
+
+                      return ListView.builder(
+                        itemCount: streamSnapshot.data!.docs.length,
+                        itemBuilder: (context, index) {
+
+
+                          return InkWell(
+                            onTap: ()
+                            {
+
+                              Get.to(() => ProductDetails(
+                                  instProd: instProdList[index],prodList: instProdListSimilar,
+                              ));
+                            },
+                            child: Container(
+                              height: getHeight(context) / FontManagerSize.s6,
+                              width: double.infinity,
+                              child: Card(
+                                  margin: const EdgeInsets.all(10),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(AppSize.s6),
+                                        child: CircleAvatar(
+                                          radius: FontManagerSize.s35,
+                                          backgroundImage: NetworkImage(
+                                              instProdList[index].productImage),
+                                        ),
+                                      ),
+                                      Column(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                        children: [
+                                          Text(
+                                            instProdList[index].productName,
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: AppSize.s20),
+                                          ),
+                                          Text(
+                                            instProdList[index].productPrice.toString(),
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.w300,
+                                                fontSize: AppSize.s20),
+                                          ),
+                                        ],
+                                      ),
+                                      Column(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                        children: [
+                                          Text(
+                                            instProdList[index].productCat,
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: AppSize.s20),
+                                          ),
+                                          Text(
+                                            '${formatDate(instProdList[index].productEntryDate, [
+                                              yyyy,
+                                              '-',
+                                              mm,
+                                              '-',
+                                              dd
+                                            ])}',
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.w200,
+                                                fontSize: AppSize.s20),
+                                          ),
+                                        ],
+                                      ),
+                                      Column(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.center,
+                                        children: [
+                                          // Press this button to edit a single product
+                                          IconButton(
+                                              icon: const  Icon(
+                                                Icons.shopping_cart,
+                                                size: AppSize.s20,
+                                              ),
+                                              //  onPressed: () =>
+                                              onPressed: () {
+                                                updateIntField(StringManager.collection_Products, 'favoriteFlag',instProdList[index].docsId,0);
+
+                                                addProducttoCart(instProdList[index]);
+
+                                              }
+                                                ),
+                                          // This icon button is used to delete a single product
+                                          IconButton(
+                                              icon: const Icon(
+                                                Icons.delete,
+                                                size: AppSize.s20,
+                                              ),
+
+                                              ///onPressed: (){},
+                                              onPressed: () async {
+                                                updateIntField(StringManager.collection_Products,"favoriteFlag",instProdList[index].docsId,0);
+
+                                              }),
+                                        ],
+                                      ),
+                                    ],
+                                  )
+
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    }
+
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  },
+                ),
+              ),
+            ),
+
           ],
         ),
       ),
     );
   }
-}
 
-class _MyPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    var paint = Paint();
-    paint.color = Colors.deepOrangeAccent;
-    paint.style = PaintingStyle.fill; // Change this to fill
+  void addProducttoCart(ProductClass prodClass) {
 
-    var path = Path();
+    FirebaseFirestore.instance.collection(StringManager.collection_Carts).add({
+      "productId":  prodClass.productId,
+      "productName":  prodClass.productName,
+      "productImage":  prodClass.productImage,
+      "productPrice":  prodClass.productPrice,
+      "productCat":  prodClass.productCat ,//contProductcat.text,
+      "productEntryDate": DateTime.now(),
+      "favoriteFlag":  prodClass.favoriteFlag,
+      "productCount":1//contProductfav.text
+    });
 
-    path.moveTo(0, size.height * 0.5);
-    path.quadraticBezierTo(
-        size.width / 2, size.height / 1, size.width, size.height * 0.4);
-    path.lineTo(size.width, 0);
-    path.lineTo(0, 0);
-
-    canvas.drawPath(path, paint);
   }
 
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return true;
-  }
 }

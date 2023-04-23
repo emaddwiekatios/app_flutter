@@ -1,4 +1,5 @@
 
+import 'package:clean_arch_app/Feature_Post/presentation/pages/Favarite/Favarite.dart';
 import 'package:clean_arch_app/Feature_Post/presentation/pages/Home/Home.dart';
 import 'package:clean_arch_app/core/resource/ColorManger.dart';
 import 'package:clean_arch_app/core/resource/FontManager.dart';
@@ -8,6 +9,8 @@ import 'package:flutter/material.dart';
 import '../../../../core/resource/ValueManger.dart';
 import '../Carts/Carts.dart';
 class PreHome extends StatefulWidget {
+  const PreHome({super.key});
+
   @override
   _PreHomeState createState() => _PreHomeState();
 }
@@ -22,7 +25,7 @@ class _PreHomeState extends State<PreHome> {
       body: [
         Home(),
         Carts(),
-        Carts(),
+        Favarite(),
         Carts()
 
       ][ _currentIndex],

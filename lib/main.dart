@@ -1,7 +1,6 @@
 //import 'dart:html';
 import 'package:clean_arch_app/Feature_Post/presentation/pages/Category/CategoryMain.dart';
 import 'package:clean_arch_app/Feature_Post/presentation/pages/Products/ProductMain.dart';
-import 'package:clean_arch_app/Feature_Post/presentation/pages/Products/ProductMain.dart';
 import 'package:clean_arch_app/core/resource/RoutesManager.dart';
 import 'package:device_preview/device_preview.dart';
 
@@ -62,8 +61,7 @@ class MyApp extends StatelessWidget {
       init: Auth(),
       builder: ((controller) {
 
-        //print('controller=');
-        //print(controller.isAuth);
+
         return GetMaterialApp(
           title: 'Flutter Demo',
           theme: getApplicationTheme(),
@@ -77,8 +75,8 @@ class MyApp extends StatelessWidget {
                FutureBuilder(
                   future: controller.tryAutoLogin(),
                   builder: (context, authsnapshot)
-               {print(' controller.isAuth=${ controller.isAuth}');
-                print('authsnapshot connectionState${authsnapshot.connectionState}');
+               {
+                 
                  return
 
                    authsnapshot.connectionState ==  ConnectionState.done

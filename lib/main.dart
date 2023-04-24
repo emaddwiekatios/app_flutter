@@ -16,6 +16,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Feature_Post/presentation/pages/Home/Home.dart';
 import 'Feature_Post/presentation/pages/Home/PreHome.dart';
+import 'Feature_Post/presentation/pages/Login/view_login/loginNew.dart';
 import 'Feature_Post/presentation/pages/Login/view_login/view_login.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -80,7 +81,7 @@ class MyApp extends StatelessWidget {
                  return
 
                    authsnapshot.connectionState ==  ConnectionState.done
-                        ? const login()
+                        ? const Splash() //login()
                        :const  Splash();
 
               }
@@ -99,6 +100,8 @@ class MyApp extends StatelessWidget {
 
             '/Onboarding': (context) => const OnBoarding(),
             '/login': (context) => const login(),
+            '/SignIn': (context) =>  SignIn(),
+
 
 
           },

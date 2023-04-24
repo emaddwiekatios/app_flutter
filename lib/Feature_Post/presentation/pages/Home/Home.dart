@@ -181,9 +181,9 @@ Widget getDrawer(context) {
               trailing: Text('Logout'.tr),
               onTap: () {
 
-                _authlogout.logout();
-                Navigator.of(context).pop();
-               Navigator.pushReplacementNamed(context,'/');
+               // _authlogout.logout();
+             //   Navigator.of(context).pop();
+               Navigator.pushNamed(context,'/Splash');
 
 
               }),

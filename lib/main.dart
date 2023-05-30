@@ -23,18 +23,15 @@ import 'package:firebase_core/firebase_core.dart';
 
 import 'Feature_Post/presentation/pages/Products/ProductAdd.dart';
 
-
 SharedPreferences? prefs;
 void main() async {
-
-
   // WidgetsFlutterBinding.ensureInitialized();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   prefs = await SharedPreferences.getInstance();
 
   runApp(const MyApp());
-     //emad 15/2/2023
+  //emad 15/2/2023
   //   runApp(
   //     DevicePreview(
   //       enabled: true,
@@ -45,7 +42,6 @@ void main() async {
   //       builder: (context) => const MyApp(),
   //     ),
   //   );
-
 }
 
 class MyApp extends StatelessWidget {
@@ -61,8 +57,6 @@ class MyApp extends StatelessWidget {
     return GetBuilder<Auth>(
       init: Auth(),
       builder: ((controller) {
-
-
         return GetMaterialApp(
           title: 'Flutter Demo',
           theme: getApplicationTheme(),
@@ -72,38 +66,27 @@ class MyApp extends StatelessWidget {
           translations: LocaleLang(),
           //home: login(),
           home: controller.isAuth
-              ?   PreHome():
-               FutureBuilder(
+              ? PreHome()
+              : FutureBuilder(
                   future: controller.tryAutoLogin(),
-                  builder: (context, authsnapshot)
-               {
-                 
-                 return
-
-                   authsnapshot.connectionState ==  ConnectionState.done
+                  builder: (context, authsnapshot) {
+                    return authsnapshot.connectionState == ConnectionState.done
                         ? const Splash() //login()
-                       :const  Splash();
-
-              }
-          ),
+                        : const Splash();
+                  }),
 
           routes: {
-
             '/Home': (context) => const Home(),
             '/PreHome': (context) => PreHome(),
             '/Splash': (context) => const Splash(),
             //'/ProductMain': (context) =>  ProductMain(),
-            '/ProductMainNew': (context) =>  ProductMainNew(),
-            '/ProductAdd': (context) =>  ProductAdd(),
-            '/CategoryMain': (context) =>  CategoryMain(),
-
+            '/ProductMainNew': (context) => ProductMainNew(),
+            '/ProductAdd': (context) => ProductAdd(),
+            '/CategoryMain': (context) => CategoryMain(),
 
             '/Onboarding': (context) => const OnBoarding(),
             '/login': (context) => const login(),
-            '/SignIn': (context) =>  SignIn(),
-
-
-
+            '/SignIn': (context) => SignIn(),
           },
         );
       }),

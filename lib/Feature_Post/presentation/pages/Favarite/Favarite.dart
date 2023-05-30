@@ -32,7 +32,7 @@ List<ProductClass> duplicateItems2 = [];
 var db = FirebaseFirestore.instance;
 
 QuerySnapshot? cars;
-var _productss=getCollectionReference(StringManager.collection_Products);
+var _productss=getCollectionReference(StringManager.collectionProducts);
 //List<ProductClass> Favarite= [];
 //final CollectionReference _productss = FirebaseFirestore.instance.collection(StringManager.collection_Products);
 final TextEditingController _productIdController = TextEditingController();
@@ -212,7 +212,7 @@ class _FavariteState extends State<Favarite> {
     await _productss.doc(productId).delete();
 
     // Show a snackbar
-    showMessage(context, 'You have successfully deleted a product');
+    showMessage(context, 'You have successfully deleted a product',Colors.tealAccent);
 
   }
 
@@ -361,8 +361,8 @@ class _FavariteState extends State<Favarite> {
                           final DocumentSnapshot documentSnapshot = streamSnapshot
                               .data!.docs[i];
                           ProductClass filteredData = ProductClass(
-                              productId: int.parse(
-                                  documentSnapshot['productId']),
+                              productId:
+                                  documentSnapshot['productId'],
                               productName: documentSnapshot['productName'],
                               productImage: documentSnapshot['productImage'],
                               productCat: documentSnapshot['productCat'],
@@ -463,7 +463,7 @@ class _FavariteState extends State<Favarite> {
                                               ),
                                               //  onPressed: () =>
                                               onPressed: () {
-                                                updateIntField(StringManager.collection_Products, 'favoriteFlag',instProdList[index].docsId,0);
+                                                updateIntField(StringManager.collectionProducts, 'favoriteFlag',instProdList[index].docsId,0);
 
                                                 addProducttoCart(instProdList[index]);
 
@@ -478,7 +478,7 @@ class _FavariteState extends State<Favarite> {
 
                                               ///onPressed: (){},
                                               onPressed: () async {
-                                                updateIntField(StringManager.collection_Products,"favoriteFlag",instProdList[index].docsId,0);
+                                                updateIntField(StringManager.collectionProducts,"favoriteFlag",instProdList[index].docsId,0);
 
                                               }),
                                         ],
@@ -509,7 +509,7 @@ class _FavariteState extends State<Favarite> {
 
   void addProducttoCart(ProductClass prodClass) {
 
-    FirebaseFirestore.instance.collection(StringManager.collection_Carts).add({
+    FirebaseFirestore.instance.collection(StringManager.collectionCarts).add({
       "productId":  prodClass.productId,
       "productName":  prodClass.productName,
       "productImage":  prodClass.productImage,

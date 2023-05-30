@@ -30,7 +30,7 @@ List<Color> colorList = [Colors.black, Colors.red, Colors.blue, Colors.yellow];
 late int _selectedRadio;
 int _selectedSized = 0;
 //final CollectionReference _productss = FirebaseFirestore.instance.collection(StringManager.collection_Products);
-var _productss=getCollectionReference(StringManager.collection_Products);
+var _productss=getCollectionReference(StringManager.collectionProducts);
 class _ProductDetailsEditState extends State<ProductDetailsEdit> {
   @override
   void initState() {
@@ -628,7 +628,7 @@ class _ProductDetailsEditState extends State<ProductDetailsEdit> {
                             ),
                             */
 
-                            getElevationButton(
+                            defaltElevationButton(
                               parFontSize: FontManagerSize.s14,
                               parBorderWidth: 1,
                               parBorderRadius: AppSize.s10,

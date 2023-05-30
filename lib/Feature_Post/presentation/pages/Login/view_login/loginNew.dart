@@ -12,6 +12,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 //import 'package:paychalet/TextFieldCustom/CustomTextField.dart';
 //import '../../../paychalet new2/lib/Home.dart';
 import 'package:provider/provider.dart';
+
+import '../../../../../core/resource/AssetManager.dart';
+import '../../../../../core/resource/MediaQuery.dart';
 //import 'package:paychalet/AppLocalizations.dart';
 //import 'GetCurrentUserFB.dart';
 class SignIn extends StatefulWidget {
@@ -64,10 +67,10 @@ class _SignInState extends State<SignIn> {
    // var appLanguage = Provider.of<AppLanguage>(context);
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-      ),
+      // appBar: AppBar(
+      //   elevation: 0,
+      //   backgroundColor: Colors.white,
+      // ),
       body:
 //        FormKeyboardActions(
 //          keyboardActionsPlatform: KeyboardActionsPlatform.ALL, //optional
@@ -97,311 +100,626 @@ class _SignInState extends State<SignIn> {
 //          ],
 //          child:
       SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.only(left: 20.0, top: 10),
-          child:
-          Column(mainAxisAlignment: MainAxisAlignment.start, children: <
-              Widget>[
-            Align(
-                alignment:   Alignment.topLeft,
+        child:   Stack(
+          children: [
+             SizedBox(height: getHeight(context),
+              width: getWidth(context),
+            ),
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                width: getWidth(context),
+                height: getHeight(context) / 2,
+                decoration: const BoxDecoration(
+                    color: Colors.red,
+
+                    image: DecorationImage(
+                       fit: BoxFit.fill,
+                       image: AssetImage(
+                         AssetManager.login,
+                       ),
+                    ),
+                ),
+              ),
+            ),
+            Positioned(
+              top: (getHeight(context)/2)-30,
+              left: 0,
+              right: 0,
+              child: Container(
+               // margin: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+                ),
                 child: Padding(
-                  padding: const EdgeInsets.only(left:10,right:20),
-                  child: Text(
-                   'Sign In',
-                    style: TextStyle(
-                        fontSize: pheight/30,
-                        fontWeight: FontWeight.bold,
-                        color: ColorManager.secondary),
-                  ),
-                )),
-            SizedBox(
-              height: pheight/ 20,
-            ),
-
-            Form(
-              key: _formKeyin,
-            //  autovalidate: _autoValidate,
-              child: Column(
-                children: <Widget>[
-                  defualtTextFormField(
-                  obscureText: false,
-                  fieldController: _cont_user,
-                  onChange: (value) =>defaultTextFieldOnChange(value!,'Category ID'),
-
-                  type: TextInputType.emailAddress,
-                  prefixIcon: IconButton(
-                      icon: const Icon(Icons.account_circle_rounded,
-                          color: Colors.blue,
-                          // Color(getColorHexFromStr('#FEE16D')),
-                          size: 20.0),
-                      onPressed: () {}),
-                  suffixIcon: IconButton(
-                      icon: const Icon(
-                          Icons.cancel
-                          , color: Colors.blue,
-                          // Color(getColorHexFromStr('#FEE16D')),
-                          size: 20.0),
-                      onPressed: () {
-                        setState(() {
-                          _cont_user.clear();
-
-                        });
-                      }),
-                  validate:(value)=>defaultTextFieldValidator(value!,'User Name'),
-
-                  hintTextLabel: 'User Name'),
-
-                  SizedBox(
-                    height: pheight / 45,
-                  ),
-                  defualtTextFormField(
-                      obscureText: false,
-                      fieldController: _cont_pass1,
-                      onChange: (value) =>defaultTextFieldOnChange(value!,'Category ID'),
-
-                      type: TextInputType.emailAddress,
-                      prefixIcon: IconButton(
-                          icon: const Icon(Icons.account_circle_rounded,
-                              color: Colors.blue,
-                              // Color(getColorHexFromStr('#FEE16D')),
-                              size: 20.0),
-                          onPressed: () {}),
-                      suffixIcon: IconButton(
-                          icon: const Icon(
-                              Icons.cancel
-                              , color: Colors.blue,
-                              // Color(getColorHexFromStr('#FEE16D')),
-                              size: 20.0),
-                          onPressed: () {
-                            setState(() {
-                              _cont_pass1.clear();
-
-                            });
-                          }),
-                      validate:(value)=>defaultTextFieldValidator(value!,'Password'),
-
-                      hintTextLabel: 'Password'),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height / 45,
-                  ),
-
-                ],
-              ),
-            ),
+                  padding: const EdgeInsets.all(12.0),
+                  child:
 
 
-            /*
-                Padding(
-                  padding: const EdgeInsets.only(left: 12.0, right: 25),
-                  child: TextField(
-                    keyboardType: TextInputType.emailAddress,
-                    focusNode: _nodeuser,
-                    controller: _cont_user,
-                    decoration: const InputDecoration(
-                      icon: Icon(Icons.person),
-                      hintText: 'Enter Email?',
-                      labelText: 'Email Or User Name ',
-                    ),
-                    //  obscureText: true,
-                  ),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height / 45,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 12.0, right: 25),
-                  child: TextField(
-                    keyboardType: TextInputType.text,
-                    focusNode: _nodepass1,
-                    controller: _cont_pass1,
-                    onChanged: (value) {
-                      if (value.length >= 6) {
-                        setState(() {
-                          p_color = Colors.orange[800].withOpacity(0.7);
-                        });
-                      } else {
-                        setState(() {
-                          p_color = Colors.grey;
-                        });
-                      }
-                    },
-                    decoration: InputDecoration(
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          Icons.remove_red_eye,
-                          color: pcolor,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            pshow1 = !pshow1;
-                            print(pshow1);
-                          });
-                        },
+
+                    Form(
+                      key: _formKeyin,
+                      //  autovalidate: _autoValidate,
+                      child: Column(
+                        children: <Widget>[
+                          SizedBox(
+                            height: pheight/ 30,
+                          ),
+                          Align(
+                              alignment:   Alignment.topLeft,
+                              child: Text(
+                                'Login In',
+                                style: TextStyle(
+                                  fontSize: pheight/25,
+                                  fontWeight: FontWeight.bold,
+                                  // color: ColorManager.secondary
+                                ),
+                              )),
+
+                          SizedBox(
+                            height: pheight/ 30,
+                          ),
+                          defaultTextFormField(
+                              obscureText: false,
+                              fieldController: _cont_user,
+                              onChange: (value) =>defaultTextFieldOnChange(value!,'Category ID'),
+
+                              type: TextInputType.emailAddress,
+                              prefixIcon: IconButton(
+                                  icon: const Icon(Icons.account_circle_rounded,
+                                      color: Colors.blue,
+                                      // Color(getColorHexFromStr('#FEE16D')),
+                                      size: 20.0),
+                                  onPressed: () {}),
+                              suffixIcon: IconButton(
+                                  icon: const Icon(
+                                      Icons.cancel
+                                      , color: Colors.blue,
+                                      // Color(getColorHexFromStr('#FEE16D')),
+                                      size: 20.0),
+                                  onPressed: () {
+                                    setState(() {
+                                      _cont_user.clear();
+
+                                    });
+                                  }),
+                              validate:(value)=>defaultTextFieldValidator(value!,'User Name'),
+
+                              hintTextLabel: 'User Name'),
+
+                          SizedBox(
+                            height: pheight / 45,
+                          ),
+                          defaultTextFormField(
+                              obscureText: false,
+                              fieldController: _cont_pass1,
+                              onChange: (value) =>defaultTextFieldOnChange(value!,'Category ID'),
+
+                              type: TextInputType.emailAddress,
+                              prefixIcon: IconButton(
+                                  icon: const Icon(Icons.account_circle_rounded,
+                                      color: Colors.blue,
+                                      // Color(getColorHexFromStr('#FEE16D')),
+                                      size: 20.0),
+                                  onPressed: () {}),
+                              suffixIcon: IconButton(
+                                  icon: const Icon(
+                                      Icons.cancel
+                                      , color: Colors.blue,
+                                      // Color(getColorHexFromStr('#FEE16D')),
+                                      size: 20.0),
+                                  onPressed: () {
+                                    setState(() {
+                                      _cont_pass1.clear();
+
+                                    });
+                                  }),
+                              validate:(value)=>defaultTextFieldValidator(value!,'Password'),
+
+                              hintTextLabel: 'Password'),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height / 45,
+                          ),
+
+
+
+
+
+                          Container(
+                            height: MediaQuery.of(context).size.height / 18,
+                            width: MediaQuery.of(context).size.width / 1.5,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50),
+                              color: ColorManager.secondary, //Colors.orange[800].withOpacity(0.7),
+                            ),
+                            // child :setUpButtonChild(),
+
+                            child: defaltElevationButton(
+                              nameButton: 'Sign In',
+                              onTabButton: () async {
+
+                                logInToFb();
+                              },
+                              parBackGroundColor: ColorManager.primary,
+                              parBorderRadius: 5,
+                              parBorderWidth: 1,
+                              parFontSize: 15,
+                              parForegroundColor: ColorManager.white,
+                            ),
+                          ),
+
+
+
+
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height / 20,
+                          ),
+                          Row(children: <Widget>[
+                            Expanded(
+                              child: new Container(
+                                  margin: const EdgeInsets.only(left: 70.0, right: 10.0),
+                                  child: Divider(
+                                    color: Colors.black,
+                                    height: 50,
+                                  )),
+                            ),
+
+                            Text('OR SIGN IN WITH',style: TextStyle(fontSize: pheight/45),),
+
+                            Expanded(
+                              child: new Container(
+                                  margin: const EdgeInsets.only(left: 10.0, right: 70.0),
+                                  child: Divider(
+                                    color: Colors.black,
+                                    height: pheight/50,
+                                  )),
+                            ),
+                          ]),
+
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height / 20,
+                          ),
+                          // Row(
+                          //   mainAxisAlignment: MainAxisAlignment.center,
+                          //   children: <Widget>[
+                          //     Container(
+                          //       width: MediaQuery.of(context).size.width / 4,
+                          //       height: MediaQuery.of(context).size.height / 12,
+                          //       decoration: BoxDecoration(
+                          //           border: Border.all(color: Colors.black12, width: 1),
+                          //           shape: BoxShape.circle,
+                          //           color: Colors.white,
+                          //           //   borderRadius: BorderRadius.circular(50),
+                          //           image: DecorationImage(
+                          //               image: AssetImage('images/face4.png'),
+                          //               // AssetImage(photos[photoIndex]),
+                          //               fit: BoxFit.contain)),
+                          //     ),
+                          //     Container(
+                          //       width: MediaQuery.of(context).size.width / 4,
+                          //       height: MediaQuery.of(context).size.height / 12,
+                          //       decoration: BoxDecoration(
+                          //           border: Border.all(color: Colors.black12, width: 1),
+                          //           shape: BoxShape.circle,
+                          //           color: Colors.white,
+                          //           //   borderRadius: BorderRadius.circular(50),
+                          //           image: DecorationImage(
+                          //               image: AssetImage('images/google3.png'),
+                          //               // AssetImage(photos[photoIndex]),
+                          //               fit: BoxFit.contain)),
+                          //     ),
+                          //     Container(
+                          //       width: MediaQuery.of(context).size.width / 4,
+                          //       height: MediaQuery.of(context).size.height / 12,
+                          //       decoration: BoxDecoration(
+                          //           border: Border.all(color: Colors.black12, width: 1),
+                          //           shape: BoxShape.circle,
+                          //           color: Colors.white,
+                          //           //   borderRadius: BorderRadius.circular(50),
+                          //           image: DecorationImage(
+                          //               image: AssetImage('images/instagram.jpg'),
+                          //               // AssetImage(photos[photoIndex]),
+                          //               fit: BoxFit.contain)),
+                          //     ),
+                          //   ],
+                          // ),ch
+                        ],
                       ),
-                      icon: Icon(Icons.code),
-                      hintText: 'Enter Re Password ?',
-                      labelText: 'Password',
                     ),
-                    obscureText: pshow1,
-                  ),
-                ),
-                 */
-            SizedBox(
-              height: MediaQuery.of(context).size.height / 10,
-            ),
 
 
-            Container(
-              height: MediaQuery.of(context).size.height / 18,
-              width: MediaQuery.of(context).size.width / 1.5,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(50),
-                color: ColorManager.secondary, //Colors.orange[800].withOpacity(0.7),
-              ),
-              // child :setUpButtonChild(),
 
-              child: getElevationButton(
-                nameButton: 'Sign In',
-                onTabButton: () async {
+                    // SizedBox(
+                    //   height: MediaQuery.of(context).size.height / 10,
+                    // ),
 
-                  logInToFb();
-                },
-                parBackGroundColor: Colors.pink,
-                  parBorderRadius: 5,
-                  parBorderWidth: 1,
-                parFontSize: 15,
-                  parForegroundColor: Colors.black,
+
+
+
                 ),
               ),
-
-
-
-            // Container(
-            //   height: pheight / 20,
-            //   width: pwidth / 1.5,
-            //   decoration: BoxDecoration(
-            //     borderRadius: BorderRadius.circular(50),
-            //     color: Colors.white,
-            //   ),
-            //   child: FlatButton(
-            //     //color: Colors.amber,
-            //     textColor: Colors.black,
-            //     padding: EdgeInsets.all(8.0),
-            //     splashColor: Colors.blueAccent,
-            //     onPressed: () {
-            //       // Navigator.pushNamed(context, '/main_page');
-            //     },
-            //     child: Row(
-            //       mainAxisAlignment: MainAxisAlignment.center,
-            //       children: <Widget>[
-            //         Text(
-            //           AppLocalizations.of(context).translate('Forget Your Password'),
-            //           style: TextStyle(
-            //               fontSize: pheight/50,
-            //               fontWeight: FontWeight.w400,
-            //               color: Colors.grey),
-            //         ),
-            //         Padding(
-            //           padding: const EdgeInsets.only(left:8.0,right:8),
-            //           child: Text( AppLocalizations.of(context).translate('?'),
+            ),
+            // Positioned(
+            //   top: (getHeight(context)/2)-10,
+            //   left: 0,
+            //   right: 0,
+            //   child: GetBuilder<Auth>(
+            //     init: Auth(),
+            //     builder: ((controller) {
+            //       return Form(
+            //         key: formkey,
+            //         child: Card(
+            //           // elevation: 30,
+            //           shape: RoundedRectangleBorder(
+            //               borderRadius: BorderRadius.circular(AppSize.s20)),
+            //           // margin: const EdgeInsets.all(AppSize.s10),
+            //           child: Padding(
+            //             padding: const EdgeInsets.all(AppSize.s28),
+            //             child: Column(
+            //               children: [
+            //                 Text(
+            //                   StringManager.login.tr,
+            //                   style: getBoldStyle(color: ColorManager.primary),
+            //                 ),
+            //                 Padding(
+            //                   padding: const EdgeInsets.all(8.0),
+            //                   child: StreamBuilder<bool>(
+            //                       stream: loginViewModel1
+            //                           .getLoginViewModelOutUserName,
+            //                       builder: (context, snapshot) {
+            //                         return TextFormField(
+            //                           showCursor: true,
+            //                           // readOnly: true,
+            //                           controller: controllerLoginUserName,
+            //                           decoration: InputDecoration(
+            //                               label:
+            //                               Text(StringManager.userName.tr),
+            //                               hintText:
+            //                               StringManager.userNameHint.tr,
+            //                               //  prefix: Text(StringManager.userName),
+            //                               prefixIcon: const Icon(Icons.email),
+            //                               errorText: (snapshot.data ?? true)
+            //                                   ? null
+            //                                   : StringManager.usernameError,
+            //                               suffix:
+            //                               Text(StringManager.userName.tr),
+            //                               //  suffixText: StringManager.userName,
+            //                               suffixIcon: const Icon(
+            //                                   Icons.remove_red_eye_outlined)),
+            //                           validator: (value) {
+            //                             if (value!.isEmpty ||
+            //                                 !value.contains('@')) {
+            //                               return 'Invalid Username';
+            //                             }
+            //                             return null;
+            //                           },
+            //                         );
+            //                       }),
+            //                 ),
+            //                 Padding(
+            //                   padding: const EdgeInsets.all(8.0),
+            //                   child: StreamBuilder<bool>(
+            //                       stream: loginViewModel1
+            //                           .getLoginViewModelOutPassword,
+            //                       builder: (context, snapshot) {
+            //                         return TextFormField(
+            //                           keyboardType: TextInputType.text,
+            //                           obscureText: true,
+            //                           showCursor: true,
+            //                           // readOnly: true,
+            //                           controller: controllerLoginPassword,
+            //                           decoration: InputDecoration(
+            //                               label:
+            //                               Text(StringManager.password.tr),
+            //                               hintText: StringManager.password.tr,
+            //                               //  prefix: Text(StringManager.userName),
+            //                               prefixIcon:
+            //                               const Icon(Icons.password),
+            //                               errorText: (snapshot.data ?? true)
+            //                                   ? null
+            //                                   : StringManager.passwordError.tr,
+            //                               suffix:
+            //                               Text(StringManager.password.tr),
+            //                               //  suffixText: StringManager.userName,
+            //                               suffixIcon: const Icon(
+            //                                   Icons.remove_red_eye_outlined)),
+            //                         );
+            //                       }),
+            //                 ),
+            //                 controller.isSignup
+            //                     ? Padding(
+            //                   padding: const EdgeInsets.all(8.0),
+            //                   child: StreamBuilder<bool>(
+            //                       stream: loginViewModel1
+            //                           .getLoginViewModelOutPassword,
+            //                       builder: (context, snapshot) {
+            //                         return TextFormField(
+            //                           keyboardType: TextInputType.text,
+            //                           obscureText: true,
+            //                           showCursor: true,
+            //                           // readOnly: true,
+            //                           controller:
+            //                           controllerLoginPasswordconfirm,
+            //                           decoration: InputDecoration(
+            //                               label: Text(StringManager
+            //                                   .confirmPassword.tr),
+            //                               hintText: StringManager
+            //                                   .confirmPassword.tr,
+            //                               //  prefix: Text(StringManager.userName),
+            //                               prefixIcon:
+            //                               const Icon(Icons.password),
+            //                               errorText:
+            //                               (snapshot.data ?? true)
+            //                                   ? null
+            //                                   : StringManager
+            //                                   .passwordError.tr,
+            //                               suffix: Text(StringManager
+            //                                   .confirmPassword.tr),
+            //                               //  suffixText: StringManager.userName,
+            //                               suffixIcon: const Icon(Icons
+            //                                   .remove_red_eye_outlined)),
+            //                         );
+            //                       }),
+            //                 )
+            //                     : Container(),
+            //                 // Text('${controller.errorMessage}'),
+            //                 controller.isSignup
+            //                     ? Container(
+            //                   height: getHeight(context) / 20,
+            //                   width: getWidth(context),
+            //                   margin: const EdgeInsets.all(
+            //                       FontManagerSize.s8),
+            //                   child: StreamBuilder<bool>(
+            //                     stream: loginViewModel1
+            //                         .getLoginViewModelOutLoginButton,
+            //                     builder: (context, snapshot) {
+            //                       return ElevatedButton(
+            //                         style: ButtonStyle(
+            //                             elevation:
+            //                             MaterialStateProperty.all(0),
+            //                             backgroundColor:
+            //                             MaterialStateProperty.all(
+            //                                 (snapshot.data ?? false)
+            //                                     ? ColorManager.primary
+            //                                     : ColorManager.grey)),
+            //                         onPressed: (snapshot.data ?? false)
+            //                             ? () async {
+            //                           print('insiude button');
+            //                           String user =
+            //                           controllerLoginUserName
+            //                               .text
+            //                               .toString();
+            //                           String password =
+            //                           controllerLoginPassword
+            //                               .text
+            //                               .toString();
+            //
+            //                           await controller.signup(
+            //                               user, password);
+            //
+            //                           if (controller.errorMessage!
+            //                               .length >
+            //                               3) {
+            //                             //print('inside error button');
+            //                             Get.defaultDialog(
+            //                               title: 'The User Error',
+            //                               content: Text(
+            //                                   '${controller.errorMessage}'),
+            //                               // backgroundColor: ColorManager.grey,
+            //                               cancel: Row(
+            //                                 mainAxisAlignment:
+            //                                 MainAxisAlignment
+            //                                     .center,
+            //                                 children: [
+            //                                   ElevatedButton.icon(
+            //                                     label: const Text(
+            //                                         'Ok'),
+            //                                     onPressed: () {
+            //                                       Navigator.pop(
+            //                                           context);
+            //                                     },
+            //                                     icon: const Icon(
+            //                                         Icons.done),
+            //                                   ),
+            //                                   ElevatedButton.icon(
+            //                                       label: const Text(
+            //                                           'Canceled'),
+            //                                       onPressed: () {
+            //                                         Navigator.pop(
+            //                                             context);
+            //                                       },
+            //                                       icon: const Icon(
+            //                                           Icons.abc)),
+            //                                 ],
+            //                               ),
+            //                             );
+            //                           } else if (controller
+            //                               .userId!.isNotEmpty &&
+            //                               !controller.isSignup) {
+            //                             ////print('inside go to home ');
+            //                             ////print(controller.userId);
+            //                             ////print(    !controller.isSignup);
+            //
+            //                             Get.to(() => const Home());
+            //                           }
+            //
+            //                           ////print(' after if 3');
+            //                         }
+            //                             : null,
+            //                         child: Text(
+            //                           controller.isSignup
+            //                               ? StringManager.signup
+            //                               : StringManager.login.tr,
+            //                           style: const TextStyle(
+            //                               fontSize: FontManagerSize.s22),
+            //                         ),
+            //                       );
+            //                     },
+            //                   ),
+            //                 )
+            //                     : Container(
+            //                   height: getHeight(context) / 20,
+            //                   width: getWidth(context),
+            //                   margin: const EdgeInsets.all(
+            //                       FontManagerSize.s8),
+            //                   child: StreamBuilder<bool>(
+            //                     stream: loginViewModel1
+            //                         .getLoginViewModelOutLoginButton,
+            //                     builder: (context, snapshot) {
+            //                       return ElevatedButton(
+            //                         style: ButtonStyle(
+            //                             elevation:
+            //                             MaterialStateProperty.all(0),
+            //                             backgroundColor:
+            //                             MaterialStateProperty.all(
+            //                                 (snapshot.data ?? false)
+            //                                     ? ColorManager.primary
+            //                                     : ColorManager.grey)),
+            //                         onPressed: (snapshot.data ?? false)
+            //                             ? () async {
+            //                           // //print('insiude button sign in');
+            //                           String user =
+            //                           controllerLoginUserName
+            //                               .text
+            //                               .toString();
+            //                           String password =
+            //                           controllerLoginPassword
+            //                               .text
+            //                               .toString();
+            //                           ////print(user);
+            //                           ////print(password);
+            //                           await controller.signin(
+            //                               user, password);
+            //
+            //                           if (controller.errorMessage!
+            //                               .length >
+            //                               3) {
+            //                             //print('inside error button');
+            //                             Get.defaultDialog(
+            //                               title: 'The User Error',
+            //                               content: Text(
+            //                                   '${controller.errorMessage}'),
+            //                               // backgroundColor: ColorManager.grey,
+            //                               cancel: Row(
+            //                                 mainAxisAlignment:
+            //                                 MainAxisAlignment
+            //                                     .center,
+            //                                 children: [
+            //                                   ElevatedButton.icon(
+            //                                     label: const Text(
+            //                                         'Ok'),
+            //                                     onPressed: () {
+            //                                       Navigator.pop(
+            //                                           context);
+            //                                     },
+            //                                     icon: const Icon(
+            //                                         Icons.done),
+            //                                   ),
+            //                                   ElevatedButton.icon(
+            //                                       label: const Text(
+            //                                           'Canceled'),
+            //                                       onPressed: () {
+            //                                         Navigator.pop(
+            //                                             context);
+            //                                       },
+            //                                       icon: const Icon(
+            //                                           Icons.abc)),
+            //                                 ],
+            //                               ),
+            //                             );
+            //                           } else if (controller
+            //                               .userId!.isNotEmpty &&
+            //                               controller.isSignup) {
+            //                             Get.defaultDialog(
+            //                               title: 'Create User',
+            //                               content: Text(
+            //                                   'The user Created : ${controller.email}'),
+            //                               confirm:
+            //                               ElevatedButton.icon(
+            //                                   label: const Text(
+            //                                       'you can Login '),
+            //                                   onPressed: () {
+            //                                     // controller.changeisSignup(!controller.isSignup);
+            //                                     // controllerLoginPassword.clear();
+            //                                     // controllerLoginPasswordconfirm.clear();
+            //                                     Navigator.pop(
+            //                                         context);
+            //                                   },
+            //                                   icon: const Icon(Icons
+            //                                       .personal_injury)),
+            //                             );
+            //                           } else if (controller
+            //                               .userId!.isNotEmpty &&
+            //                               !controller.isSignup) {
+            //                             ////print('inside go to home ');
+            //                             ////print(controller.userId);
+            //                             ////print(    !controller.isSignup);
+            //
+            //                             //Get.to(() => const Home());
+            //                           }
+            //
+            //                           // //print(' after if 3');
+            //                         }
+            //                             : null,
+            //                         child: Text(
+            //                           controller.isSignup
+            //                               ? StringManager.signup
+            //                               : StringManager.login.tr,
+            //                           style: const TextStyle(
+            //                               fontSize: FontManagerSize.s22),
+            //                         ),
+            //                       );
+            //                     },
+            //                   ),
+            //                 ),
+            //                 !controller.isSignup
+            //                     ? InkWell(
+            //                   onTap: () {
+            //                     setState(() {
+            //                       controller.isSignup =
+            //                       !controller.isSignup;
+            //                     });
+            //                   },
+            //                   child: Text(
+            //                     'You Dont Have Account Sign Up',
+            //                     style: TextStyle(
+            //                         fontSize: AppSize.s16,
+            //                         color: ColorManager.primary,
+            //                         fontWeight: FontWeight.w600),
+            //                   ),
+            //                 )
+            //                     : InkWell(
+            //                   onTap: () {
+            //                     setState(() {
+            //                       controller.isSignup = false;
+            //                     });
+            //                   },
+            //                   child: Text(
+            //                     'You  Have Account Signin',
+            //                     style: TextStyle(
+            //                         fontSize: AppSize.s16,
+            //                         color: ColorManager.primary,
+            //                         fontWeight: FontWeight.w600),
+            //                   ),
+            //                 ),
+            //               ],
+            //             ),
             //           ),
             //         ),
-            //         InkWell(
-            //           child: Text(
-            //             AppLocalizations.of(context).translate('Restore'),
-            //             style: TextStyle(
-            //                 fontSize: pheight/50,
-            //                 fontWeight: FontWeight.w300,
-            //                 color: pcolor2),
-            //           ),
-            //           onTap: () {
-            //             print('inside button');
-            //             Navigator.of(context).push(
-            //               new MaterialPageRoute(
-            //                 builder: (BuildContext context) =>
-            //                 new Restore(),
-            //               ),
-            //             );
-            //           },
-            //         ),
-            //       ],
-            //     ),
+            //       );
+            //     }),
             //   ),
             // ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height / 20,
-            ),
-            Row(children: <Widget>[
-              Expanded(
-                child: new Container(
-                    margin: const EdgeInsets.only(left: 70.0, right: 10.0),
-                    child: Divider(
-                      color: Colors.black,
-                      height: 50,
-                    )),
-              ),
+          ],
+        )
 
-              Text('OR SIGN IN WITH',style: TextStyle(fontSize: pheight/45),),
 
-              Expanded(
-                child: new Container(
-                    margin: const EdgeInsets.only(left: 10.0, right: 70.0),
-                    child: Divider(
-                      color: Colors.black,
-                      height: pheight/50,
-                    )),
-              ),
-            ]),
 
-            SizedBox(
-              height: MediaQuery.of(context).size.height / 20,
-            ),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.center,
-            //   children: <Widget>[
-            //     Container(
-            //       width: MediaQuery.of(context).size.width / 4,
-            //       height: MediaQuery.of(context).size.height / 12,
-            //       decoration: BoxDecoration(
-            //           border: Border.all(color: Colors.black12, width: 1),
-            //           shape: BoxShape.circle,
-            //           color: Colors.white,
-            //           //   borderRadius: BorderRadius.circular(50),
-            //           image: DecorationImage(
-            //               image: AssetImage('images/face4.png'),
-            //               // AssetImage(photos[photoIndex]),
-            //               fit: BoxFit.contain)),
-            //     ),
-            //     Container(
-            //       width: MediaQuery.of(context).size.width / 4,
-            //       height: MediaQuery.of(context).size.height / 12,
-            //       decoration: BoxDecoration(
-            //           border: Border.all(color: Colors.black12, width: 1),
-            //           shape: BoxShape.circle,
-            //           color: Colors.white,
-            //           //   borderRadius: BorderRadius.circular(50),
-            //           image: DecorationImage(
-            //               image: AssetImage('images/google3.png'),
-            //               // AssetImage(photos[photoIndex]),
-            //               fit: BoxFit.contain)),
-            //     ),
-            //     Container(
-            //       width: MediaQuery.of(context).size.width / 4,
-            //       height: MediaQuery.of(context).size.height / 12,
-            //       decoration: BoxDecoration(
-            //           border: Border.all(color: Colors.black12, width: 1),
-            //           shape: BoxShape.circle,
-            //           color: Colors.white,
-            //           //   borderRadius: BorderRadius.circular(50),
-            //           image: DecorationImage(
-            //               image: AssetImage('images/instagram.jpg'),
-            //               // AssetImage(photos[photoIndex]),
-            //               fit: BoxFit.contain)),
-            //     ),
-            //   ],
-            // ),
-          ]),
-        ),
+
+
       ),
       //    ) end key action
     );

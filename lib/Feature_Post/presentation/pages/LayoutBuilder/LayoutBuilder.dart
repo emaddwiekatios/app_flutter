@@ -55,7 +55,7 @@ class _GetLayoutBuilderState extends State<GetLayoutBuilder> {
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: defualtTextFormField(
+                                  child: defaultTextFormField(
                                       obscureText: false,
                                       fieldController: emailCont,
                                       onChange: (value) =>defaultTextFieldOnChange(value!,'Username'),
@@ -87,7 +87,7 @@ class _GetLayoutBuilderState extends State<GetLayoutBuilder> {
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: defualtTextFormField(
+                                  child: defaultTextFormField(
                                       obscureText: isObscureText,
                                       fieldController: passCont,
                                       onChange: (value) =>defaultTextFieldOnChange(value!,'Password'),

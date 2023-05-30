@@ -1,5 +1,7 @@
 //import 'dart:html';
 
+import 'dart:convert';
+
 import 'package:clean_arch_app/core/resource/AssetManager.dart';
 import 'package:clean_arch_app/core/resource/FontManager.dart';
 import 'package:clean_arch_app/core/resource/MediaQuery.dart';
@@ -93,7 +95,7 @@ class _ProductAddState extends State<ProductAdd> {
 
   Future<void> getProductIdmax() async {
     print('maxProductId=$maxProductId');
-     maxProductId = await getDocumentMaxId(StringManager.collection_Products, 'productId');
+     maxProductId = await getDocumentMaxId(StringManager.collectionProducts, 'productId');
     maxProductId=maxProductId+1;
     setState(() {
       contProductid.text= (maxProductId).toString();
@@ -166,6 +168,17 @@ class _ProductAddState extends State<ProductAdd> {
 
     return SafeArea(
       child: Scaffold(
+        // appBar:  defualtAppBarWidget(titleName: 'emad',
+        //                      child: Row(
+        //                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        //                          children: [
+        //                          IconButton(icon:Icon(Icons.add),
+        //                            onPressed: () {print('add');
+        //                            },),
+        //                            IconButton(icon:Icon(Icons.add_business),
+        //                              onPressed: () { print('add b ');  },),
+        //
+        //                          ],),),
         //  resizeToAvoidBottomPadding: false,
         resizeToAvoidBottomInset: true,
         key: _scaffoldKey,
@@ -272,7 +285,7 @@ class _ProductAddState extends State<ProductAdd> {
                           //prodid
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: defualtTextFormField(
+                            child: defaultTextFormField(
                                 obscureText: false,
                                 fieldController: contProductid,
                                 onChange: (value) =>defaultTextFieldOnChange(value!,'Product ID'),
@@ -332,7 +345,7 @@ class _ProductAddState extends State<ProductAdd> {
                                     height: pheight/AppSize.s10,
                                     width:
                                         MediaQuery.of(context).size.width / 2,
-                                    child: getElevationButton(nameButton:'${formatDate(_date, [yyyy,'-',M,'-', dd,' '])}',
+                                    child: defaltElevationButton(nameButton:'${formatDate(_date, [yyyy,'-',M,'-', dd,' '])}',
                                       onTabButton: () {
                                         DatePicker.showDatePicker(context,
                                           showTitleActions: true,
@@ -370,7 +383,7 @@ class _ProductAddState extends State<ProductAdd> {
                       ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: defualtTextFormField(
+                            child: defaultTextFormField(
                                 obscureText: false,
                                 fieldController: contProductname,
                                 onChange: (value) =>defaultTextFieldOnChange(value!,'Product Name'),
@@ -505,7 +518,7 @@ class _ProductAddState extends State<ProductAdd> {
                       ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: defualtTextFormField(
+                            child: defaultTextFormField(
                                 obscureText: false,
                                 fieldController: contProductAmt,
                                 onChange: (value) =>defaultTextFieldOnChange(value!,'Product Amt'),
@@ -543,7 +556,7 @@ class _ProductAddState extends State<ProductAdd> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            getElevationButton(nameButton:'Save',
+                            defaltElevationButton(nameButton:'Save',
                               onTabButton: () {
                                 showDialog<void>(
                                   context: context,
@@ -562,7 +575,7 @@ class _ProductAddState extends State<ProductAdd> {
                               parFontSize: 15,
                               parForegroundColor: Colors.black,
                             ),
-                            getElevationButton(nameButton:'Cancel',
+                            defaltElevationButton(nameButton:'Cancel',
                               onTabButton: () {
                                 Navigator.pop(context);
                               },
@@ -572,7 +585,7 @@ class _ProductAddState extends State<ProductAdd> {
                               parFontSize: 15,
                               parForegroundColor: Colors.black,
                             ),
-                            getElevationButton(nameButton:'Camera',
+                            defaltElevationButton(nameButton:'Camera',
                               onTabButton: () async {
                                 image = await ImagePicker()
                                     .pickImage(
@@ -588,7 +601,7 @@ class _ProductAddState extends State<ProductAdd> {
                               parForegroundColor: Colors.black,
                             ),
 
-                            getElevationButton(nameButton:'Gallery',
+                            defaltElevationButton(nameButton:'Gallery',
                               onTabButton: () async {
                                 image = await ImagePicker()
                                     .pickImage(
@@ -608,6 +621,18 @@ class _ProductAddState extends State<ProductAdd> {
                       ),
 
 const SizedBox(height: AppSize.s20,),
+                          defaltElevationButton(nameButton:'Show Nessage',
+                            onTabButton: ()  {
+
+                              ScaffoldMessenger.of(context).showSnackBar(defaultSnackBar("message", actionMessage: "actionMessage"));
+                            },
+                            parBackGroundColor: ColorManager.secondary,
+                            parBorderRadius: 5,
+                            parBorderWidth: 5,
+                            parFontSize: 15,
+                            parForegroundColor: Colors.black,
+                          ),
+
 
 
                         ],
@@ -654,8 +679,8 @@ const SizedBox(height: AppSize.s20,),
       "favoriteFlag": 0, //contProductfav.text
       "productCount":1
     };
-    addDataFireStore(StringManager.collection_Products,productsmap);
-    int maxId = await getDocumentMaxId(StringManager.collection_Products, 'productId');
+    addDataFireStore(StringManager.collectionProducts,productsmap);
+    int maxId = await getDocumentMaxId(StringManager.collectionProducts, 'productId');
     setState(() {
       contProductid.text = (maxId + 1).toString();
       contProductAmt.clear();

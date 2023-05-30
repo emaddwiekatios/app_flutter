@@ -634,7 +634,7 @@ class _CategoryDetailsEditState extends State<CategoryDetailsEdit> {
                             ),
                             */
 
-                            getElevationButton(
+                            defaltElevationButton(
                               parFontSize: FontManagerSize.s14,
                               parBorderWidth: 1,
                               parBorderRadius: AppSize.s10,

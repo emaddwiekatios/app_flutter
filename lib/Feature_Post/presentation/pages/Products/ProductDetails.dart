@@ -183,8 +183,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                         child: Column(
                           children: [
                             Card(
-                              // shape: RoundedRectangleBorder(
-                              //     borderRadius: BorderRadius.circular(AppSize.s20)),
+                               shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(AppSize.s20)),
                               //color: Colors.red,
                               margin: const EdgeInsets.all(AppSize.s6),
                               //elevation: 20,
@@ -194,13 +194,15 @@ class _ProductDetailsState extends State<ProductDetails> {
                                   height:
                                       getHeight(context) / FontManagerSize.s2_5,
                                   decoration: BoxDecoration(
-                                      // borderRadius: BorderRadius.circular(AppSize.s20),
+                                       borderRadius: BorderRadius.circular(AppSize.s20),
                                       // color: Colors.tealAccent,
                                       image: DecorationImage(
                                           fit: BoxFit.fill,
                                           // image: AssetImage(AssetManager.mancat4)
                                           image: NetworkImage(
-                                              widget.instProd.productImage))),
+                                              widget.instProd.productImage)
+                                      )
+                                  ),
                                 ),
                               ),
                             ),
@@ -594,7 +596,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                getElevationButton(
+                                defaltElevationButton(
 
                                   parFontSize: FontManagerSize.s14,
                                   parBorderWidth: 1,
@@ -605,9 +607,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                                     addProducttoCart();
 
                                     },
-                                  nameButton: 'ADD To Carts',
+                                  nameButton: 'ADD Carts',
                                 ),
-                                getElevationButton(
+                                defaltElevationButton(
                                   parFontSize: FontManagerSize.s14,
                                   parBorderWidth: 1,
                                   parBorderRadius: AppSize.s10,
@@ -681,22 +683,26 @@ class _ProductDetailsState extends State<ProductDetails> {
                                                 bottomRight:Radius.circular(AppSize.s10)
                                             ),
                                           ),
-                                          height: getHeight(context)/FontManagerSize.s24,
+                                          height: getHeight(context)/FontManagerSize.s30,
 
-                                          child:Column(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                          child:Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                          //  crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
                                               Text(' ${widget.prodList[index].productName}'
-                                                ,style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
-                                              Text(' Price :${widget.prodList[index].productPrice} \$'
-                                                ,style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold,color: ColorManager.primary),),
+                                                ,style: TextStyle(fontSize: AppSize.s14, fontWeight: FontWeight.bold),),
+                                              Padding(
+                                                padding: const EdgeInsets.all(AppSize.s4),
+                                                child: Text(' ${widget.prodList[index].productPrice} \$'
+                                                  ,style: TextStyle(fontSize: AppSize.s14, fontWeight: FontWeight.bold,color: ColorManager.primary),),
+                                              ),
 
                                             ],
                                           )
                                       ),
 
                                       child: Container(
+
                                         height: getHeight(context)/AppSize.s20,
                                         //width: 80,
                                         decoration: BoxDecoration(
@@ -704,8 +710,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                                           borderRadius: BorderRadius.circular(AppSize.s10),
 
                                           image:  DecorationImage(
-                                              fit: BoxFit.fill,         image: AssetImage(//AssetManager.mancat
-                                            widget.prodList[index].productImage,
+
+                                              fit: BoxFit.fill,
+                                              image: AssetImage(widget.prodList[index].productImage,
                                           )),
                                           color: ColorManager.primary.withOpacity(.9),
                                         ),)
@@ -818,7 +825,7 @@ class _ProductDetailsState extends State<ProductDetails> {
 
   void addProducttoCart() {
 
-    FirebaseFirestore.instance.collection(StringManager.collection_Carts).add({
+    var cartMap={
       "productId":  widget.instProd.productId,
       "productName":  widget.instProd.productName,
       "productImage":  widget.instProd.productImage,
@@ -827,8 +834,11 @@ class _ProductDetailsState extends State<ProductDetails> {
       "productEntryDate": DateTime.now(),
       "favoriteFlag":  widget.instProd.favoriteFlag,
       "productCount":1//contProductfav.text
-    });
-    Navigator.of(context).pop();
+    };
+
+    addDataFireStore(StringManager.collectionCarts,   cartMap);
+    showMessage(context, "The products add to carts Succefully",Colors.black);
+   // Navigator.of(context).pop();
   }
 }
 

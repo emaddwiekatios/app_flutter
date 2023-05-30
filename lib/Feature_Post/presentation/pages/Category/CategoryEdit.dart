@@ -257,7 +257,7 @@ class _CategoryEditState extends State<CategoryEdit> {
                         children: <Widget>[
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: defualtTextFormField(
+                            child: defaultTextFormField(
                                 obscureText: false,
                                 fieldController: contcatid,
                                 onChange: (value) =>defaultTextFieldOnChange(value!,'Category ID'),
@@ -316,7 +316,7 @@ class _CategoryEditState extends State<CategoryEdit> {
                                         height: pheight/AppSize.s10,
                                         width:
                                         MediaQuery.of(context).size.width / 2,
-                                        child: getElevationButton(nameButton:'${formatDate(_date, [yyyy,'-',M,'-', dd,' '])}',
+                                        child: defaltElevationButton(nameButton:'${formatDate(_date, [yyyy,'-',M,'-', dd,' '])}',
                                           onTabButton: () {
                                             DatePicker.showDatePicker(context,
                                               showTitleActions: true,
@@ -356,7 +356,7 @@ class _CategoryEditState extends State<CategoryEdit> {
 
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: defualtTextFormField(
+                            child: defaultTextFormField(
                                 obscureText: false,
                                 fieldController: contcatname,
                                 onChange: (value) =>defaultTextFieldOnChange(value!,'Category Name'),
@@ -388,7 +388,7 @@ class _CategoryEditState extends State<CategoryEdit> {
                           isSave ? CircularProgressIndicator() : SizedBox(),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: defualtTextFormField(
+                            child: defaultTextFormField(
                                 obscureText: false,
                                 fieldController: contcatAmt,
                                 onChange: (value) =>defaultTextFieldOnChange(value!,'Category Amt'),
@@ -453,7 +453,7 @@ class _CategoryEditState extends State<CategoryEdit> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                getElevationButton(nameButton:'Save',
+                                defaltElevationButton(nameButton:'Save',
                                   onTabButton: () {
                                     var categoryMap= {
                                       "catId": contcatid.text,
@@ -465,7 +465,7 @@ class _CategoryEditState extends State<CategoryEdit> {
                                       "Type": "0" //contcatfav.text
                                     };
 
-                                    updateDataFireStore(StringManager.collection_Categorys,categoryMap ,widget.Intcategory.docsId);
+                                    updateDataFireStore(StringManager.collectionCategory,categoryMap ,widget.Intcategory.docsId);
 
                                   },
                                   parBackGroundColor: ColorManager.secondary,
@@ -474,7 +474,7 @@ class _CategoryEditState extends State<CategoryEdit> {
                                   parFontSize: 15,
                                   parForegroundColor: Colors.black,
                                 ),
-                                getElevationButton(nameButton:'Cancel',
+                                defaltElevationButton(nameButton:'Cancel',
                                   onTabButton: () {
                                     Navigator.pop(context);
                                   },
@@ -484,7 +484,7 @@ class _CategoryEditState extends State<CategoryEdit> {
                                   parFontSize: 15,
                                   parForegroundColor: Colors.black,
                                 ),
-                                getElevationButton(nameButton:'Camera',
+                                defaltElevationButton(nameButton:'Camera',
                                   onTabButton: () async {
                                     image = await ImagePicker()
                                         .pickImage(
@@ -500,7 +500,7 @@ class _CategoryEditState extends State<CategoryEdit> {
                                   parForegroundColor: Colors.black,
                                 ),
 
-                                getElevationButton(nameButton:'Gallery',
+                                defaltElevationButton(nameButton:'Gallery',
                                   onTabButton: () async {
                                     image = await ImagePicker()
                                         .pickImage(

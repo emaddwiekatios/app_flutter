@@ -257,7 +257,7 @@ class _CategoryAddState extends State<CategoryAdd> {
                         children: <Widget>[
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: defualtTextFormField(
+                            child: defaultTextFormField(
                                 obscureText: false,
                                 fieldController: contcatid,
                                 onChange: (value) =>defaultTextFieldOnChange(value!,'Category ID'),
@@ -316,7 +316,7 @@ class _CategoryAddState extends State<CategoryAdd> {
                                         height: pheight/AppSize.s10,
                                         width:
                                         MediaQuery.of(context).size.width / 2,
-                                        child: getElevationButton(nameButton:'${formatDate(_date, [yyyy,'-',M,'-', dd,' '])}',
+                                        child: defaltElevationButton(nameButton:'${formatDate(_date, [yyyy,'-',M,'-', dd,' '])}',
                                           onTabButton: () {
                                             DatePicker.showDatePicker(context,
                                               showTitleActions: true,
@@ -356,7 +356,7 @@ class _CategoryAddState extends State<CategoryAdd> {
 
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: defualtTextFormField(
+                            child: defaultTextFormField(
                                 obscureText: false,
                                 fieldController: contcatname,
                                 onChange: (value) =>defaultTextFieldOnChange(value!,'Category Name'),
@@ -388,7 +388,7 @@ class _CategoryAddState extends State<CategoryAdd> {
 
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: defualtTextFormField(
+                            child: defaultTextFormField(
                                 obscureText: false,
                                 fieldController: contcatAmt,
                                 onChange: (value) =>defaultTextFieldOnChange(value!,'Category Amt'),
@@ -435,7 +435,7 @@ class _CategoryAddState extends State<CategoryAdd> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                getElevationButton(nameButton:'Save',
+                                defaltElevationButton(nameButton:'Save',
                                   onTabButton: () {
                                     showDialog<void>(
                                       context: context,
@@ -454,7 +454,7 @@ class _CategoryAddState extends State<CategoryAdd> {
                                   parFontSize: 15,
                                   parForegroundColor: Colors.black,
                                 ),
-                                getElevationButton(nameButton:'Cancel',
+                                defaltElevationButton(nameButton:'Cancel',
                                   onTabButton: () {
                                     Navigator.pop(context);
                                   },
@@ -464,7 +464,7 @@ class _CategoryAddState extends State<CategoryAdd> {
                                   parFontSize: 15,
                                   parForegroundColor: Colors.black,
                                 ),
-                                getElevationButton(nameButton:'Camera',
+                                defaltElevationButton(nameButton:'Camera',
                                   onTabButton: () async {
                                     image = await ImagePicker()
                                         .pickImage(
@@ -480,7 +480,7 @@ class _CategoryAddState extends State<CategoryAdd> {
                                   parForegroundColor: Colors.black,
                                 ),
 
-                                getElevationButton(nameButton:'Gallery',
+                                defaltElevationButton(nameButton:'Gallery',
                                   onTabButton: () async {
                                     image = await ImagePicker()
                                         .pickImage(
@@ -539,8 +539,8 @@ class _CategoryAddState extends State<CategoryAdd> {
       "catDate": DateTime.now(),
       "Type": "0", //contcatfav.text
     };
-    addDataFireStore(StringManager.collection_Categorys,categoryMap);
-    int maxcatId = await getDocumentMaxId(StringManager.collection_Categorys, 'catId');
+    addDataFireStore(StringManager.collectionCategory,categoryMap);
+    int maxcatId = await getDocumentMaxId(StringManager.collectionCategory, 'catId');
     setState(() {
       contcatid.text = (maxcatId + 1).toString();
       contcatname.clear();

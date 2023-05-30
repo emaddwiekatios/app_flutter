@@ -21,152 +21,53 @@ class Carts extends StatefulWidget {
   @override
   _CartsState createState() => _CartsState();
 }
-
+double sumItem=0.0;
+int noItem=0;
 const curveHeight = 160.0;
 const avatarRadius = curveHeight * 0.28;
 const avatarDiameter = avatarRadius * 2;
 Color colorOne = Colors.amber;
 Color colorTwo = ColorManager.primary;
 Color colorThree = ColorManager.primary;
-var _carts=getCollectionReference(StringManager.collection_Carts);
+var _carts=getCollectionReference(StringManager.collectionCarts);
 class _CartsState extends State<Carts> {
   final GlobalKey<ScaffoldState> _scaffoldKey =  GlobalKey<ScaffoldState>();
-  // Color pyellow = Color(Colors.amber);
 
-  ////  add  keyboard action
-
-  // final FocusNode _nodeText1 = FocusNode();
-  // final FocusNode _nodeText2 = FocusNode();
-  // final FocusNode _nodeText3 = FocusNode();
-  // final FocusNode _nodeText4 = FocusNode();
-  // final FocusNode _nodeText5 = FocusNode();
-  // final FocusNode _nodeText6 = FocusNode();
-
-  /// Creates the [KeyboardActionsConfig] to hook up the fields
-  /// and their focus nodes to our [FormKeyboardActions].
-  // KeyboardActionsConfig _buildConfig(BuildContext context) {
-  //   return KeyboardActionsConfig(
-  //     keyboardActionsPlatform: KeyboardActionsPlatform.ALL,
-  //     keyboardBarColor: Colors.grey[200],
-  //     nextFocus: true,
-  //     actions: [
-  //       KeyboardActionsItem(
-  //         focusNode: _nodeText1,
-  //       ),
-  //       KeyboardActionsItem(focusNode: _nodeText2, toolbarButtons: [
-  //             (node) {
-  //           return GestureDetector(
-  //             onTap: () => node.unfocus(),
-  //             child: Padding(
-  //               padding: EdgeInsets.all(8.0),
-  //               child: const Icon(Icons.close),
-  //             ),
-  //           );
-  //         }
-  //       ]),
-  //       KeyboardActionsItem(
-  //         focusNode: _nodeText3,
-  //         onTapAction: () {
-  //           showDialog(
-  //               context: context,
-  //               builder: (context) {
-  //                 return AlertDialog(
-  //                   content: Text("Custom Action"),
-  //                   actions: <Widget>[
-  //                     FlatButton(
-  //                       child: Text("OK"),
-  //                       onPressed: () => Navigator.of(context).pop(),
-  //                     )
-  //                   ],
-  //                 );
-  //               });
-  //         },
-  //       ),
-  //       KeyboardActionsItem(
-  //         focusNode: _nodeText4,
-  //         // displayCloseWidget: false,
-  //       ),
-  //       KeyboardActionsItem(
-  //         focusNode: _nodeText5,
-  //         toolbarButtons: [
-  //           //button 1
-  //               (node) {
-  //             return GestureDetector(
-  //               onTap: () => node.unfocus(),
-  //               child: Container(
-  //                 color: Colors.white,
-  //                 padding: EdgeInsets.all(8.0),
-  //                 child: Text(
-  //                   "CLOSE",
-  //                   style: TextStyle(color: Colors.black),
-  //                 ),
-  //               ),
-  //             );
-  //           },
-  //           //button 2
-  //               (node) {
-  //             return GestureDetector(
-  //               onTap: () => node.unfocus(),
-  //               child: Container(
-  //                 color: Colors.black,
-  //                 padding: EdgeInsets.all(8.0),
-  //                 child: Text(
-  //                   "DONE",
-  //                   style: TextStyle(color: Colors.white),
-  //                 ),
-  //               ),
-  //             );
-  //           }
-  //         ],
-  //       ),
-  //       KeyboardActionsItem(
-  //         focusNode: _nodeText6,
-  //         footerBuilder: (_) => PreferredSize(
-  //             child: SizedBox(
-  //                 height: 40,
-  //                 child: Center(
-  //                   child: Text('Custom Footer'),
-  //                 )),
-  //             preferredSize: Size.fromHeight(40)),
-  //       ),
-  //     ],
-  //   );
-  // }
-
-//note  add  code on text field
-//  KeyboardActions(
-//  config: _buildConfig(context),
-  //child:widget
-  // add on text field  focusNode: _nodeText1,
-
-  ///// end add  keyboard action
   List<ProductClass> instCartsList=[];
 @override
   void initState() {
-    // TODO: implement initState
+  //();
 
-  //get_sumitem();
     super.initState();
   }
 
-  var sumItem=0.0;
-  var noItem=0;
-  // void get_sumitem()
-  // {
-  //
-  //   for(int i =0 ;i<instCartsList.length;i++)
-  //     {
-  //       sumItem=(sumItem+ instCartsList[i].productPrice) ;
-  //
-  //     }
-  //   noItem=instCartsList.length;
-  
-  // }
+  void onWillpop()
+  {
+    getSumItem();
+  print('inside willpop');
+  }
+
+  void getSumItem ()
+  {
+    sumItem=0.0;
+    instCartsList.forEach((element) {
+      //setState(() {
+        sumItem=(sumItem+ int.parse(element.productPrice)*element.productCount);
+     // });
+    });
+  print(sumItem);
+  }
+
+
     @override
   Widget build(BuildContext context) {
-    var pHeight = MediaQuery.of(context).size.height;
-    var pWidth = MediaQuery.of(context).size.width;
 
+
+
+
+
+      var pHeight = MediaQuery.of(context).size.height;
+    var pWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       key: _scaffoldKey,
 
@@ -181,50 +82,7 @@ class _CartsState extends State<Carts> {
         child: Stack(
           children: <Widget>[
             //header shape
-      /*  Positioned(
-              top: 0,
-              left: 0,
-              child: Container(
-                height: MediaQuery.of(context).size.height / 4,
-                width: MediaQuery.of(context).size.width,
-                decoration: const BoxDecoration(
-                  //borderRadius: BorderRadius.circular(200),
-                  //  color: Colors.amber,
-                ),
-                child: CustomPaint(
-                  painter: _MyPainter(),
-                  child: Container(
-                    height: 400.0,
-                  ),
-                ),
-              ),
-            ),
 
-            Positioned(
-              top: 125,
-              left: -150,
-              child: Container(
-                height: 450, //MediaQuery.of(context).size.height / 4,
-                width: 450, //MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(250),
-                  color: Colors.amber,
-                ),
-              ),
-            ),
-            Positioned(
-              top: 100,
-              left: 115,
-              child: Container(
-                height: 350, //MediaQuery.of(context).size.height / 4,
-                width: 350, //MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(200),
-                    color: Colors.amber),
-              ),
-            ),
-            */
-            //a
             Positioned(
               bottom: -125,
               left: -150,
@@ -262,26 +120,11 @@ class _CartsState extends State<Carts> {
                 },
               ),
             ),
-            // Positioned(
-            //   top: pHeight / 25,
-            //   right: pWidth / 20,
-            //   child: IconButton(
-            //     icon: const Icon(Icons.arrow_back),
-            //     onPressed: () {
-            //       //print('inside button');
-            //       // FirebaseAuth.instance.signOut();
-            //       Navigator.pop(context);
-            //       //  Navigator.popAndPushNamed(context, "/SignIn");
-            //
-            //       //Navigator.pushReplacementNamed(context, "/SignIn");
-            //     },
-            //   ),
-            // ),
-            //body
+
             Positioned(
-              top: pHeight / 10,
+              top: AppSize.s40,
               right: 0,
-              bottom: 20,
+              bottom: 100,
               child: SizedBox(
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height >= 775.0
@@ -289,15 +132,12 @@ class _CartsState extends State<Carts> {
                       : 775.0,
                   child:  Center(
                       child: StreamBuilder(
-                        stream: getCollectionReference(StringManager.collection_Carts).snapshots(),
+                        stream: getCollectionReference(StringManager.collectionCarts).snapshots(),
                         builder: (BuildContext context, AsyncSnapshot snapshot) {
-
-
-
-
+                          sumItem=0.0;
                           if (snapshot.hasData) {
-
                             instCartsList.clear();
+
                               for (int i = 0; i <
                                   snapshot.data!.docs.length; i++) {
                                 final DocumentSnapshot documentSnapshot = snapshot
@@ -315,16 +155,24 @@ class _CartsState extends State<Carts> {
                                     documentSnapshot['favoriteFlag'],
                                     docsId: documentSnapshot.id,
                                     productCount: documentSnapshot['productCount']);
-                                instCartsList.add(filteredData);
+
+                                sumItem=sumItem+(double.parse(documentSnapshot['productPrice'])* documentSnapshot['productCount']);
+                                   instCartsList.add(filteredData);
+
 
                               }
 
-
+                            Future.delayed(Duration.zero,(){
+                              setState(() {
+                              //  print('future');
+                              });
+                            });
 
                             return ListView.builder(
                               itemCount: instCartsList.length,
                               itemBuilder: (BuildContext context, int index) {
-                                //print('insdie int ');
+
+
                                 return     GestureDetector(
                                   onTap: ()
                                   {
@@ -384,7 +232,7 @@ class _CartsState extends State<Carts> {
                                                     Row(
                                                       children: [
                                                         IconButton(onPressed: (){
-                                                          updateIntField(StringManager.collection_Carts,'productCount',instCartsList[index].docsId,instCartsList[index].productCount-1);
+                                                          updateIntField(StringManager.collectionCarts,'productCount',instCartsList[index].docsId,instCartsList[index].productCount-1);
 
                                                         },
                                                             icon:  Icon(Icons.remove_circle,color:Colors.grey[300], )),
@@ -392,10 +240,10 @@ class _CartsState extends State<Carts> {
                                                         IconButton(onPressed: (){
                                                           setState(() {
                                                             var tempProductCount =instCartsList[index].productCount+1;
-                                                         
+
                                                           });
 
-                                                          updateIntField(StringManager.collection_Carts,'productCount',instCartsList[index].docsId,instCartsList[index].productCount+1);
+                                                          updateIntField(StringManager.collectionCarts,'productCount',instCartsList[index].docsId,instCartsList[index].productCount+1);
 
                                                         }, icon:  Icon(Icons.add_circle,color: ColorManager.primary, )),
                                                       ],
@@ -413,12 +261,18 @@ class _CartsState extends State<Carts> {
                                           top:2,
                                           right: 2,
                                           child:
-                                          IconButton(onPressed: (){
-                                            deleteProduct(
+                                          IconButton(onPressed: () async {
+
+                                           await deleteProduct(
                                                 context,
-                                                StringManager.collection_Carts,
+                                                StringManager.collectionCarts,
                                                 instCartsList[index].docsId,null
                                             );
+                                            setState(() {
+                                              print('inside set state');
+                                              noItem=instCartsList.length;
+                                              getSumItem();
+                                            });
 
                                           }, icon:const Icon(Icons.cancel_outlined )),)
                                       ],
@@ -432,7 +286,8 @@ class _CartsState extends State<Carts> {
 
                               },
                              );
-                          } else if (snapshot.hasError) {
+                          }
+                          else if (snapshot.hasError) {
                             return const Icon(Icons.error_outline);
                           } else {
                             return CircularProgressIndicator();
@@ -453,86 +308,86 @@ class _CartsState extends State<Carts> {
 
             Positioned(
               bottom: AppSize.s0,
-              right: 0,//MediaQuery.of(context).size.width / 2 -50,
-              child:  ElevatedButton(
-                style:ButtonStyle(backgroundColor:MaterialStateProperty.all(Colors.cyanAccent)) ,
-                child: Text('Check out'),
-                onPressed: () {
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (context) {
-                      return Container(
-                        margin:const EdgeInsets.only(left:AppSize.s10,top: FontManagerSize.s5),
-                        height: getHeight(context)/FontManagerSize.s8,
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.only(topRight: Radius.circular(200))
-                        )
-                        ,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Column
+              right:  AppSize.s0,
+                left:  AppSize.s0,//MediaQuery.of(context).size.width / 2 -50,
+              child: Container(
 
-                              (
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text('Item : ',style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
-                                    Text('$noItem',style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
+                margin:const EdgeInsets.all(AppSize.s10),
+                height: getHeight(context)/FontManagerSize.s10,
+                decoration: const BoxDecoration(
+                color: Colors.blueGrey,
 
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Text('Total : ',style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
-                                    Text('$sumItem\$',style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
+                    borderRadius: BorderRadius.all( Radius.circular(10))
+                )
+                ,
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Column
 
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text('Tax : ',style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
-                                    Text('${sumItem*.16}\$',style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
+                        (
+                       // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
 
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Text('G Total : ',style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
-                                    Text('${sumItem*1.16}\$',style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Text('Total : ',style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
+                              Text('$sumItem\$',style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('Item : ',style: TextStyle(fontSize: AppSize.s16, fontWeight: FontWeight.bold),),
+                                  Text('$noItem',style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
 
-                                  ],
-                                ),
-                              ],
-                            ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('Tax : ',style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
+                              Text('${(sumItem*.16).roundToDouble()}\$',style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
 
-                            getElevationButton(
-                                parFontSize: AppSize.s20,
-                                parBorderRadius: AppSize.s10,
-                                parBorderWidth: AppSize.s1,
-                                nameButton: 'Check Out',
-                                onTabButton: (){
-                                 //print('inside checkout');
-                                },
-                                parBackGroundColor: ColorManager.primary,
-                                parForegroundColor: Colors.white)
-                          ],
-                        ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text('G Total : ',style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
+                              Text('${(sumItem*1.16).roundToDouble()}\$',style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
+
+                            ],
+                          ),
+
+                        ],
+                      ),
+                      defaltElevationButton(
+                           heightButton: getHeight(context)/FontManagerSize.s20,
+                           widthButton: getWidth(context)/3,
+                          parFontSize: AppSize.s20,
+                          parBorderRadius: AppSize.s10,
+                          parBorderWidth: AppSize.s1,
+                          nameButton: 'Check',
+                          onTabButton: (){
+                            //print('inside checkout');
+                          },
+                          parBackGroundColor: ColorManager.primary,
+                          parForegroundColor: Colors.white)
+
+                    ],
+                  ),
+                ),
 
 
-                      );
-                    },
-                  );
-                },
-              ),
+              )
+
             ),
 
             //header title
@@ -553,6 +408,8 @@ class _CartsState extends State<Carts> {
 
     );
   }
+
+
 }
 
 class _MyPainter extends CustomPainter {

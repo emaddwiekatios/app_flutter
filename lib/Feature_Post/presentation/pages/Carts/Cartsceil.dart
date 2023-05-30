@@ -83,7 +83,7 @@ class _CartsCeilState extends State<CartsCeil> {
                           Row(
                             children: [
                              IconButton(onPressed: (){
-                               updateIntField(StringManager.collection_Carts,'productCount',widget.instCarts.docsId,widget.instCarts.productCount-1);
+                               updateIntField(StringManager.collectionCarts,'productCount',widget.instCarts.docsId,widget.instCarts.productCount-1);
 
                              },
                                  icon:  Icon(Icons.remove_circle,color:Colors.grey[300], )),
@@ -91,7 +91,7 @@ class _CartsCeilState extends State<CartsCeil> {
                                IconButton(onPressed: (){
                                  var tempProductCount =widget.instCarts.productCount+1;
                                  //print(tempProductCount);
-                                 updateIntField(StringManager.collection_Carts,'productCount',widget.instCarts.docsId,widget.instCarts.productCount+1);
+                                 updateIntField(StringManager.collectionCarts,'productCount',widget.instCarts.docsId,widget.instCarts.productCount+1);
 
                                }, icon:  Icon(Icons.add_circle,color: ColorManager.primary, )),
                             ],
@@ -112,7 +112,7 @@ class _CartsCeilState extends State<CartsCeil> {
               IconButton(onPressed: (){
                 deleteProduct(
                    context,
-                   StringManager.collection_Carts,
+                   StringManager.collectionCarts,
                   widget.instCarts.docsId,null
                    );
 

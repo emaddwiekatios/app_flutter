@@ -466,7 +466,7 @@ class _CategoryMainState extends State<CategoryMain> {
                                               ///onPressed: (){},
                                               onPressed: () async {
                                               
-                                                deleteProduct(context,StringManager.collection_Categorys,
+                                                deleteProduct(context,StringManager.collectionCategory,
                                                     instCatList[index].docsId,instCatList[index].catImage);
                                                 // Create a reference to the file to delete
                                                 // FirebaseStorage.instance

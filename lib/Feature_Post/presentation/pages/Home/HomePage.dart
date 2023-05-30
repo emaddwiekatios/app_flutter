@@ -481,7 +481,7 @@ class _HomePageState extends State<HomePage> {
                           width: getWidth(context),
                           height: getHeight(context), //FontManagerSize.s3,
                           child: StreamBuilder(
-                            stream:getCollectionReference(StringManager.collection_Products).snapshots(),
+                            stream:getCollectionReference(StringManager.collectionProducts).snapshots(),
                             builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
 
 
@@ -593,15 +593,17 @@ class _HomePageState extends State<HomePage> {
                                                       height:
                                                       getHeight(context) /
                                                           FontManagerSize
-                                                              .s20,
-                                                      child: Column(
+                                                              .s26,
+                                                      child:
+                                                      Row(
                                                         mainAxisAlignment:
                                                         MainAxisAlignment
-                                                            .center,
+                                                            .spaceAround,
                                                         crossAxisAlignment:
                                                         CrossAxisAlignment
                                                             .start,
                                                         children: [
+
                                                           Text('${instProdList[index].productName} ',
                                                             //  Text(' ${filteredData.productName}',
                                                             style: TextStyle(
@@ -612,15 +614,21 @@ class _HomePageState extends State<HomePage> {
                                                                 FontWeight
                                                                     .bold),
                                                           ),
-                                                          Text(
-                                                            ' Price :${instProdList[index].productPrice} \$',
-                                                            style: TextStyle(
-                                                                fontSize: 12,
-                                                                fontWeight:
-                                                                FontWeight
-                                                                    .bold,
-                                                                color: Colors.black),
+
+                                                          Padding(
+                                                            padding: const EdgeInsets.all(4.0),
+                                                            child: Text('${instProdList[index].productPrice} \$',
+                                                              //  Text(' ${filteredData.productName}',
+                                                              style: TextStyle(
+                                                                  fontSize:
+                                                                  FontManagerSize
+                                                                      .s16,
+                                                                  fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                            ),
                                                           ),
+
                                                         ],
                                                       )),
                                                   child: Container(
@@ -657,30 +665,81 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                         Positioned(
                                             right: AppSize.s4,
-                                            child: IconButton(
-                                                onPressed: () {
+                                            child: Column(
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                             // crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                IconButton(
+                                                    onPressed: () async {
 
-                                                  setState(() {
-                                                    int temp = instProdList[index].favoriteFlag ==0
-                                                        ? 1
-                                                        : 0;
-                                                   // instProdList[index].favoriteFlag = temp;
+                                                  int  isCarts = await getIsProductInCarts(
+                                                      StringManager.collectionCarts,
+                                                      instProdList[index].productId
+                                                  );
 
-                                                    updateIntField(StringManager.collection_Products,'favoriteFlag',instProdList[index].docsId,temp);
-                                                  });
+
+                                                  if (isCarts == 0) {
+                                                    print('in side if >0 =$isCarts');
+                                                    var cartMap = {
+                                                      "productId": instProdList[index]
+                                                          .productId,
+                                                      "productName": instProdList[index]
+                                                          .productName,
+                                                      "productImage": instProdList[index]
+                                                          .productImage,
+                                                      "productPrice": instProdList[index]
+                                                          .productPrice,
+                                                      "productCat": instProdList[index]
+                                                          .productCat,
+                                                      //contProductcat.text,
+                                                      "productEntryDate": DateTime
+                                                          .now(),
+                                                      "favoriteFlag": instProdList[index]
+                                                          .favoriteFlag,
+                                                      "productCount": 1
+                                                      //contProductfav.text
+                                                    };
+
+                                                    addDataFireStore(
+                                                        StringManager.collectionCarts,
+                                                        cartMap);
+                                                    showMessage(context,
+                                                        "The products add to carts Successfully",Colors.green);
+                                                  }
+                                                  else {
+                                                    showMessage(context,
+                                                        "The products all ready on Carts",Colors.blue);
+
+                                                  }
                                                 },
-                                                icon: instProdList[index]
-                                                    .favoriteFlag ==
-                                                    1
-                                                    ? const Icon(
-                                                  Icons
-                                                      .favorite_outlined,
-                                                  color: Colors.red,
-                                                )
-                                                    : const Icon(
-                                                  Icons.favorite_border,
-                                                  color: Colors.red,
-                                                )))
+                                                    icon:  const Icon(Icons.shopping_cart_checkout,color: Colors.red, )
+                                                ),
+                                                IconButton(
+                                                    onPressed: () {
+
+                                                      setState(() {
+                                                        int temp = instProdList[index].favoriteFlag ==0
+                                                            ? 1
+                                                            : 0;
+                                                       // instProdList[index].favoriteFlag = temp;
+
+                                                        updateIntField(StringManager.collectionProducts,'favoriteFlag',instProdList[index].docsId,temp);
+                                                      });
+                                                    },
+                                                    icon: instProdList[index]
+                                                        .favoriteFlag ==
+                                                        1
+                                                        ? const Icon(
+                                                      Icons
+                                                          .favorite_outlined,
+                                                      color: Colors.red,
+                                                    )
+                                                        : const Icon(
+                                                      Icons.favorite_border,
+                                                      color: Colors.red,
+                                                    )),
+                                              ],
+                                            ))
                                       ],
                                     ),
                                   );

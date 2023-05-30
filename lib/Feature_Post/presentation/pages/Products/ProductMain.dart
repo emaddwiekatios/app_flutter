@@ -31,7 +31,7 @@ var db = FirebaseFirestore.instance;
 QuerySnapshot? cars;
 //List<ProductClass> ProductMainNew= [];
 //final CollectionReference _productss =FirebaseFirestore.instance.collection(StringManager.collection_Products);
-var _productss=getCollectionReference(StringManager.collection_Products);
+var _productss=getCollectionReference(StringManager.collectionProducts);
 final TextEditingController _productIdController = TextEditingController();
 final TextEditingController _productNameController = TextEditingController();
 final TextEditingController _productImageController = TextEditingController();
@@ -405,6 +405,7 @@ class _ProductMainNewState extends State<ProductMainNew> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceAround,
                                         children: [
+
                                           Text(
                                             instProdList[index].productName,
                                             style: const TextStyle(
@@ -412,7 +413,7 @@ class _ProductMainNewState extends State<ProductMainNew> {
                                                 fontSize: AppSize.s20),
                                           ),
                                           Text(
-                                            instProdList[index].productPrice,
+                                           '\$${instProdList[index].productPrice}',
                                             style: const TextStyle(
                                                 fontWeight: FontWeight.w300,
                                                 fontSize: AppSize.s20),
@@ -465,7 +466,7 @@ class _ProductMainNewState extends State<ProductMainNew> {
 
                                               ///onPressed: (){},
                                               onPressed: () async {
-                                                deleteProduct(context,StringManager.collection_Products,
+                                                deleteProduct(context,StringManager.collectionProducts,
                                                     instProdList[index].docsId,instProdList[index].productImage);
                                                 // Create a reference to the file to delete
                                                 // FirebaseStorage.instance

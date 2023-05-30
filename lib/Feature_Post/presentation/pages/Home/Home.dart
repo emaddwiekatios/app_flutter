@@ -1,6 +1,9 @@
 //import 'package:clean_arch_app/Feature_Post/presentation/pages/Home/HomePage.dart';
 import 'package:clean_arch_app/Feature_Post/presentation/pages/Login/view_login/Auth.dart';
+import 'package:clean_arch_app/Feature_Post/presentation/pages/Login/view_login/loginNew.dart';
+import 'package:clean_arch_app/Feature_Post/presentation/pages/Login/view_login/view_login.dart';
 import 'package:clean_arch_app/Feature_Post/presentation/pages/logingpt.dart';
+import 'package:clean_arch_app/Feature_Post/presentation/pages/splash/splash.dart';
 import 'package:clean_arch_app/core/resource/AssetManager.dart';
 import 'package:clean_arch_app/core/resource/ColorManger.dart';
 import 'package:clean_arch_app/core/resource/FontManager.dart';
@@ -183,10 +186,13 @@ Widget getDrawer(context) {
 
                // _authlogout.logout();
              //   Navigator.of(context).pop();
-               Navigator.pushNamed(context,'/Splash');
+               Navigator.pushNamed(context,'/SignIn');
 
-
-              }),
+              //  Navigator.pushReplacement(context,
+              //      MaterialPageRoute(builder: (_)=> Splash()
+              //      ));
+              //
+               }),
           const Divider(
             height: FontManagerSize.s8,
           ),

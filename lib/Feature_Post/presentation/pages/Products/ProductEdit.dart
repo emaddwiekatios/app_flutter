@@ -41,7 +41,7 @@ class ProductEdit extends StatefulWidget {
   @override
   _ProductEditState createState() => _ProductEditState();
 }
-var _productss=getCollectionReference(StringManager.collection_Products);
+var _productss=getCollectionReference(StringManager.collectionProducts);
 //final CollectionReference _productss = FirebaseFirestore.instance.collection(StringManager.collection_Products);
 QuerySnapshot? cars;
 QuerySnapshot? cars_token;
@@ -273,7 +273,7 @@ class _ProductEditState extends State<ProductEdit> {
                           //prodid
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: defualtTextFormField(
+                            child: defaultTextFormField(
                                 obscureText: false,
                                 fieldController: contProductid,
                                 onChange: (value) =>defaultTextFieldOnChange(value!,'Product ID'),
@@ -333,7 +333,7 @@ class _ProductEditState extends State<ProductEdit> {
                                         height: pheight/AppSize.s10,
                                         width:
                                         MediaQuery.of(context).size.width / 2,
-                                        child: getElevationButton(nameButton:'${formatDate(_date, [yyyy,'-',M,'-', dd,' '])}',
+                                        child: defaltElevationButton(nameButton:'${formatDate(_date, [yyyy,'-',M,'-', dd,' '])}',
                                           onTabButton: () {
                                             DatePicker.showDatePicker(context,
                                               showTitleActions: true,
@@ -371,7 +371,7 @@ class _ProductEditState extends State<ProductEdit> {
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: defualtTextFormField(
+                            child: defaultTextFormField(
                                 obscureText: false,
                                 fieldController: contProductname,
                                 onChange: (value) =>defaultTextFieldOnChange(value!,'Product Name'),
@@ -500,7 +500,7 @@ class _ProductEditState extends State<ProductEdit> {
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: defualtTextFormField(
+                            child: defaultTextFormField(
                                 obscureText: false,
                                 fieldController: contProductAmt,
                                 onChange: (value) =>defaultTextFieldOnChange(value!,'Product Amt'),
@@ -564,7 +564,7 @@ class _ProductEditState extends State<ProductEdit> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                getElevationButton(nameButton:'Update',
+                                defaltElevationButton(nameButton:'Update',
                                   onTabButton: () {
                                     showDialog<void>(
                                       context: context,
@@ -585,8 +585,8 @@ class _ProductEditState extends State<ProductEdit> {
                                       "favoriteFlag": 0, //contProductfav.text
                                     };
                                     // ignore: use_build_context_synchronously
-                                    updateDataFireStore(StringManager.collection_Products, productMap,widget.instProd.docsId);
-                                    showMessage(context,'You have successfully Updated ${contProductname.text} product');
+                                    updateDataFireStore(StringManager.collectionProducts, productMap,widget.instProd.docsId);
+                                    showMessage(context,'You have successfully Updated ${contProductname.text} product',Colors.green);
                                     Navigator.of(context).pop();
                                   },
                                   parBackGroundColor: ColorManager.secondary,
@@ -595,7 +595,7 @@ class _ProductEditState extends State<ProductEdit> {
                                   parFontSize: 15,
                                   parForegroundColor: Colors.black,
                                 ),
-                                getElevationButton(nameButton:'Cancel',
+                                defaltElevationButton(nameButton:'Cancel',
                                   onTabButton: () {
                                     Navigator.pop(context);
                                   },
@@ -605,7 +605,7 @@ class _ProductEditState extends State<ProductEdit> {
                                   parFontSize: 15,
                                   parForegroundColor: Colors.black,
                                 ),
-                                getElevationButton(nameButton:'Camera',
+                                defaltElevationButton(nameButton:'Camera',
                                   onTabButton: () async {
                                     image = await ImagePicker()
                                         .pickImage(
@@ -621,7 +621,7 @@ class _ProductEditState extends State<ProductEdit> {
                                   parForegroundColor: Colors.black,
                                 ),
 
-                                getElevationButton(nameButton:'Gallery',
+                                defaltElevationButton(nameButton:'Gallery',
                                   onTabButton: () async {
                                     image = await ImagePicker()
                                         .pickImage(

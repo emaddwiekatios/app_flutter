@@ -15,7 +15,7 @@ class _AddPagesState extends State<AddPages> {
   PageController _pageController = PageController();
   int currentpage = 0;
 
-  List<Colors> listname = [Colors.black12, "yyy", "jjjj", 'jkjkj'];
+// List<Colors> listname = [Colors.black12, "yyy", "jjjj", 'jkjkj'];
   @override
   void initState() {
     _pageController = PageController(initialPage: currentpage);

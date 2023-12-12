@@ -16,6 +16,7 @@ import '../../manager/Language/LocaleController.dart';
 //import 'HomePage.dart' as home;
 
 import '../LayoutBuilder/LayoutBuilder.dart';
+
 ///import '../../../../core/resource/template.dart';
 import 'HomePage.dart';
 
@@ -29,20 +30,20 @@ class Home extends StatefulWidget {
 }
 
 LocaleController localeController = Get.put(LocaleController());
-Auth _authlogout =Get.put(Auth());
-class _HomeState extends State<Home> {
+Auth _authlogout = Get.put(Auth());
 
+class _HomeState extends State<Home> {
   @override
   void initState() {
     // TODO: implement initState
 
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return const SafeArea(
       child: Scaffold(
-
         // appBar: AppBar(
         //   backgroundColor: Colors.transparent,
         //   title: Text('Home'.tr),)
@@ -83,7 +84,7 @@ Widget getDrawer(context) {
                 //  ),
               ),
               ListTile(
-                  leading:  Icon(
+                  leading: Icon(
                     Icons.home,
                     color: ColorManager.primary,
                   ),
@@ -93,16 +94,13 @@ Widget getDrawer(context) {
                     //print('ontap');
                     Navigator.pop(context);
                   }),
-               Divider(
+              Divider(
                 height: FontManagerSize.s8,
               ),
-             Text('Admin Tab'),
+              Text('Admin Tab'),
               const Divider(
                 height: FontManagerSize.s8,
-              )
-
-
-       ,
+              ),
               ListTile(
                   leading: Icon(
                     Icons.generating_tokens,
@@ -118,27 +116,22 @@ Widget getDrawer(context) {
               const Divider(
                 height: FontManagerSize.s8,
               ),
-
-
-  ListTile(
-  leading: Icon(
-  Icons.generating_tokens,
-  color: ColorManager.primary,
-  ),
-  title: Text('Categorys'.tr),
-  trailing: Text('Categorys'.tr),
-  onTap: () {
-  ////print('ontap');
-  Get.toNamed('/CategoryMain');
-  //  Get.to(() => GetxManagement());
-  }),
-  const Divider(
-  height: FontManagerSize.s8,
-  ),
-
-
-
-  ListTile(
+              ListTile(
+                  leading: Icon(
+                    Icons.generating_tokens,
+                    color: ColorManager.primary,
+                  ),
+                  title: Text('Categorys'.tr),
+                  trailing: Text('Categorys'.tr),
+                  onTap: () {
+                    ////print('ontap');
+                    Get.toNamed('/CategoryMain');
+                    //  Get.to(() => GetxManagement());
+                  }),
+              const Divider(
+                height: FontManagerSize.s8,
+              ),
+              ListTile(
                   leading: Icon(
                     Icons.layers_outlined,
                     color: ColorManager.primary,
@@ -164,8 +157,7 @@ Widget getDrawer(context) {
               onTap: () {
                 if (localeController.currentLanguage == const Locale('en')) {
                   localeController.changeLanguage(const Locale('ar'));
-                }
-                else {
+                } else {
                   localeController.changeLanguage(const Locale('en'));
                 }
 
@@ -174,7 +166,6 @@ Widget getDrawer(context) {
           const Divider(
             height: FontManagerSize.s8,
           ),
-
           ListTile(
               leading: Icon(
                 Icons.logout,
@@ -183,16 +174,15 @@ Widget getDrawer(context) {
               title: Text('Logout'.tr),
               trailing: Text('Logout'.tr),
               onTap: () {
+                // _authlogout.logout();
+                //   Navigator.of(context).pop();
+                Navigator.pushNamed(context, '/SignIn');
 
-               // _authlogout.logout();
-             //   Navigator.of(context).pop();
-               Navigator.pushNamed(context,'/SignIn');
-
-              //  Navigator.pushReplacement(context,
-              //      MaterialPageRoute(builder: (_)=> Splash()
-              //      ));
-              //
-               }),
+                //  Navigator.pushReplacement(context,
+                //      MaterialPageRoute(builder: (_)=> Splash()
+                //      ));
+                //
+              }),
           const Divider(
             height: FontManagerSize.s8,
           ),

@@ -1,4 +1,5 @@
 //import 'dart:html';
+import 'package:clean_arch_app/Feature_Post/presentation/pages/Add/AddPages.dart';
 import 'package:clean_arch_app/Feature_Post/presentation/pages/Category/CategoryMain.dart';
 import 'package:clean_arch_app/Feature_Post/presentation/pages/Products/ProductMain.dart';
 import 'package:clean_arch_app/core/resource/RoutesManager.dart';
@@ -14,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'Feature_Post/presentation/pages/Add/testing.dart';
 import 'Feature_Post/presentation/pages/Home/Home.dart';
 import 'Feature_Post/presentation/pages/Home/PreHome.dart';
 import 'Feature_Post/presentation/pages/Login/view_login/loginNew.dart';
@@ -87,6 +89,9 @@ class MyApp extends StatelessWidget {
             '/Onboarding': (context) => const OnBoarding(),
             '/login': (context) => const login(),
             '/SignIn': (context) => SignIn(),
+
+            '/AddPages': (context) => AddPages(),
+            '/testing': (context) => testing(),
           },
         );
       }),

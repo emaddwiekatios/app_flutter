@@ -38,14 +38,14 @@ defaultTextFieldValidator(String password, String nameField) {
 Widget defaultTextFormField({
   required TextEditingController fieldController,
   // Function? onChange,
-   Color borderColor =Colors.blueGrey,
+  Color borderColor = Colors.blueGrey,
   String? Function(String?)? onChange,
   required String? Function(String?)? validate,
-   TextInputType type =TextInputType.emailAddress,
+  TextInputType type = TextInputType.emailAddress,
   required String hintTextLabel,
   required IconButton prefixIcon,
   required IconButton suffixIcon,
-   bool obscureText = true ,
+  bool obscureText = true,
 }) =>
     TextFormField(
       obscureText: obscureText,
@@ -54,7 +54,7 @@ Widget defaultTextFormField({
       controller: fieldController,
       onChanged: onChange,
       validator: validate,
-      style:const  TextStyle(color: Colors.black),
+      style: const TextStyle(color: Colors.black),
       decoration: InputDecoration(
         fillColor: Colors.blue,
         label: Text(hintTextLabel),
@@ -62,7 +62,8 @@ Widget defaultTextFormField({
         suffixIcon: suffixIcon,
         contentPadding: const EdgeInsets.only(left: 15.0, top: 15.0, right: 15),
         hintText: hintTextLabel,
-        hintStyle:const TextStyle(color: Colors.black, fontFamily: 'Quicksand'),
+        hintStyle:
+            const TextStyle(color: Colors.black, fontFamily: 'Quicksand'),
         enabledBorder: const OutlineInputBorder(
           borderSide: BorderSide(
             color: Colors.greenAccent,
@@ -71,7 +72,7 @@ Widget defaultTextFormField({
         ),
         border: OutlineInputBorder(
           borderSide: BorderSide(
-            color:   borderColor,
+            color: borderColor,
             width: 1.0,
           ),
         ),
@@ -94,8 +95,11 @@ Future<void> deleteProduct(
       const SnackBar(content: Text('You have successfully deleted a product')));
 }
 
-void showMessage(BuildContext context, String message,Color backGroundColor) {
-  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message),backgroundColor: backGroundColor,));
+void showMessage(BuildContext context, String message, Color backGroundColor) {
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    content: Text(message),
+    backgroundColor: backGroundColor,
+  ));
 }
 
 Future<int> getDocumentMaxId(String docName, String fieldName) async {
@@ -118,19 +122,18 @@ Future<int> getDocumentMaxId(String docName, String fieldName) async {
   return MaxId;
 }
 
-
 Future<int> getIsProductInCarts(String collectionName, int productId) async {
   int productIdExist = 0;
   await FirebaseFirestore.instance
       .collection(collectionName)
-      .where("productId",isEqualTo: productId)
+      .where("productId", isEqualTo: productId)
       .get()
       .then((QuerySnapshot querySnapshot) {
     //    print(querySnapshot.docs);
     for (var element in querySnapshot.docs) {
       print('element[productId]=${element['productId']}');
 
-     productIdExist = (element['productId']);
+      productIdExist = (element['productId']);
       // });
     }
   });
@@ -160,14 +163,11 @@ Future<void> updateIntField(String collectionName, String fieldName,
       .update({fieldName: flag});
 }
 
-// ignore: camel_case_types, must_be_immutable
 class defaltElevationButton extends StatelessWidget {
   defaltElevationButton(
-
-      {
-        this.heightButton,
-        this.widthButton,
-        required this.parFontSize,
+      {this.heightButton,
+      this.widthButton,
+      required this.parFontSize,
       required this.parBorderRadius,
       required this.parBorderWidth,
       required this.nameButton,
@@ -182,12 +182,12 @@ class defaltElevationButton extends StatelessWidget {
   double parBorderWidth;
   double parBorderRadius;
   double parFontSize;
-  double? heightButton ;
+  double? heightButton;
   double? widthButton;
   @override
   Widget build(BuildContext context) {
-    heightButton ?? (heightButton=getHeight(context)/FontManagerSize.s30);
-    widthButton ??  (widthButton=getWidth(context)/FontManagerSize.s3);
+    heightButton ?? (heightButton = getHeight(context) / FontManagerSize.s30);
+    widthButton ?? (widthButton = getWidth(context) / FontManagerSize.s3);
     return Container(
       height: heightButton,
       width: widthButton,
@@ -221,23 +221,22 @@ Widget getButtonGeneral(
   );
 }
 
-SnackBar defaultSnackBar(String message,
-    {required String actionMessage}) {
+SnackBar defaultSnackBar(String message, {required String actionMessage}) {
   return SnackBar(
     content: Text(
       message,
-      style:const  TextStyle(color: Colors.white, fontSize: 14.0),
+      style: const TextStyle(color: Colors.white, fontSize: 14.0),
     ),
     action: (actionMessage != null)
         ? SnackBarAction(
             textColor: Colors.white,
             label: actionMessage,
             onPressed: () {
-           //   return onClick();
+              //   return onClick();
             },
           )
         : null,
-    duration:const  Duration(seconds: 2),
+    duration: const Duration(seconds: 2),
     backgroundColor: Colors.indigo,
   );
 }
@@ -254,22 +253,21 @@ SnackBar defaultSnackBar(String message,
 //
 // ],),),
 
-  class defualtAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
+class defualtAppBarWidget extends StatelessWidget
+    implements PreferredSizeWidget {
   String titleName;
   Widget child;
-  defualtAppBarWidget({required this.titleName,required this.child});
+  defualtAppBarWidget({required this.titleName, required this.child});
   @override
   Widget build(BuildContext context) {
-  return AppBar(title: Text(titleName),
-    systemOverlayStyle: SystemUiOverlayStyle.dark
-    ,
-    backgroundColor: ColorManager.primary,
-    actions: [
-      child
-    ],
-               );
+    return AppBar(
+      title: Text(titleName),
+      systemOverlayStyle: SystemUiOverlayStyle.dark,
+      backgroundColor: ColorManager.primary,
+      actions: [child],
+    );
   }
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
-  }
+}

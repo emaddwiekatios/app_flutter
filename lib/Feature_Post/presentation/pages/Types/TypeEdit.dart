@@ -1,12 +1,8 @@
 //import 'dart:html';
 
-import 'dart:convert';
-
+import 'package:clean_arch_app/Feature_Post/presentation/pages/Types/TypesClass.dart';
 import 'package:clean_arch_app/core/resource/AssetManager.dart';
-import 'package:clean_arch_app/core/resource/FontManager.dart';
 import 'package:clean_arch_app/core/resource/MediaQuery.dart';
-import 'package:clean_arch_app/core/resource/StringManager.dart';
-import 'package:clean_arch_app/core/resource/ValueManger.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -15,7 +11,7 @@ import 'dart:io';
 import 'dart:async';
 import 'package:image/image.dart' as Im;
 import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
+
 import 'dart:math' as Math;
 
 import 'package:date_format/date_format.dart';
@@ -30,27 +26,38 @@ import 'package:http/http.dart' as http;
 
 import '../../../../core/resource/ColorManger.dart';
 import '../../../../core/resource/Construct.dart';
+import '../../../../core/resource/FontManager.dart';
+import '../../../../core/resource/StringManager.dart';
+import '../../../../core/resource/ValueManger.dart';
 import '../Category/CategoryAdd.dart';
+import '../TypeCategory/TypeCategoryAdd.dart';
 
 // ignore: must_be_immutable
-class ProductAdd extends StatefulWidget {
-  ProductAdd({super.key});
+class TypeEdit extends StatefulWidget {
+  //var Docs_max;
+  TypeEdit({required this.instProd});
+
+  TypeClass instProd;
   @override
-  _ProductAddState createState() => _ProductAddState();
+  _TypeEditState createState() => _TypeEditState();
 }
 
+var _Typess = getCollectionReference(StringManager.collectionTypes);
+//final CollectionReference _Typess = FirebaseFirestore.instance.collection(StringManager.collection_Types);
 QuerySnapshot? cars;
-QuerySnapshot? carsToken;
-QuerySnapshot? carsProviders;
-
+QuerySnapshot? cars_token;
+QuerySnapshot? carsproviders;
+const CURVE_HEIGHT = 160.0;
+const AVATAR_RADIUS = CURVE_HEIGHT * 0.28;
+const AVATAR_DIAMETER = AVATAR_RADIUS * 2;
 Color? colorOne;
 Color? colorTwo;
 Color? colorThree;
 User? user;
-//dynamic _pickImageError;
+dynamic _pickImageError;
 bool isVideo = false;
-bool isSave = false;
-//String? _retrieveDataError;
+
+String? _retrieveDataError;
 typedef OnPickImageCallback = void Function(
     double? maxWidth, double? maxHeight, int? quality);
 final ImagePicker _picker = ImagePicker();
@@ -61,7 +68,7 @@ final TextEditingController qualityController = TextEditingController();
 final CollectionReference _Categoryss =
     FirebaseFirestore.instance.collection('Category');
 
-class _ProductAddState extends State<ProductAdd> {
+class _TypeEditState extends State<TypeEdit> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
 //  add  keyboard action
@@ -85,50 +92,53 @@ class _ProductAddState extends State<ProductAdd> {
   //File? _imageFile;
   DateTime _date = DateTime.now();
   QuerySnapshot? carsinvoice;
-
   int maxCatId = 0;
-  int maxProductId = 0;
-  // final GlobalKey<ScaffoldState> _scaffoldKeysnak = new GlobalKey<ScaffoldState>();
-
-  Future<void> getProductIdmax() async {
-    maxProductId =
-        await getDocumentMaxId(StringManager.collectionProducts, 'productId');
-    maxProductId = maxProductId + 1;
-    setState(() {
-      contProductid.text = (maxProductId).toString();
-    });
-    print('maxProductId=$maxProductId');
-  }
+  final GlobalKey<ScaffoldState> _scaffoldKeysnak =
+      new GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    getProductIdmax();
+    contTypeid.text = widget.instProd.TypeId.toString();
+    contTypeAmt.text = widget.instProd.TypePrice.toString();
 
+    contTypename.text = widget.instProd.TypeName;
+    _selectedCat = widget.instProd.TypeCat.toString();
+    //_date=DateTime.now().add(Duration(days: 3));//
+    //print(widget.instProd.TypeEntryDate);
+    _date = widget.instProd.TypeEntryDate;
+    //image= Image.file(File(widget.instProd.TypeImage!.path)))
     getCategory();
-    getCurrentUser();
+    //getCurrentUser();
     // //print("inside init");
     colorOne = Colors.red;
     colorTwo = Colors.red;
     colorThree = Colors.red;
   }
 
-  String? imagename;
+/*
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return null;
+  }
+*/
+  String? imageName;
   //PickedFile sampleimage;
-  File? sampleimage;
-  var currentdate;
+  File? sampleImage;
+  var currentDate;
   int state = 0;
   var url2;
 
-  List<String> list_cat = [];
+  List<String> listCat = [];
 
   String _selectedCat = 'Category';
 
-  List<String> list_Providers = [];
+  List<String> listProviders = [];
 
-  String _selectedProviders = 'Providers';
+  String selectedProviders = 'Providers';
 
-  List<String> list_currency = ['Shakel', 'Dollar'];
+  List<String> listCurrency = ['shakel', 'Dollar'];
 
   String _selectedcurrency = 'Shakel';
 
@@ -136,16 +146,16 @@ class _ProductAddState extends State<ProductAdd> {
 
   String _selectedpays_from = 'Emad';
 
-  TextEditingController contProductid = new TextEditingController();
-  TextEditingController contProductname = new TextEditingController();
-  TextEditingController contProductAmt = new TextEditingController();
-  TextEditingController contProductfav = new TextEditingController();
-  TextEditingController contProductcat = new TextEditingController();
-  TextEditingController contProductdesc = new TextEditingController();
-  TextEditingController contProducturl = new TextEditingController();
-  TextEditingController contProductdentrydate = new TextEditingController();
-  TextEditingController contProductTo = new TextEditingController();
-  TextEditingController contProductdate = new TextEditingController();
+  TextEditingController contTypeid = new TextEditingController();
+  TextEditingController contTypename = new TextEditingController();
+  TextEditingController contTypeAmt = new TextEditingController();
+  TextEditingController contTypefav = new TextEditingController();
+  TextEditingController contTypecat = new TextEditingController();
+  TextEditingController contTypedesc = new TextEditingController();
+  TextEditingController contTypeurl = new TextEditingController();
+  TextEditingController contTypedentrydate = new TextEditingController();
+  TextEditingController contTypeTo = new TextEditingController();
+  TextEditingController contTypedate = new TextEditingController();
   File? imageFile;
 
   @override
@@ -153,22 +163,8 @@ class _ProductAddState extends State<ProductAdd> {
     var pheight = MediaQuery.of(context).size.height;
     var pwidth = MediaQuery.of(context).size.width;
 
-//    var appLanguage = Provider.of<AppLanguage>(context);
-
     return SafeArea(
       child: Scaffold(
-        // appBar:  defualtAppBarWidget(titleName: 'emad',
-        //                      child: Row(
-        //                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        //                          children: [
-        //                          IconButton(icon:Icon(Icons.add),
-        //                            onPressed: () {print('add');
-        //                            },),
-        //                            IconButton(icon:Icon(Icons.add_business),
-        //                              onPressed: () { print('add b ');  },),
-        //
-        //                          ],),),
-        //  resizeToAvoidBottomPadding: false,
         resizeToAvoidBottomInset: true,
         key: _scaffoldKey,
         // drawer: Appdrawer(),
@@ -195,10 +191,10 @@ class _ProductAddState extends State<ProductAdd> {
                       //  color: red4,
                       ),
                   child: CustomPaint(
-                    painter: _MyPainter(),
                     child: Container(
                       height: 400.0,
                     ),
+                    painter: _MyPainter(),
                   ),
                 ),
               ),
@@ -232,7 +228,7 @@ class _ProductAddState extends State<ProductAdd> {
                 top: 20,
                 right: 20,
                 child: IconButton(
-                  icon: const Icon(Icons.arrow_back),
+                  icon: Icon(Icons.arrow_back),
                   onPressed: () {
                     Navigator.pop(context);
                   },
@@ -241,12 +237,12 @@ class _ProductAddState extends State<ProductAdd> {
               Positioned(
                 top: MediaQuery.of(context).size.height / 15,
                 left: MediaQuery.of(context).size.width / 2 -
-                    ('Add Product'.toString().length * 8),
-                child: const Text(
-                  'Add Product',
-                  //AppLocalizations.of(context).translate('Add Product'),
+                    ('Edit Type'.toString().length * 8),
+                child: Text(
+                  'Edit Type',
+                  //AppLocalizations.of(context).translate('Add Type'),
 
-                  //'Add Product',
+                  //'Add Type',
                   style: TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
@@ -275,9 +271,9 @@ class _ProductAddState extends State<ProductAdd> {
                             padding: const EdgeInsets.all(8.0),
                             child: defaultTextFormField(
                                 obscureText: false,
-                                fieldController: contProductid,
-                                onChange: (value) => defaultTextFieldOnChange(
-                                    value!, 'Product ID'),
+                                fieldController: contTypeid,
+                                onChange: (value) =>
+                                    defaultTextFieldOnChange(value!, 'Type ID'),
                                 type: TextInputType.emailAddress,
                                 prefixIcon: IconButton(
                                     icon: const Icon(
@@ -293,12 +289,12 @@ class _ProductAddState extends State<ProductAdd> {
                                         size: 20.0),
                                     onPressed: () {
                                       setState(() {
-                                        contProductid.clear();
+                                        contTypeid.clear();
                                       });
                                     }),
                                 validate: (value) => defaultTextFieldValidator(
-                                    value!, 'Product Id'),
-                                hintTextLabel: 'Product Id'),
+                                    value!, 'Type Id'),
+                                hintTextLabel: 'Type Id'),
                           ),
 
                           Padding(
@@ -317,8 +313,8 @@ class _ProductAddState extends State<ProductAdd> {
                                       child: const Padding(
                                         padding:
                                             EdgeInsets.only(left: AppSize.s10),
-                                        child: Text('Product_Date'
-                                            //  '${AppLocalizations.of(context).translate('Product_Date')} :'
+                                        child: Text('Type_Date'
+                                            //  '${AppLocalizations.of(context).translate('Type_Date')} :'
                                             ),
                                       ),
                                     ),
@@ -391,9 +387,9 @@ class _ProductAddState extends State<ProductAdd> {
                             padding: const EdgeInsets.all(8.0),
                             child: defaultTextFormField(
                                 obscureText: false,
-                                fieldController: contProductname,
+                                fieldController: contTypename,
                                 onChange: (value) => defaultTextFieldOnChange(
-                                    value!, 'Product Name'),
+                                    value!, 'Type Name'),
                                 type: TextInputType.emailAddress,
                                 prefixIcon: IconButton(
                                     icon: const Icon(
@@ -409,15 +405,14 @@ class _ProductAddState extends State<ProductAdd> {
                                         size: 20.0),
                                     onPressed: () {
                                       setState(() {
-                                        contProductid.clear();
+                                        contTypename.clear();
                                       });
                                     }),
                                 validate: (value) => defaultTextFieldValidator(
-                                    value!, 'Product Name'),
-                                hintTextLabel: 'Product Name'),
+                                    value!, 'Type Name'),
+                                hintTextLabel: 'Type Name'),
                           ),
 
-                          isSave ? CircularProgressIndicator() : SizedBox(),
                           //category
                           Padding(
                             padding: const EdgeInsets.only(left: 8.0, right: 8),
@@ -447,7 +442,7 @@ class _ProductAddState extends State<ProductAdd> {
                                   ),
                                   const SizedBox(width: 5),
                                   Expanded(
-                                    flex: 3,
+                                    flex: 8,
                                     child: Material(
                                       elevation: 0.0,
                                       borderRadius: BorderRadius.circular(5.0),
@@ -462,7 +457,7 @@ class _ProductAddState extends State<ProductAdd> {
                                                 padding: const EdgeInsets.only(
                                                     left: 15.0),
                                                 child: DropdownButton<String>(
-                                                    items: list_cat
+                                                    items: listCat
                                                         .map((String val) {
                                                       return DropdownMenuItem<
                                                           String>(
@@ -486,11 +481,6 @@ class _ProductAddState extends State<ProductAdd> {
                                                 size: 20,
                                               ),
                                               onPressed: () async {
-                                                //print('ffffff');
-                                                // setState(() {
-                                                //  maxCatId=await getDocumentMaxId('Categorys','Cat_Id');
-                                                // });
-
                                                 getCategory();
                                               }),
                                           IconButton(
@@ -500,8 +490,10 @@ class _ProductAddState extends State<ProductAdd> {
                                                 //print('go to cat add');
                                                 var maxCatId =
                                                     await getDocumentMaxId(
-                                                        'Categorys', 'catId');
-                                                Get.to(CategoryAdd(
+                                                        StringManager
+                                                            .collectionTypeCategory,
+                                                        'catId');
+                                                Get.to(TypeCategoryAdd(
                                                   Docs_max: maxCatId + 1,
                                                 ));
                                               }),
@@ -517,9 +509,9 @@ class _ProductAddState extends State<ProductAdd> {
                             padding: const EdgeInsets.all(8.0),
                             child: defaultTextFormField(
                                 obscureText: false,
-                                fieldController: contProductAmt,
+                                fieldController: contTypeAmt,
                                 onChange: (value) => defaultTextFieldOnChange(
-                                    value!, 'Product Amt'),
+                                    value!, 'Type Amt'),
                                 type: TextInputType.emailAddress,
                                 prefixIcon: IconButton(
                                     icon: const Icon(
@@ -535,25 +527,46 @@ class _ProductAddState extends State<ProductAdd> {
                                         size: 20.0),
                                     onPressed: () {
                                       setState(() {
-                                        contProductid.clear();
+                                        contTypeAmt.clear();
                                       });
                                     }),
                                 validate: (value) => defaultTextFieldValidator(
-                                    value!, 'Product Amt'),
-                                hintTextLabel: 'Product Amt'),
+                                    value!, 'Type Amt'),
+                                hintTextLabel: 'Type Amt'),
                           ),
-                          image == null
-                              ? Container()
-                              : Container(
-                                  height: getHeight(context) / 4,
-                                  width: getWidth(context) - 20,
-                                  child: Image.file(File(image!.path))),
+
+                          // Container(
+                          //     padding:
+                          //         EdgeInsets.only(top: 20, left: 20, right: 20),
+                          //     alignment: Alignment.topCenter,
+                          //     child: Column(
+                          //       children: [
+                          //         image == null
+                          //             ? Container(
+                          //                 height: getHeight(context) /
+                          //                     FontManagerSize.s4,
+                          //                 // decoration: BoxDecoration(
+                          //                 //     // borderRadius: BorderRadius.circular(AppSize.s20),
+                          //                 //     // color: Colors.tealAccent,
+                          //                 //     image: DecorationImage(
+                          //                 //         fit: BoxFit.fill,
+                          //                 //         // image: AssetImage(AssetManager.mancat4)
+                          //                 //         image: NetworkImage(widget
+                          //                 //             .instProd.TypeImage))),
+                          //               )
+                          //             : Container(
+                          //                 height: getHeight(context) / 4,
+                          //                 width: getWidth(context) - 20,
+                          //                 child: Image.file(File(image!.path)))
+                          //       ],
+                          //     )),
                           FittedBox(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 defaltElevationButton(
-                                  nameButton: 'Save',
+                                  heightButton: pheight / 20,
+                                  nameButton: 'Update',
                                   onTabButton: () {
                                     showDialog<void>(
                                       context: context,
@@ -563,7 +576,15 @@ class _ProductAddState extends State<ProductAdd> {
                                             child: CircularProgressIndicator());
                                       },
                                     );
-                                    uploadimage();
+
+                                    updateDatacollection();
+
+                                    showMessage(
+                                        context,
+                                        'You have successfully Updated ${contTypename.text} Type',
+                                        Colors.green);
+
+                                    Navigator.of(context).pop();
                                   },
                                   parBackGroundColor: ColorManager.secondary,
                                   parBorderRadius: 5,
@@ -572,6 +593,7 @@ class _ProductAddState extends State<ProductAdd> {
                                   parForegroundColor: Colors.black,
                                 ),
                                 defaltElevationButton(
+                                  heightButton: pheight / 20,
                                   nameButton: 'Cancel',
                                   onTabButton: () {
                                     Navigator.pop(context);
@@ -582,56 +604,104 @@ class _ProductAddState extends State<ProductAdd> {
                                   parFontSize: 15,
                                   parForegroundColor: Colors.black,
                                 ),
-                                defaltElevationButton(
-                                  nameButton: 'Camera',
-                                  onTabButton: () async {
-                                    image = await ImagePicker()
-                                        .pickImage(source: ImageSource.camera);
-                                    setState(() {
-                                      //update UI
-                                    });
-                                  },
-                                  parBackGroundColor: ColorManager.secondary,
-                                  parBorderRadius: 5,
-                                  parBorderWidth: 5,
-                                  parFontSize: 15,
-                                  parForegroundColor: Colors.black,
-                                ),
-                                defaltElevationButton(
-                                  nameButton: 'Gallery',
-                                  onTabButton: () async {
-                                    image = await ImagePicker()
-                                        .pickImage(source: ImageSource.gallery);
-                                    setState(() {
-                                      //update UI
-                                    });
-                                  },
-                                  parBackGroundColor: ColorManager.secondary,
-                                  parBorderRadius: 5,
-                                  parBorderWidth: 5,
-                                  parFontSize: 15,
-                                  parForegroundColor: Colors.black,
-                                ),
+                                // defaltElevationButton(
+                                //   nameButton: 'Camera',
+                                //   onTabButton: () async {
+                                //     image = await ImagePicker()
+                                //         .pickImage(source: ImageSource.camera);
+                                //     setState(() {
+                                //       //update UI
+                                //     });
+                                //   },
+                                //   parBackGroundColor: ColorManager.secondary,
+                                //   parBorderRadius: 5,
+                                //   parBorderWidth: 5,
+                                //   parFontSize: 15,
+                                //   parForegroundColor: Colors.black,
+                                // ),
+                                // defaltElevationButton(
+                                //   nameButton: 'Gallery',
+                                //   onTabButton: () async {
+                                //     image = await ImagePicker()
+                                //         .pickImage(source: ImageSource.gallery);
+                                //     setState(() {
+                                //       //update UI
+                                //     });
+                                //   },
+                                //   parBackGroundColor: ColorManager.secondary,
+                                //   parBorderRadius: 5,
+                                //   parBorderWidth: 5,
+                                //   parFontSize: 15,
+                                //   parForegroundColor: Colors.black,
+                                // ),
                               ],
                             ),
                           ),
-
-                          const SizedBox(
-                            height: AppSize.s20,
-                          ),
-                          defaltElevationButton(
-                            nameButton: 'Show Nessage',
-                            onTabButton: () {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  defaultSnackBar("message",
-                                      actionMessage: "actionMessage"));
-                            },
-                            parBackGroundColor: ColorManager.secondary,
-                            parBorderRadius: 5,
-                            parBorderWidth: 5,
-                            parFontSize: 15,
-                            parForegroundColor: Colors.black,
-                          ),
+                          // Row(
+                          //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          //   children: [
+                          //     ElevatedButton(
+                          //       // elevation: 7.0,
+                          //         child: Text('Update'),
+                          //
+                          //
+                          //
+                          //         onPressed: ()  {
+                          //
+                          //            var TypeMap={
+                          //             "TypeId": contTypeid.text,
+                          //             "TypeName": contTypename.text,
+                          //             // "TypeImage": url2,
+                          //             "TypePrice": contTypeAmt.text,
+                          //             "TypeCat": _selectedCat ,//contTypecat.text,
+                          //             "TypeEntryDate": _date,
+                          //             "favoriteFlag": 0, //contTypefav.text
+                          //           };
+                          //           // ignore: use_build_context_synchronously
+                          //           updateDataFireStore(StringManager.collection_Types, TypeMap,widget.instProd.docsId);
+                          //            showMessage(context,'You have successfully Updated ${contTypename.text} Type');
+                          //
+                          //
+                          //         }),
+                          //
+                          //     IconButton(icon: Icon(Icons.photo_camera),
+                          //         onPressed: () async {
+                          //           image = await ImagePicker()
+                          //               .pickImage(
+                          //               source: ImageSource.camera);
+                          //           setState(() {
+                          //             //update UI
+                          //           });
+                          //         },
+                          //       ),
+                          //     IconButton(icon:const Icon(Icons.photo_album_sharp),
+                          //         onPressed: () async {
+                          //           image = await ImagePicker()
+                          //               .pickImage(
+                          //               source:
+                          //               ImageSource.gallery);
+                          //           setState(() {
+                          //             //update UI
+                          //           });
+                          //         },
+                          //         ),
+                          //     ElevatedButton(
+                          //       //elevation: 7.0,
+                          //       child: Text(
+                          //         'Canceled',
+                          //         //  AppLocalizations.of(context).translate('Cancel')
+                          //       ),
+                          //
+                          //       // Text("Upload"),
+                          //       //  textColor: Colors.white,
+                          //       // color: Colors.red,
+                          //       onPressed: () {
+                          //         Navigator.pop(context);
+                          //       },
+                          //     ),
+                          //
+                          //   ],
+                          // ),
                         ],
                       ),
                     ),
@@ -647,46 +717,37 @@ class _ProductAddState extends State<ProductAdd> {
     );
   }
 
-  Future<void> uploadimage() async {
-    final Reference ref = FirebaseStorage.instance
-        .ref('/File/Products')
-        .child('${contProductname.text}.jpg');
-    final UploadTask task = ref.putFile(File(image!.path));
-    task.then((res) {
-      res.ref.getDownloadURL().then((value) {
-        url2 = value;
-        //print(value);
-        addDatacollection();
-      });
+  // Future<void> uploadImage() async {
+  //   final Reference ref =
+  //       FirebaseStorage.instance.ref('/File').child('${contTypename.text}.jpg');
+  //   final UploadTask task = ref.putFile(File(image!.path));
+  //   task.then((res) {
+  //     res.ref.getDownloadURL().then((value) {
+  //       url2 = value;
 
-      //url=downurl as String;
-    });
-  }
+  //       addDataFireStore();
+  //     });
+  //   });
+  // }
 
-  Future<void> addDatacollection() async {
-    var productsmap = {
-      "productId": int.parse(contProductid.text),
-      "productName": contProductname.text,
-      "productImage": url2,
-      "productPrice": contProductAmt.text,
-      "productCat": _selectedCat, //contProductcat.text,
-      "productEntryDate": DateTime.now(),
-      "favoriteFlag": 0, //contProductfav.text
-      "productCount": 1
-    };
-    addDataFireStore(StringManager.collectionProducts, productsmap);
-    int maxId =
-        await getDocumentMaxId(StringManager.collectionProducts, 'productId');
-    setState(() {
-      contProductid.text = (maxId + 1).toString();
-      contProductAmt.clear();
-      contProductcat.clear();
-      contProductname.clear();
-      contProductdate.clear();
-      contProductdate.clear();
-    });
-    Navigator.of(context).pop();
-  }
+  // Clear the text fields
+
+  // void addDataFireStore() {
+  //   final todayDate = DateTime.now();
+  //   currentDate = formatDate(todayDate,
+  //       [yyyy, '-', mm, '-', dd, ' ', hh, ':', nn, ':', ss, ' ', am]);
+
+  //   FirebaseFirestore.instance.collection("Clean_App_Types_New").add({
+  //     "TypeId": contTypeid.text,
+  //     "TypeName": contTypename.text,
+  //     "TypeImage": url2,
+  //     "TypePrice": contTypeAmt.text,
+  //     "TypeCat": _selectedCat,
+  //     "TypeEntryDate": currentDate,
+  //     "favoriteFlag": "0",
+  //   });
+  //   Navigator.of(context).pop();
+  // }
 
   getCurrentUser() async {
     final FirebaseAuth auth = FirebaseAuth.instance;
@@ -696,42 +757,31 @@ class _ProductAddState extends State<ProductAdd> {
     //return user.email;
   }
 
-  Future<http.Response> addProducttosql() async {
+  Future<http.Response> addTypeSql() async {
+    //print('inside add');
     final todayDate = DateTime.now();
-    currentdate = formatDate(todayDate,
+    currentDate = formatDate(todayDate,
         [yyyy, '-', mm, '-', dd, ' ', hh, ':', nn, ':', ss, ' ', am]);
-    var url =
-        ("http://emaddwiekat.atwebpages.com/Sales/Flutter/AddProductd.php");
+    var url = ("http://emaddwiekat.atwebpages.com/Sales/Flutter/AddTyped.php");
 
     var response = await http.post(Uri.parse(url), body: {
-      "Product_id": contProductid.text,
-      "Product_name": contProductname.text,
-      "Product_desc": contProductdesc.text,
-      "Product_amt": contProductAmt.text,
-      "Product_to": _selectedProviders,
-      "Product_fav": "false",
-      "Product_cat": _selectedCat,
-      "Product_entry_date": _date.toString(), // currentdate,
-      "Product_modify_date": currentdate.toString(), // currentdate,
-      "Product_img": 'url2',
-      "Product_from": _selectedpays_from,
-      "Product_user": user!.email.toString(),
-      "Product_currency": _selectedcurrency
+      "Type_id": contTypeid.text,
+      "Type_name": contTypename.text,
+      "Type_desc": contTypedesc.text,
+      "Type_amt": contTypeAmt.text,
+      "Type_to": selectedProviders,
+      "Type_fav": "false",
+      "Type_cat": _selectedCat,
+      "Type_entry_date": _date.toString(),
+      "Type_modify_date": currentDate.toString(),
+      "Type_img": 'url2',
+      "Type_from": _selectedpays_from,
+      "Type_user": user!.email.toString(),
+      "Type_currency": _selectedcurrency
     });
     //print("${response.statusCode}");
     //print("${response.body}");
     return response;
-  }
-
-  printlistproviders() {
-    // if (cars != null) {
-    //   list_Providers.clear();
-    //   for (var i = 0; i < carsproviders.docs.length; i++) {
-    //     list_Providers.add(carsproviders.docs[i].data()['Provider_name']);
-    //   }
-    // } else {
-    //  //print("error");
-    // }
   }
 
   print_data() async {
@@ -752,96 +802,70 @@ class _ProductAddState extends State<ProductAdd> {
     // }
   }
 
-  printlist() {
+  printList() {
     if (cars != null) {
-      list_cat.clear();
+      listCat.clear();
       for (var element in cars!.docs) {
         setState(() {
           setState(() {
-            list_cat.add(element['Cat_Name']);
+            listCat.add(element['Cat_Name']);
           });
         });
       }
-
-      // querySnapshot.docs.forEach((element) {
-      //   setState(() {
-      //     list_cat.add(element['Cat_Name']);
-      //   });
     } else {
       //print("error");
     }
   }
 
-  void _showSnackbar(String name) {
-//    final scaff = Scaffold.of(context);
-//     _scaffoldKey.currentState.showSnackBar(SnackBar(
-//       content: Text('Tranaction ${name} Saved'),
-//       backgroundColor: Colors.amber,
-//       duration: Duration(seconds: 5),
-//       action: SnackBarAction(
-//         label: 'Done', onPressed: _scaffoldKey.currentState.hideCurrentSnackBar,
-//       ),
-//     ));
-  }
-
   void getCategory() {
-    list_cat.clear();
+    listCat.clear();
     FirebaseFirestore.instance
-        .collection('Categorys')
+        .collection(StringManager.collectionTypeCategory)
         .get()
         .then((QuerySnapshot querySnapshot) {
       for (var element in querySnapshot.docs) {
         setState(() {
-          list_cat.add(element['catName']);
+          listCat.add(element['catName']);
         });
       }
     });
   }
 
-//  void _onPressed() {
-//   //print('inside onpreesses');
-//    FirebaseFirestore.instance.collection("users").get().then((querySnapshot) {
-//      querySnapshot.docs.forEach((result) {
-//       //print(result.data);
-////        FirebaseFirestore.instance
-////            .collection("users")
-////            .doc(result.id)
-////            .collection("tokens")
-////            .get()
-////            .then((querySnapshot) {
-////          querySnapshot.docs.forEach((result) {
-////           //print(result.data);
-////          });
-////        });
-//      });
-//    });
-//  }
-//
-//
-//  void _onPressedone() async{
-//    final User _auth = FirebaseAuth.instance.currentUser;
-//    FirebaseFirestore.instance
-//        .collection("users")
-//        .doc(_auth.uid)
-//        .collection("tokens")
-//        .get().then((value){
-//          value.docs.forEach((element) {
-//           //print(element.data()['token']);
-//          });
-//
-//    });
-//  }
-//
-//  void _onPressedall() async{
-//
+  // Future<void> _createOrUpdate([String? Docsid]) async {
+  //   await _Typess.doc(Docsid).update({
+  //     "TypeId": contTypeid.text,
+  //     "TypeName": contTypename.text,
+  //    // "TypeImage": url2,
+  //     "TypePrice": contTypeAmt.text,
+  //     "TypeCat": _selectedCat ,//contTypecat.text,
+  //     "TypeEntryDate": _date,
+  //     "favoriteFlag": 0, //contTypefav.text
+  //   });
+  //   // ignore: use_build_context_synchronously
+  //   showMessage(context,'You have successfully Updated ${contTypename.text} Type');
+  // }
 
-//    FirebaseFirestore.instance
-//        .collection("users")
-//        .doc(_auth.uid)
-//        .collection("tokens")
-//        .get().then((value){
-//     //print(value.docs[0].data()['token']);
-//    });
+  void change_date(DateTime newDate) {
+    setState(() {
+      _date = newDate;
+    });
+  }
+
+  void updateDatacollection() {
+    var TypeMap = {
+      "TypeId": int.parse(contTypeid.text),
+      "TypeName": contTypename.text,
+      // "TypeImage": url2,
+      "TypePrice": contTypeAmt.text,
+      "TypeCat": _selectedCat, //contTypecat.text,
+      "TypeEntryDate": _date,
+      "favoriteFlag": 0, //contTypefav.text
+    };
+    updateDataFireStore(
+        StringManager.collectionTypes, TypeMap, widget.instProd.docsId);
+
+    Navigator.of(context).pop();
+  }
 }
 
 class _MyPainter extends CustomPainter {

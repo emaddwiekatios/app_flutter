@@ -4,6 +4,8 @@ class StringManager {
   static const String collectionProducts = "Clean_App_Products_New";
   static const String collectionCategory = "Category";
   static const String collectionCarts = "Carts";
+  static const String collectionTypes = "Types";
+  static const String collectionTypeCategory = "TypesCategory";
 
   static const String noRouteFound = "no_route_found";
   static const String onBoardingTitle1 = "on_boarding_title1";

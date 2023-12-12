@@ -1,7 +1,9 @@
-import 'package:clean_arch_app/Feature_Post/presentation/pages/Home/HomePage.dart';
-import 'package:clean_arch_app/Feature_Post/presentation/pages/Products/ProductAdd.dart';
-import 'package:clean_arch_app/Feature_Post/presentation/pages/Products/ProductDetailsEdit.dart';
-import 'package:clean_arch_app/Feature_Post/presentation/pages/Products/ProductsClass.dart';
+//import 'package:clean_arch_app/Feature_Post/presentation/pages/Home/HomePage.dart';
+///import 'package:clean_arch_app/Feature_Post/presentation/pages/Types/TypeAdd.dart';
+//import 'package:clean_arch_app/Feature_Post/presentation/pages/Types/TypeDetailsEdit.dart';
+import 'package:clean_arch_app/Feature_Post/presentation/pages/Types/TypeEdit.dart';
+import 'package:clean_arch_app/Feature_Post/presentation/pages/Types/TypesClass.dart';
+import 'package:clean_arch_app/core/resource/AssetManager.dart';
 import 'package:clean_arch_app/core/resource/FontManager.dart';
 import 'package:clean_arch_app/core/resource/MediaQuery.dart';
 import 'package:clean_arch_app/core/resource/ValueManger.dart';
@@ -13,55 +15,71 @@ import 'package:get/get.dart';
 
 import '../../../../core/resource/Construct.dart';
 import '../../../../core/resource/StringManager.dart';
+import 'TypeAdd.dart';
+import 'TypeDetailsEdit.dart';
 
-class ProductMainNew extends StatefulWidget {
-  const ProductMainNew({super.key});
+class TypeMainNew extends StatefulWidget {
+  const TypeMainNew({super.key});
 
   @override
-  _ProductMainNewState createState() => _ProductMainNewState();
+  _TypeMainNewState createState() => _TypeMainNewState();
 }
 
-List<ProductClass> list = [];
+List<TypeClass> list = [];
 
-List<ProductClass>? listTemp;
-List<ProductClass> duplicateItems = [];
-List<ProductClass> duplicateItems2 = [];
+List<TypeClass> instProdList = [];
+
+List<TypeClass>? listTemp;
+List<TypeClass> duplicateItems = [];
+List<TypeClass> duplicateItems2 = [];
+List<TypeClass> dummySearchList = [];
+List<TypeClass> dummyListData = [];
+bool updateDataFlag = true;
 var db = FirebaseFirestore.instance;
-
+int? indexParameter;
 QuerySnapshot? cars;
-//List<ProductClass> ProductMainNew= [];
-//final CollectionReference _productss =FirebaseFirestore.instance.collection(StringManager.collection_Products);
-var _productss = getCollectionReference(StringManager.collectionProducts);
+//List<TypeClass> TypeMainNew= [];
+//final CollectionReference _Typess =FirebaseFirestore.instance.collection(StringManager.collection_Types);
+var _Types = getCollectionReference(StringManager.collectionTypes)
+    .orderBy('TypeId', descending: true);
+final TextEditingController _TypeIdController = TextEditingController();
+final TextEditingController controllerSearch = TextEditingController();
 
-final TextEditingController _productIdController = TextEditingController();
-final TextEditingController _productNameController = TextEditingController();
-final TextEditingController _productImageController = TextEditingController();
-final TextEditingController _productPriceController = TextEditingController();
-final TextEditingController _productCatController = TextEditingController();
-final TextEditingController _productEntryDateController =
-    TextEditingController();
+final TextEditingController _TypeNameController = TextEditingController();
+final TextEditingController _TypeImageController = TextEditingController();
+final TextEditingController _TypePriceController = TextEditingController();
+final TextEditingController _TypeCatController = TextEditingController();
+final TextEditingController _TypeEntryDateController = TextEditingController();
 
-class _ProductMainNewState extends State<ProductMainNew> {
-  void filterSearchResults(String query) {
-    List<ProductClass> dummySearchList = [];
-    dummySearchList = duplicateItems;
-    if (query.isNotEmpty) {
-      List<ProductClass> dummyListData = [];
-      for (var item in dummySearchList) {
-        if (item.productName.toUpperCase().contains(query.toUpperCase())) {
-          dummyListData.add(item);
-        }
-      }
-      setState(() {
-        list = dummyListData;
-      });
-      return;
-    } else {
-      setState(() {
-        list = duplicateItems;
-      });
-    }
-  }
+class _TypeMainNewState extends State<TypeMainNew> {
+  // void filterSearchResults(String query) {
+  //   print('query===$query');
+  //   List<TypeClass> dummySearchList = [];
+
+  //   dummySearchList = duplicateItems;
+  //   if (query.isNotEmpty) {
+  //     List<TypeClass> dummyListData = [];
+  //     for (var item in dummySearchList) {
+  //       //print(item.TypeName);
+  //       if (item.TypeName.toUpperCase().contains(query.toUpperCase())) {
+  //         //print('inside forrrrrr if =$item');
+  //         dummyListData.add(item);
+  //         print(dummyListData);
+  //       }
+  //     }
+  //     setState(() {
+  //       instProdList = dummyListData;
+  //       print(instProdList);
+  //     });
+  //     return;
+  //   } else {
+  //     setState(() {
+  //       instProdList = duplicateItems;
+  //     });
+  //   }
+  // }
+
+ 
 
   @override
   void initState() {
@@ -75,22 +93,20 @@ class _ProductMainNewState extends State<ProductMainNew> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   Color pyellow = Colors.red;
 
-  Future<void> _createOrUpdate([ProductClass? documentSnapshot]) async {
+  Future<void> _createOrUpdate([TypeClass? documentSnapshot]) async {
     String action = 'create';
 
     if (documentSnapshot != null) {
       action = 'update';
-      _productIdController.text = documentSnapshot.productId.toString();
-      _productNameController.text = documentSnapshot.productName;
-      _productImageController.text = documentSnapshot.productImage;
-      _productCatController.text = documentSnapshot.productCat;
-      _productEntryDateController.text =
-          documentSnapshot.productEntryDate.toString();
-      _productPriceController.text = documentSnapshot.productPrice;
+      _TypeIdController.text = documentSnapshot.TypeId.toString();
+      _TypeNameController.text = documentSnapshot.TypeName;
+      _TypeCatController.text = documentSnapshot.TypeCat;
+      _TypeEntryDateController.text = documentSnapshot.TypeEntryDate.toString();
+      _TypePriceController.text = documentSnapshot.TypePrice;
     } else {
-      _productNameController.text = '';
-      _productPriceController.text = '';
-      _productCatController.text = '';
+      _TypeNameController.text = '';
+      _TypePriceController.text = '';
+      _TypeCatController.text = '';
     }
 
     await showModalBottomSheet(
@@ -109,7 +125,7 @@ class _ProductMainNewState extends State<ProductMainNew> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 TextField(
-                  controller: _productNameController,
+                  controller: _TypeNameController,
                   decoration: const InputDecoration(labelText: 'Name'),
                 ),
                 const SizedBox(
@@ -118,7 +134,7 @@ class _ProductMainNewState extends State<ProductMainNew> {
                 TextField(
                   keyboardType:
                       const TextInputType.numberWithOptions(decimal: true),
-                  controller: _productPriceController,
+                  controller: _TypePriceController,
                   decoration: const InputDecoration(
                     labelText: 'Price',
                   ),
@@ -129,7 +145,7 @@ class _ProductMainNewState extends State<ProductMainNew> {
                 TextField(
                   keyboardType:
                       const TextInputType.numberWithOptions(decimal: true),
-                  controller: _productCatController,
+                  controller: _TypeCatController,
                   decoration: const InputDecoration(
                     labelText: 'Cat',
                   ),
@@ -140,13 +156,13 @@ class _ProductMainNewState extends State<ProductMainNew> {
                 ElevatedButton(
                   child: Text(action == 'create' ? 'Create' : 'Update'),
                   onPressed: () async {
-                    final String name = _productNameController.text;
-                    final String price = _productPriceController.text;
-                    final String cat = _productCatController.text;
+                    final String name = _TypeNameController.text;
+                    final String price = _TypePriceController.text;
+                    final String cat = _TypeCatController.text;
                     if (action == 'create') {
-                      _productNameController.text = '';
-                      _productPriceController.text = '';
-                      _productCatController.text = '';
+                      _TypeNameController.text = '';
+                      _TypePriceController.text = '';
+                      _TypeCatController.text = '';
                       final todayDate = DateTime.now();
                       var currentdate = formatDate(todayDate, [
                         yyyy,
@@ -164,31 +180,29 @@ class _ProductMainNewState extends State<ProductMainNew> {
                         am
                       ]);
 
-                      // Persist a new product to Firestore
-                      await _productss.add({
-                        "productName": name,
-                        "productPrice": price,
-                        "productCat": cat,
-                        "productId": "13",
-                        "productImage": "IMAGEPAth",
-                        "productEntryDate": currentdate,
-                        "favoriteFlag": 0
-                      });
+                      // Persist a new Type to Firestore
+                      // await _Types.add({
+                      //   "TypeName": name,
+                      //   "TypePrice": price,
+                      //   "TypeCat": cat,
+                      //   "TypeId": "13",
+                      //   "TypeEntryDate": currentdate
+                      // });
                     }
 
                     if (action == 'update') {
-                      // Update the product
-                      await _productss.doc(documentSnapshot?.docsId).update({
-                        "productName": name,
-                        "productPrice": price,
-                        "productCat": cat
-                      });
+                      // Update the Type
+                      // await _Types.doc(documentSnapshot?.docsId).update({
+                      //   "TypeName": name,
+                      //   "TypePrice": price,
+                      //   "TypeCat": cat
+                      // });
                     }
 
                     // Clear the text fields
-                    _productNameController.text = '';
-                    _productPriceController.text = '';
-                    _productCatController.text = '';
+                    _TypeNameController.text = '';
+                    _TypePriceController.text = '';
+                    _TypeCatController.text = '';
 
                     // Hide the bottom sheet
                     Navigator.of(context).pop();
@@ -209,11 +223,11 @@ class _ProductMainNewState extends State<ProductMainNew> {
       child: Scaffold(
         key: _scaffoldKey,
         // drawer: Appdrawer(),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => _createOrUpdate(),
-          // onPressed: () {  },
-          child: const Icon(Icons.add),
-        ),
+        // floatingActionButton: FloatingActionButton(
+        //   onPressed: () => _createOrUpdate(),
+        //   // onPressed: () {  },
+        //   child: const Icon(Icons.add),
+        // ),
 
         body: Stack(
           children: <Widget>[
@@ -299,7 +313,7 @@ class _ProductMainNewState extends State<ProductMainNew> {
               top: 50,
               left: MediaQuery.of(context).size.width / 2 - 70,
               child: Text(
-                'List Products',
+                'List Types',
                 style: TextStyle(fontSize: 29, fontWeight: FontWeight.bold),
               ),
             ),
@@ -308,21 +322,34 @@ class _ProductMainNewState extends State<ProductMainNew> {
               top: 100,
               left: 15,
               right: 15,
+              bottom: 20,
 
               // left: MediaQuery.of(context).size.width / 2 - 70,
               child: SingleChildScrollView(
                 child: Container(
-                  height: 50,
+                  height: 45,
                   width: MediaQuery.of(context).size.width - 30,
                   child: Material(
                     elevation: 5.0,
-                    borderRadius: BorderRadius.circular(5.0),
+                    borderRadius: BorderRadius.circular(10.0),
                     child: TextField(
+                        controller: controllerSearch,
                         onChanged: (value) {
                           //print('inside change');
-                          filterSearchResults(value);
+                          //filterSearchResults(value);
                         },
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
+                            suffixIcon: IconButton(
+                              icon: Icon(Icons.cancel),
+                              onPressed: () {
+                                controllerSearch.clear();
+                            //    filterSearchResults(controllerSearch.text);
+                              },
+                              //  onPressed: () {
+                              // controllerSearch.clear();
+                              //  filterSearchResults(controllerSearch.text);
+                              // }
+                            ),
                             border: InputBorder.none,
                             prefixIcon: Icon(Icons.search,
                                 color: Colors.yellow, size: 30.0),
@@ -338,46 +365,55 @@ class _ProductMainNewState extends State<ProductMainNew> {
             Positioned(
               top: 160,
               right: 0,
-              child: Container(
+              child: SizedBox(
                 width: MediaQuery.of(context).size.width,
-                height: getHeight(context) / 1.2,
+                height: getHeight(context) / 1.35,
                 child: StreamBuilder(
-                  stream: _productss.snapshots(),
+                  stream: _Types.snapshots(),
                   builder:
                       (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
                     if (streamSnapshot.hasData) {
-                      instProdList.clear();
-                      for (int i = 0;
-                          i < streamSnapshot.data!.docs.length;
-                          i++) {
-                        final DocumentSnapshot documentSnapshot =
-                            streamSnapshot.data!.docs[i];
-                        ProductClass filteredData = ProductClass(
-                            productId: documentSnapshot['productId'],
-                            productName: documentSnapshot['productName'],
-                            productImage: documentSnapshot['productImage'],
-                            productCat: documentSnapshot['productCat'],
-                            productEntryDate: DateTime.now(),
-                            //DateTime.parse(documentSnapshot['productEntryDate']),
-                            productPrice: documentSnapshot['productPrice'],
-                            favoriteFlag: documentSnapshot['favoriteFlag'],
-                            docsId: documentSnapshot.id,
-                            productCount: 1);
+                      if (updateDataFlag) {
+                        instProdList.clear();
+                        for (int i = 0;
+                            i < streamSnapshot.data!.docs.length;
+                            i++) {
+                          final DocumentSnapshot documentSnapshot =
+                              streamSnapshot.data!.docs[i];
 
-                        instProdList.add(filteredData);
-                        duplicateItems = instProdList;
+                          TypeClass filteredData = TypeClass(
+                              TypeId: documentSnapshot['TypeId'],
+                              TypeName: documentSnapshot['TypeName'],
+                              TypeCat: documentSnapshot['TypeCat'],
+                              TypeEntryDate:
+                                  DateTime.fromMicrosecondsSinceEpoch(
+                                      documentSnapshot['TypeEntryDate']
+                                          .microsecondsSinceEpoch),
+                              //DateTime.parse(
+                              //documentSnapshot['TypeEntryDate']),
+                              TypePrice: documentSnapshot['TypePrice'],
+                              docsId: documentSnapshot.id,
+                              TypeCount: 1);
+
+                          instProdList.add(filteredData);
+                          duplicateItems = instProdList;
+                        }
                       }
 
+                      instProdList.sort(
+                          (a, b) => b.TypeEntryDate.compareTo(a.TypeEntryDate));
+
                       return ListView.builder(
-                        itemCount: streamSnapshot.data!.docs.length,
+                        itemCount: instProdList
+                            .length, //streamSnapshot.data!.docs.length,
                         itemBuilder: (context, index) {
                           return InkWell(
                             onTap: () {
-                              //print(instProdList[index].productEntryDate);
-                              Get.to(() => ProductDetailsEdit(
-                                  instProd: instProdList[index]
-                                  //   prodList: instProdListSimilar,
-                                  ));
+                              print(instProdList[index].TypeEntryDate);
+                              Get.to(
+                                  () => TypeEdit(instProd: instProdList[index]
+                                      //   prodList: instProdListSimilar,
+                                      ));
                             },
                             child: Container(
                               height: getHeight(context) / FontManagerSize.s6,
@@ -388,54 +424,24 @@ class _ProductMainNewState extends State<ProductMainNew> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.all(AppSize.s6),
-                                        child: CircleAvatar(
-                                          radius: FontManagerSize.s35,
-                                          backgroundImage: NetworkImage(
-                                              instProdList[index].productImage),
-                                        ),
-                                      ),
                                       Column(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
+                                            MainAxisAlignment.center,
                                         children: [
-                                          Text(
-                                            instProdList[index].productName,
-                                            style: const TextStyle(
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: AppSize.s20),
+                                          Padding(
+                                            padding: const EdgeInsets.all(
+                                                AppSize.s6),
+                                            child: CircleAvatar(
+                                              radius: FontManagerSize.s20,
+                                              backgroundImage: AssetImage(
+                                                  AssetManager.buying),
+                                            ),
                                           ),
                                           Text(
-                                            '\$${instProdList[index].productPrice}',
+                                            '\$${instProdList[index].TypePrice}',
                                             style: const TextStyle(
                                                 fontWeight: FontWeight.w300,
-                                                fontSize: AppSize.s20),
-                                          ),
-                                        ],
-                                      ),
-                                      Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
-                                        children: [
-                                          Text(
-                                            instProdList[index].productCat,
-                                            style: const TextStyle(
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: AppSize.s20),
-                                          ),
-                                          Text(
-                                            '${formatDate(instProdList[index].productEntryDate, [
-                                                  yyyy,
-                                                  '-',
-                                                  mm,
-                                                  '-',
-                                                  dd
-                                                ])}',
-                                            style: const TextStyle(
-                                                fontWeight: FontWeight.w200,
-                                                fontSize: AppSize.s20),
+                                                fontSize: AppSize.s18),
                                           ),
                                         ],
                                       ),
@@ -443,16 +449,56 @@ class _ProductMainNewState extends State<ProductMainNew> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
                                         children: [
-                                          // Press this button to edit a single product
+                                          Text(
+                                            instProdList[index].TypeName,
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: AppSize.s28),
+                                          ),
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              Text(
+                                                instProdList[index].TypeCat,
+                                                style: const TextStyle(
+                                                    fontWeight: FontWeight.w400,
+                                                    fontSize: AppSize.s18),
+                                              ),
+                                              Text(
+                                                '${formatDate(instProdList[index].TypeEntryDate, [
+                                                      yyyy,
+                                                      '-',
+                                                      mm,
+                                                      '-',
+                                                      dd
+                                                    ])}',
+                                                style: const TextStyle(
+                                                    fontWeight: FontWeight.w300,
+                                                    fontSize: AppSize.s20),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          // Press this button to edit a single Type
                                           IconButton(
                                               icon: const Icon(
                                                 Icons.edit,
                                                 size: AppSize.s20,
                                               ),
                                               //  onPressed: () =>
-                                              onPressed: () => _createOrUpdate(
-                                                  instProdList[index])),
-                                          // This icon button is used to delete a single product
+                                              onPressed: () => Get.to(() =>
+                                                  TypeEdit(
+                                                      instProd:
+                                                          instProdList[index]
+                                                      //   prodList: instProdListSimilar,
+                                                      ))),
+                                          // This icon button is used to delete a single Type
                                           IconButton(
                                               icon: const Icon(
                                                 Icons.delete,
@@ -464,15 +510,9 @@ class _ProductMainNewState extends State<ProductMainNew> {
                                                 deleteProduct(
                                                     context,
                                                     StringManager
-                                                        .collectionProducts,
-                                                    instProdList[index].docsId,
-                                                    instProdList[index]
-                                                        .productImage);
-                                                // Create a reference to the file to delete
-                                                // FirebaseStorage.instance
-                                                //     .refFromURL(documentSnapshot[
-                                                //         'productImage'])
-                                                //     .delete();
+                                                        .collectionTypes,
+                                                    instProdList[index].docsId);
+
 // Child references can also take paths
 // spaceRef now points to "images/space.jpg
 // imagesRef still points to "images"
@@ -485,21 +525,21 @@ class _ProductMainNewState extends State<ProductMainNew> {
                                   // ListTile(
                                   //
                                   //
-                                  //   title: Text('${instProdList[index].productName}'),
+                                  //   title: Text('${instProdList[index].TypeName}'),
                                   //   subtitle: Column(
                                   //     children: [
-                                  //      Text('${instProdList[index].productName}'),
-                                  //       Text('${instProdList[index].productPrice}')
+                                  //      Text('${instProdList[index].TypeName}'),
+                                  //       Text('${instProdList[index].TypePrice}')
                                   //     ],
                                   //   ),
                                   //   leading:  Column(
                                   //     children: [
-                                  //       // Text('${instProdList[index].productImage}'),
+                                  //       // Text('${instProdList[index].TypeImage}'),
                                   //       Text('${instProdList[index].favoriteFlag}'),
-                                  //       //   Text('${instProdList[index].productPrice}'),
-                                  //       Text('${formatDate(instProdList[index].productEntryDate,
+                                  //       //   Text('${instProdList[index].TypePrice}'),
+                                  //       Text('${formatDate(instProdList[index].TypeEntryDate,
                                   //           [yyyy, '-', mm, '-', dd])}'),
-                                  //       Text('${instProdList[index].productCat}'),
+                                  //       Text('${instProdList[index].TypeCat}'),
                                   //     ],
                                   //   ),
                                   //   trailing: SizedBox(
@@ -507,17 +547,17 @@ class _ProductMainNewState extends State<ProductMainNew> {
                                   //     height: 200,
                                   //     child: Row(
                                   //       children: [
-                                  //         // Press this button to edit a single product
+                                  //         // Press this button to edit a single Type
                                   //         IconButton(
                                   //           icon: const Icon(Icons.edit),
                                   //           //  onPressed: () =>
                                   //           onPressed:()=> _createOrUpdate(documentSnapshot)
                                   //         ),
-                                  //         // This icon button is used to delete a single product
+                                  //         // This icon button is used to delete a single Type
                                   //         IconButton(
                                   //             icon: const Icon(Icons.delete),
                                   //             ///onPressed: (){},
-                                  //             onPressed: () =>  _deleteProduct(documentSnapshot.id)
+                                  //             onPressed: () =>  _deleteType(documentSnapshot.id)
                                   //         ),
                                   //
                                   //       ],
@@ -543,15 +583,16 @@ class _ProductMainNewState extends State<ProductMainNew> {
               top: pheight / 30,
               right: pwidth / 20,
               child: IconButton(
-                icon: Icon(Icons.add, size: 30),
-                onPressed: () async {
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (_) => ProductAdd()));
+                  icon: Icon(Icons.add, size: 30),
+                  onPressed: () async {
+                    print('inside addd');
+                    Navigator.push(
+                        context, MaterialPageRoute(builder: (_) => TypeAdd()));
+                  }
 
-                  //  }
-                  //pushNamed(context, "/ProductAdd");
-                },
-              ),
+                  //pushNamed(context, "/TypeAdd");
+
+                  ),
             ),
           ],
         ),

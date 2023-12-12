@@ -1,15 +1,11 @@
 //import 'dart:html';
 
-import 'dart:convert';
-
+import 'package:clean_arch_app/Feature_Post/presentation/pages/TypeCategory/TypeCategoryClass.dart';
 import 'package:clean_arch_app/core/resource/AssetManager.dart';
-import 'package:clean_arch_app/core/resource/FontManager.dart';
 import 'package:clean_arch_app/core/resource/MediaQuery.dart';
 import 'package:clean_arch_app/core/resource/StringManager.dart';
-import 'package:clean_arch_app/core/resource/ValueManger.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'dart:ui';
 import 'dart:io';
 import 'dart:async';
@@ -22,7 +18,6 @@ import 'package:date_format/date_format.dart';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -30,13 +25,14 @@ import 'package:http/http.dart' as http;
 
 import '../../../../core/resource/ColorManger.dart';
 import '../../../../core/resource/Construct.dart';
-import '../Category/CategoryAdd.dart';
+import '../../../../core/resource/FontManager.dart';
+import '../../../../core/resource/ValueManger.dart';
 
-// ignore: must_be_immutable
-class ProductAdd extends StatefulWidget {
-  ProductAdd({super.key});
+class TypeCategoryEdit extends StatefulWidget {
+  TypeCategoryClass IntTypeCategory;
+  TypeCategoryEdit({required this.IntTypeCategory});
   @override
-  _ProductAddState createState() => _ProductAddState();
+  _TypeCategoryEditState createState() => _TypeCategoryEditState();
 }
 
 QuerySnapshot? cars;
@@ -47,10 +43,10 @@ Color? colorOne;
 Color? colorTwo;
 Color? colorThree;
 User? user;
-//dynamic _pickImageError;
+dynamic _pickImageError;
 bool isVideo = false;
 bool isSave = false;
-//String? _retrieveDataError;
+String? _retrieveDataError;
 typedef OnPickImageCallback = void Function(
     double? maxWidth, double? maxHeight, int? quality);
 final ImagePicker _picker = ImagePicker();
@@ -58,10 +54,10 @@ final TextEditingController maxWidthController = TextEditingController();
 final TextEditingController maxHeightController = TextEditingController();
 final TextEditingController qualityController = TextEditingController();
 
-final CollectionReference _Categoryss =
-    FirebaseFirestore.instance.collection('Category');
+final CollectionReference _TypeCategoryss =
+    FirebaseFirestore.instance.collection('TypeCategorys');
 
-class _ProductAddState extends State<ProductAdd> {
+class _TypeCategoryEditState extends State<TypeCategoryEdit> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
 //  add  keyboard action
@@ -85,27 +81,19 @@ class _ProductAddState extends State<ProductAdd> {
   //File? _imageFile;
   DateTime _date = DateTime.now();
   QuerySnapshot? carsinvoice;
-
   int maxCatId = 0;
-  int maxProductId = 0;
-  // final GlobalKey<ScaffoldState> _scaffoldKeysnak = new GlobalKey<ScaffoldState>();
-
-  Future<void> getProductIdmax() async {
-    maxProductId =
-        await getDocumentMaxId(StringManager.collectionProducts, 'productId');
-    maxProductId = maxProductId + 1;
-    setState(() {
-      contProductid.text = (maxProductId).toString();
-    });
-    print('maxProductId=$maxProductId');
-  }
+  final GlobalKey<ScaffoldState> _scaffoldKeysnak =
+      new GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    getProductIdmax();
+    contcatid.text = widget.IntTypeCategory.catId.toString();
+    contcatAmt.text = widget.IntTypeCategory.catPrice;
+    contcatdate.text = widget.IntTypeCategory.catDate.toString();
+    contcatname.text = widget.IntTypeCategory.catName;
 
-    getCategory();
+    getTypeCategory();
     getCurrentUser();
     // //print("inside init");
     colorOne = Colors.red;
@@ -113,6 +101,13 @@ class _ProductAddState extends State<ProductAdd> {
     colorThree = Colors.red;
   }
 
+/*
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return null;
+  }
+*/
   String? imagename;
   //PickedFile sampleimage;
   File? sampleimage;
@@ -122,7 +117,7 @@ class _ProductAddState extends State<ProductAdd> {
 
   List<String> list_cat = [];
 
-  String _selectedCat = 'Category';
+  String _selectedCat = 'TypeCategory';
 
   List<String> list_Providers = [];
 
@@ -136,16 +131,16 @@ class _ProductAddState extends State<ProductAdd> {
 
   String _selectedpays_from = 'Emad';
 
-  TextEditingController contProductid = new TextEditingController();
-  TextEditingController contProductname = new TextEditingController();
-  TextEditingController contProductAmt = new TextEditingController();
-  TextEditingController contProductfav = new TextEditingController();
-  TextEditingController contProductcat = new TextEditingController();
-  TextEditingController contProductdesc = new TextEditingController();
-  TextEditingController contProducturl = new TextEditingController();
-  TextEditingController contProductdentrydate = new TextEditingController();
-  TextEditingController contProductTo = new TextEditingController();
-  TextEditingController contProductdate = new TextEditingController();
+  TextEditingController contcatid = new TextEditingController();
+  TextEditingController contcatname = new TextEditingController();
+  TextEditingController contcatAmt = new TextEditingController();
+  TextEditingController contcatfav = new TextEditingController();
+  TextEditingController contcatcat = new TextEditingController();
+  TextEditingController contcatdesc = new TextEditingController();
+  TextEditingController contcaturl = new TextEditingController();
+  TextEditingController contcatdentrydate = new TextEditingController();
+  TextEditingController contcatTo = new TextEditingController();
+  TextEditingController contcatdate = new TextEditingController();
   File? imageFile;
 
   @override
@@ -157,17 +152,6 @@ class _ProductAddState extends State<ProductAdd> {
 
     return SafeArea(
       child: Scaffold(
-        // appBar:  defualtAppBarWidget(titleName: 'emad',
-        //                      child: Row(
-        //                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        //                          children: [
-        //                          IconButton(icon:Icon(Icons.add),
-        //                            onPressed: () {print('add');
-        //                            },),
-        //                            IconButton(icon:Icon(Icons.add_business),
-        //                              onPressed: () { print('add b ');  },),
-        //
-        //                          ],),),
         //  resizeToAvoidBottomPadding: false,
         resizeToAvoidBottomInset: true,
         key: _scaffoldKey,
@@ -190,15 +174,15 @@ class _ProductAddState extends State<ProductAdd> {
                 child: Container(
                   height: MediaQuery.of(context).size.height / 4,
                   width: MediaQuery.of(context).size.width,
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                       //borderRadius: BorderRadius.circular(200),
                       //  color: red4,
                       ),
                   child: CustomPaint(
-                    painter: _MyPainter(),
                     child: Container(
                       height: 400.0,
                     ),
+                    painter: _MyPainter(),
                   ),
                 ),
               ),
@@ -241,12 +225,12 @@ class _ProductAddState extends State<ProductAdd> {
               Positioned(
                 top: MediaQuery.of(context).size.height / 15,
                 left: MediaQuery.of(context).size.width / 2 -
-                    ('Add Product'.toString().length * 8),
+                    ('Edit TypeCategory'.toString().length * 8),
                 child: const Text(
-                  'Add Product',
-                  //AppLocalizations.of(context).translate('Add Product'),
+                  'Edit TypeCategory',
+                  //AppLocalizations.of(context).translate('Add cat'),
 
-                  //'Add Product',
+                  //'Add cat',
                   style: TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
@@ -270,14 +254,13 @@ class _ProductAddState extends State<ProductAdd> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
-                          //prodid
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: defaultTextFormField(
                                 obscureText: false,
-                                fieldController: contProductid,
+                                fieldController: contcatid,
                                 onChange: (value) => defaultTextFieldOnChange(
-                                    value!, 'Product ID'),
+                                    value!, 'TypeCategory ID'),
                                 type: TextInputType.emailAddress,
                                 prefixIcon: IconButton(
                                     icon: const Icon(
@@ -293,14 +276,13 @@ class _ProductAddState extends State<ProductAdd> {
                                         size: 20.0),
                                     onPressed: () {
                                       setState(() {
-                                        contProductid.clear();
+                                        contcatid.clear();
                                       });
                                     }),
                                 validate: (value) => defaultTextFieldValidator(
-                                    value!, 'Product Id'),
-                                hintTextLabel: 'Product Id'),
+                                    value!, 'TypeCategory Id'),
+                                hintTextLabel: 'TypeCategory Id'),
                           ),
-
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Container(
@@ -317,7 +299,7 @@ class _ProductAddState extends State<ProductAdd> {
                                       child: const Padding(
                                         padding:
                                             EdgeInsets.only(left: AppSize.s10),
-                                        child: Text('Product_Date'
+                                        child: Text('TypeCategory_Date'
                                             //  '${AppLocalizations.of(context).translate('Product_Date')} :'
                                             ),
                                       ),
@@ -391,9 +373,9 @@ class _ProductAddState extends State<ProductAdd> {
                             padding: const EdgeInsets.all(8.0),
                             child: defaultTextFormField(
                                 obscureText: false,
-                                fieldController: contProductname,
+                                fieldController: contcatname,
                                 onChange: (value) => defaultTextFieldOnChange(
-                                    value!, 'Product Name'),
+                                    value!, 'TypeCategory Name'),
                                 type: TextInputType.emailAddress,
                                 prefixIcon: IconButton(
                                     icon: const Icon(
@@ -409,117 +391,21 @@ class _ProductAddState extends State<ProductAdd> {
                                         size: 20.0),
                                     onPressed: () {
                                       setState(() {
-                                        contProductid.clear();
+                                        contcatname.clear();
                                       });
                                     }),
                                 validate: (value) => defaultTextFieldValidator(
-                                    value!, 'Product Name'),
-                                hintTextLabel: 'Product Name'),
+                                    value!, 'TypeCategory Name'),
+                                hintTextLabel: 'TypeCategory Name'),
                           ),
-
                           isSave ? CircularProgressIndicator() : SizedBox(),
-                          //category
-                          Padding(
-                            padding: const EdgeInsets.only(left: 8.0, right: 8),
-                            child: Container(
-                              height: pheight / FontManagerSize.s20,
-                              decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.black),
-                                  borderRadius: BorderRadius.circular(7)),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    flex: 2,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(0),
-                                      child: Material(
-                                        elevation: 0.0,
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                        child: const Padding(
-                                          padding: EdgeInsets.all(AppSize.s12),
-                                          child: Text(
-                                            'Category',
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 5),
-                                  Expanded(
-                                    flex: 3,
-                                    child: Material(
-                                      elevation: 0.0,
-                                      borderRadius: BorderRadius.circular(5.0),
-                                      child: Row(
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 0.0, right: 0),
-                                            child: Align(
-                                              alignment: Alignment.topLeft,
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 15.0),
-                                                child: DropdownButton<String>(
-                                                    items: list_cat
-                                                        .map((String val) {
-                                                      return DropdownMenuItem<
-                                                          String>(
-                                                        value: val,
-                                                        child: Text(val),
-                                                      );
-                                                    }).toList(),
-                                                    hint: Text(_selectedCat),
-                                                    onChanged: (newVal) {
-                                                      setState(() {
-                                                        _selectedCat = newVal!;
-                                                      });
-                                                    }),
-                                              ),
-                                            ),
-                                          ),
-                                          IconButton(
-                                              icon: Icon(
-                                                Icons.refresh,
-                                                color: Colors.red,
-                                                size: 20,
-                                              ),
-                                              onPressed: () async {
-                                                //print('ffffff');
-                                                // setState(() {
-                                                //  maxCatId=await getDocumentMaxId('Categorys','Cat_Id');
-                                                // });
-
-                                                getCategory();
-                                              }),
-                                          IconButton(
-                                              icon: const Icon(Icons.add,
-                                                  size: 20),
-                                              onPressed: () async {
-                                                //print('go to cat add');
-                                                var maxCatId =
-                                                    await getDocumentMaxId(
-                                                        'Categorys', 'catId');
-                                                Get.to(CategoryAdd(
-                                                  Docs_max: maxCatId + 1,
-                                                ));
-                                              }),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: defaultTextFormField(
                                 obscureText: false,
-                                fieldController: contProductAmt,
+                                fieldController: contcatAmt,
                                 onChange: (value) => defaultTextFieldOnChange(
-                                    value!, 'Product Amt'),
+                                    value!, 'TypeCategory Amt'),
                                 type: TextInputType.emailAddress,
                                 prefixIcon: IconButton(
                                     icon: const Icon(
@@ -535,35 +421,64 @@ class _ProductAddState extends State<ProductAdd> {
                                         size: 20.0),
                                     onPressed: () {
                                       setState(() {
-                                        contProductid.clear();
+                                        contcatAmt.clear();
                                       });
                                     }),
                                 validate: (value) => defaultTextFieldValidator(
-                                    value!, 'Product Amt'),
-                                hintTextLabel: 'Product Amt'),
+                                    value!, 'TypeCategory Amt'),
+                                hintTextLabel: 'TypeCategory Amt'),
                           ),
-                          image == null
-                              ? Container()
-                              : Container(
-                                  height: getHeight(context) / 4,
-                                  width: getWidth(context) - 20,
-                                  child: Image.file(File(image!.path))),
+                          // Container(
+                          //     padding:
+                          //         EdgeInsets.only(top: 20, left: 20, right: 20),
+                          //     alignment: Alignment.topCenter,
+                          //     child: Column(
+                          //       children: [
+                          //         image == null
+                          //             ? Container(
+                          //                 height: getHeight(context) /
+                          //                     FontManagerSize.s4,
+                          //                 decoration: BoxDecoration(
+                          //                     // borderRadius: BorderRadius.circular(AppSize.s20),
+                          //                     // color: Colors.tealAccent,
+                          //                     image: DecorationImage(
+                          //                         fit: BoxFit.fill,
+                          //                         // image: AssetImage(AssetManager.mancat4)
+                          //                         image: NetworkImage(widget
+                          //                             .IntTypeCategory
+                          //                             .catImage))),
+                          //               )
+                          //             : Container(
+                          //                 height: getHeight(context) / 4,
+                          //                 width: getWidth(context) - 20,
+                          //                 child: Image.file(File(image!.path)))
+                          //       ],
+                          //     )),
                           FittedBox(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 defaltElevationButton(
+                                  heightButton: pheight / 18,
                                   nameButton: 'Save',
                                   onTabButton: () {
-                                    showDialog<void>(
-                                      context: context,
-                                      // false = user must tap button, true = tap outside dialog
-                                      builder: (BuildContext dialogContext) {
-                                        return Center(
-                                            child: CircularProgressIndicator());
-                                      },
-                                    );
-                                    uploadimage();
+                                    var TypeCategoryMap = {
+                                      "catId": contcatid.text,
+                                      "catName": contcatname.text,
+                                      //"catimage": url2,
+                                      "catPrice": contcatAmt.text,
+                                      "catDesc":
+                                          contcatname.text, //contcatcat.text,
+                                      "catDate": _date,
+                                      "Type": "0" //contcatfav.text
+                                    };
+
+                                    updateDataFireStore(
+                                        StringManager.collectionTypeCategory,
+                                        TypeCategoryMap,
+                                        widget.IntTypeCategory.docsId);
+
+                                    Navigator.pop(context);
                                   },
                                   parBackGroundColor: ColorManager.secondary,
                                   parBorderRadius: 5,
@@ -572,6 +487,7 @@ class _ProductAddState extends State<ProductAdd> {
                                   parForegroundColor: Colors.black,
                                 ),
                                 defaltElevationButton(
+                                  heightButton: pheight / 18,
                                   nameButton: 'Cancel',
                                   onTabButton: () {
                                     Navigator.pop(context);
@@ -582,55 +498,38 @@ class _ProductAddState extends State<ProductAdd> {
                                   parFontSize: 15,
                                   parForegroundColor: Colors.black,
                                 ),
-                                defaltElevationButton(
-                                  nameButton: 'Camera',
-                                  onTabButton: () async {
-                                    image = await ImagePicker()
-                                        .pickImage(source: ImageSource.camera);
-                                    setState(() {
-                                      //update UI
-                                    });
-                                  },
-                                  parBackGroundColor: ColorManager.secondary,
-                                  parBorderRadius: 5,
-                                  parBorderWidth: 5,
-                                  parFontSize: 15,
-                                  parForegroundColor: Colors.black,
-                                ),
-                                defaltElevationButton(
-                                  nameButton: 'Gallery',
-                                  onTabButton: () async {
-                                    image = await ImagePicker()
-                                        .pickImage(source: ImageSource.gallery);
-                                    setState(() {
-                                      //update UI
-                                    });
-                                  },
-                                  parBackGroundColor: ColorManager.secondary,
-                                  parBorderRadius: 5,
-                                  parBorderWidth: 5,
-                                  parFontSize: 15,
-                                  parForegroundColor: Colors.black,
-                                ),
+                                // defaltElevationButton(
+                                //   nameButton: 'Camera',
+                                //   onTabButton: () async {
+                                //     image = await ImagePicker()
+                                //         .pickImage(source: ImageSource.camera);
+                                //     setState(() {
+                                //       //update UI
+                                //     });
+                                //   },
+                                //   parBackGroundColor: ColorManager.secondary,
+                                //   parBorderRadius: 5,
+                                //   parBorderWidth: 5,
+                                //   parFontSize: 15,
+                                //   parForegroundColor: Colors.black,
+                                // ),
+                                // defaltElevationButton(
+                                //   nameButton: 'Gallery',
+                                //   onTabButton: () async {
+                                //     image = await ImagePicker()
+                                //         .pickImage(source: ImageSource.gallery);
+                                //     setState(() {
+                                //       //update UI
+                                //     });
+                                //   },
+                                //   parBackGroundColor: ColorManager.secondary,
+                                //   parBorderRadius: 5,
+                                //   parBorderWidth: 5,
+                                //   parFontSize: 15,
+                                //   parForegroundColor: Colors.black,
+                                // ),
                               ],
                             ),
-                          ),
-
-                          const SizedBox(
-                            height: AppSize.s20,
-                          ),
-                          defaltElevationButton(
-                            nameButton: 'Show Nessage',
-                            onTabButton: () {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  defaultSnackBar("message",
-                                      actionMessage: "actionMessage"));
-                            },
-                            parBackGroundColor: ColorManager.secondary,
-                            parBorderRadius: 5,
-                            parBorderWidth: 5,
-                            parFontSize: 15,
-                            parForegroundColor: Colors.black,
                           ),
                         ],
                       ),
@@ -649,42 +548,43 @@ class _ProductAddState extends State<ProductAdd> {
 
   Future<void> uploadimage() async {
     final Reference ref = FirebaseStorage.instance
-        .ref('/File/Products')
-        .child('${contProductname.text}.jpg');
+        .ref('/File/TypeCategory')
+        .child('${contcatname.text}.jpg');
     final UploadTask task = ref.putFile(File(image!.path));
     task.then((res) {
       res.ref.getDownloadURL().then((value) {
         url2 = value;
         //print(value);
-        addDatacollection();
+        addisubcollection();
       });
 
       //url=downurl as String;
     });
   }
 
-  Future<void> addDatacollection() async {
-    var productsmap = {
-      "productId": int.parse(contProductid.text),
-      "productName": contProductname.text,
-      "productImage": url2,
-      "productPrice": contProductAmt.text,
-      "productCat": _selectedCat, //contProductcat.text,
-      "productEntryDate": DateTime.now(),
-      "favoriteFlag": 0, //contProductfav.text
-      "productCount": 1
-    };
-    addDataFireStore(StringManager.collectionProducts, productsmap);
-    int maxId =
-        await getDocumentMaxId(StringManager.collectionProducts, 'productId');
-    setState(() {
-      contProductid.text = (maxId + 1).toString();
-      contProductAmt.clear();
-      contProductcat.clear();
-      contProductname.clear();
-      contProductdate.clear();
-      contProductdate.clear();
+  void addisubcollection() async {
+    final todayDate = DateTime.now();
+    currentdate = formatDate(todayDate,
+        [yyyy, '-', mm, '-', dd, ' ', hh, ':', nn, ':', ss, ' ', am]);
+
+    FirebaseFirestore.instance.collection("TypeCategorys").add({
+      "catId": contcatid.text,
+      "catName": contcatname.text,
+      "catimage": url2,
+      "catPrice": contcatAmt.text,
+      "catDesc": contcatname.text, //contcatcat.text,
+      "catDate": DateTime.now(),
+      "Type": "0", //contcatfav.text
     });
+
+    int maxcatId = await getDocumentMaxId('TypeCategorys', 'catId');
+    //print(maxcatId);
+    setState(() {
+      contcatid.text = (maxcatId + 1).toString();
+      contcatname.clear();
+      contcatAmt.clear();
+    });
+
     Navigator.of(context).pop();
   }
 
@@ -696,30 +596,77 @@ class _ProductAddState extends State<ProductAdd> {
     //return user.email;
   }
 
-  Future<http.Response> addProducttosql() async {
+  addimagedata() {
     final todayDate = DateTime.now();
     currentdate = formatDate(todayDate,
         [yyyy, '-', mm, '-', dd, ' ', hh, ':', nn, ':', ss, ' ', am]);
-    var url =
-        ("http://emaddwiekat.atwebpages.com/Sales/Flutter/AddProductd.php");
+
+    getCurrentUser();
+    FirebaseFirestore.instance.collection("Clean_App_cats_New").doc().set({
+      'cat_id': contcatid.text,
+      'cat_name': contcatname.text,
+      // 'cat_desc': contcatdesc.text,
+      'cat_amt': contcatAmt.text,
+      // 'cat_to': _selectedProviders ,//contcatTo.text,
+      'catfav': "false",
+      'catcat': _selectedCat,
+      'catentry_date': _date, // currentdate,
+      'catmodify_date': todayDate, // currentdate,
+      'catimg': url2,
+      'catfrom': _selectedpays_from,
+      'catuser': user?.email.toString(),
+      'catcurrency': _selectedcurrency
+    });
+
+    FirebaseFirestore.instance.collection("catsHistory").doc().set({
+      'cat_id': contcatid.text,
+      'cat_name': contcatname.text,
+      'cat_desc': contcatdesc.text,
+      'cat_amt': contcatAmt.text,
+      'cat_to': contcatTo.text,
+      'cat_fav': "false",
+      'cat_cat': _selectedCat,
+      'cat_entry_date': todayDate, //currentdate,
+      'cat_modify_date': todayDate, //currentdate,
+      'cat_img': url2,
+      'cat_from': _selectedpays_from,
+      'cat_user': user?.email.toString(),
+      'cat_currency': _selectedcurrency
+    });
+
+    _showSnackbar(contcatname.text);
+    setState(() {
+      contcatid.text = (int.parse(contcatid.text) + 1).toString();
+      contcatname.clear();
+      contcatdesc.clear();
+      contcatAmt.clear();
+      contcatTo.clear();
+    });
+  }
+
+  Future<http.Response> addcattosql() async {
+    ////print('inside add');
+    final todayDate = DateTime.now();
+    currentdate = formatDate(todayDate,
+        [yyyy, '-', mm, '-', dd, ' ', hh, ':', nn, ':', ss, ' ', am]);
+    var url = ("http://emaddwiekat.atwebpages.com/Sales/Flutter/Addcatd.php");
 
     var response = await http.post(Uri.parse(url), body: {
-      "Product_id": contProductid.text,
-      "Product_name": contProductname.text,
-      "Product_desc": contProductdesc.text,
-      "Product_amt": contProductAmt.text,
-      "Product_to": _selectedProviders,
-      "Product_fav": "false",
-      "Product_cat": _selectedCat,
-      "Product_entry_date": _date.toString(), // currentdate,
-      "Product_modify_date": currentdate.toString(), // currentdate,
-      "Product_img": 'url2',
-      "Product_from": _selectedpays_from,
-      "Product_user": user!.email.toString(),
-      "Product_currency": _selectedcurrency
+      "cat_id": contcatid.text,
+      "cat_name": contcatname.text,
+      "cat_desc": contcatdesc.text,
+      "cat_amt": contcatAmt.text,
+      "cat_to": _selectedProviders,
+      "cat_fav": "false",
+      "cat_cat": _selectedCat,
+      "cat_entry_date": _date.toString(), // currentdate,
+      "cat_modify_date": currentdate.toString(), // currentdate,
+      "cat_img": 'url2',
+      "cat_from": _selectedpays_from,
+      "cat_user": user!.email.toString(),
+      "cat_currency": _selectedcurrency
     });
-    //print("${response.statusCode}");
-    //print("${response.body}");
+
     return response;
   }
 
@@ -745,7 +692,7 @@ class _ProductAddState extends State<ProductAdd> {
     //   for (var i = 0; i < cars_token.docs.length; i++) {
     //    //print('token data ');
     //    //print(cars_token.docs[i].data());
-    //     //list_cat.add(cars.docs[i].data()['cat_name']);
+    //     //list_cat.add(cars.docs[i].data()['catname']);
     //   }
     // } else {
     //  //print("error");
@@ -758,14 +705,14 @@ class _ProductAddState extends State<ProductAdd> {
       for (var element in cars!.docs) {
         setState(() {
           setState(() {
-            list_cat.add(element['Cat_Name']);
+            list_cat.add(element['catName']);
           });
         });
       }
 
       // querySnapshot.docs.forEach((element) {
       //   setState(() {
-      //     list_cat.add(element['Cat_Name']);
+      //     list_cat.add(element['catName']);
       //   });
     } else {
       //print("error");
@@ -784,10 +731,10 @@ class _ProductAddState extends State<ProductAdd> {
 //     ));
   }
 
-  void getCategory() {
+  void getTypeCategory() {
     list_cat.clear();
     FirebaseFirestore.instance
-        .collection('Categorys')
+        .collection('TypeCategorys')
         .get()
         .then((QuerySnapshot querySnapshot) {
       for (var element in querySnapshot.docs) {

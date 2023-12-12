@@ -31,12 +31,13 @@ import 'package:http/http.dart' as http;
 import '../../../../core/resource/ColorManger.dart';
 import '../../../../core/resource/Construct.dart';
 import '../Category/CategoryAdd.dart';
+import '../TypeCategory/TypeCategoryAdd.dart';
 
 // ignore: must_be_immutable
-class ProductAdd extends StatefulWidget {
-  ProductAdd({super.key});
+class TypeAdd extends StatefulWidget {
+  TypeAdd({super.key});
   @override
-  _ProductAddState createState() => _ProductAddState();
+  _TypeAddState createState() => _TypeAddState();
 }
 
 QuerySnapshot? cars;
@@ -47,10 +48,10 @@ Color? colorOne;
 Color? colorTwo;
 Color? colorThree;
 User? user;
-//dynamic _pickImageError;
+dynamic _pickImageError;
 bool isVideo = false;
 bool isSave = false;
-//String? _retrieveDataError;
+String? _retrieveDataError;
 typedef OnPickImageCallback = void Function(
     double? maxWidth, double? maxHeight, int? quality);
 final ImagePicker _picker = ImagePicker();
@@ -61,7 +62,7 @@ final TextEditingController qualityController = TextEditingController();
 final CollectionReference _Categoryss =
     FirebaseFirestore.instance.collection('Category');
 
-class _ProductAddState extends State<ProductAdd> {
+class _TypeAddState extends State<TypeAdd> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
 //  add  keyboard action
@@ -87,23 +88,24 @@ class _ProductAddState extends State<ProductAdd> {
   QuerySnapshot? carsinvoice;
 
   int maxCatId = 0;
-  int maxProductId = 0;
-  // final GlobalKey<ScaffoldState> _scaffoldKeysnak = new GlobalKey<ScaffoldState>();
+  int maxTypeId = 0;
+  final GlobalKey<ScaffoldState> _scaffoldKeysnak =
+      new GlobalKey<ScaffoldState>();
 
-  Future<void> getProductIdmax() async {
-    maxProductId =
-        await getDocumentMaxId(StringManager.collectionProducts, 'productId');
-    maxProductId = maxProductId + 1;
+  Future<void> getTypeIdmax() async {
+    print('maxTypeId=$maxTypeId');
+    maxTypeId = await getDocumentMaxId(StringManager.collectionTypes, 'TypeId');
+    maxTypeId = maxTypeId + 1;
     setState(() {
-      contProductid.text = (maxProductId).toString();
+      contTypeid.text = (maxTypeId).toString();
     });
-    print('maxProductId=$maxProductId');
+    print('maxTypeId=$maxTypeId');
   }
 
   @override
   void initState() {
     super.initState();
-    getProductIdmax();
+    getTypeIdmax();
 
     getCategory();
     getCurrentUser();
@@ -113,6 +115,13 @@ class _ProductAddState extends State<ProductAdd> {
     colorThree = Colors.red;
   }
 
+/*
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return null;
+  }
+*/
   String? imagename;
   //PickedFile sampleimage;
   File? sampleimage;
@@ -136,16 +145,16 @@ class _ProductAddState extends State<ProductAdd> {
 
   String _selectedpays_from = 'Emad';
 
-  TextEditingController contProductid = new TextEditingController();
-  TextEditingController contProductname = new TextEditingController();
-  TextEditingController contProductAmt = new TextEditingController();
-  TextEditingController contProductfav = new TextEditingController();
-  TextEditingController contProductcat = new TextEditingController();
-  TextEditingController contProductdesc = new TextEditingController();
-  TextEditingController contProducturl = new TextEditingController();
-  TextEditingController contProductdentrydate = new TextEditingController();
-  TextEditingController contProductTo = new TextEditingController();
-  TextEditingController contProductdate = new TextEditingController();
+  TextEditingController contTypeid = new TextEditingController();
+  TextEditingController contTypename = new TextEditingController();
+  TextEditingController contTypeAmt = new TextEditingController();
+  TextEditingController contTypefav = new TextEditingController();
+  TextEditingController contTypecat = new TextEditingController();
+  TextEditingController contTypedesc = new TextEditingController();
+  TextEditingController contTypeurl = new TextEditingController();
+  TextEditingController contTypedentrydate = new TextEditingController();
+  TextEditingController contTypeTo = new TextEditingController();
+  TextEditingController contTypedate = new TextEditingController();
   File? imageFile;
 
   @override
@@ -192,7 +201,7 @@ class _ProductAddState extends State<ProductAdd> {
                   width: MediaQuery.of(context).size.width,
                   decoration: const BoxDecoration(
                       //borderRadius: BorderRadius.circular(200),
-                      //  color: red4,
+                      //color: Colors.red,
                       ),
                   child: CustomPaint(
                     painter: _MyPainter(),
@@ -241,12 +250,12 @@ class _ProductAddState extends State<ProductAdd> {
               Positioned(
                 top: MediaQuery.of(context).size.height / 15,
                 left: MediaQuery.of(context).size.width / 2 -
-                    ('Add Product'.toString().length * 8),
+                    ('Add Type'.toString().length * 8),
                 child: const Text(
-                  'Add Product',
-                  //AppLocalizations.of(context).translate('Add Product'),
+                  'Add Type',
+                  //AppLocalizations.of(context).translate('Add Type'),
 
-                  //'Add Product',
+                  //'Add Type',
                   style: TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
@@ -275,9 +284,9 @@ class _ProductAddState extends State<ProductAdd> {
                             padding: const EdgeInsets.all(8.0),
                             child: defaultTextFormField(
                                 obscureText: false,
-                                fieldController: contProductid,
-                                onChange: (value) => defaultTextFieldOnChange(
-                                    value!, 'Product ID'),
+                                fieldController: contTypeid,
+                                onChange: (value) =>
+                                    defaultTextFieldOnChange(value!, 'Type ID'),
                                 type: TextInputType.emailAddress,
                                 prefixIcon: IconButton(
                                     icon: const Icon(
@@ -293,12 +302,12 @@ class _ProductAddState extends State<ProductAdd> {
                                         size: 20.0),
                                     onPressed: () {
                                       setState(() {
-                                        contProductid.clear();
+                                        contTypeid.clear();
                                       });
                                     }),
                                 validate: (value) => defaultTextFieldValidator(
-                                    value!, 'Product Id'),
-                                hintTextLabel: 'Product Id'),
+                                    value!, 'Type Id'),
+                                hintTextLabel: 'Type Id'),
                           ),
 
                           Padding(
@@ -317,8 +326,8 @@ class _ProductAddState extends State<ProductAdd> {
                                       child: const Padding(
                                         padding:
                                             EdgeInsets.only(left: AppSize.s10),
-                                        child: Text('Product_Date'
-                                            //  '${AppLocalizations.of(context).translate('Product_Date')} :'
+                                        child: Text('Type_Date'
+                                            //  '${AppLocalizations.of(context).translate('Type_Date')} :'
                                             ),
                                       ),
                                     ),
@@ -364,6 +373,7 @@ class _ProductAddState extends State<ProductAdd> {
                                       ),
                                       InkWell(
                                         onTap: () {
+                                          print('ontabp edit');
                                           //   locale: LocaleType.ar
                                           DatePicker.showDatePicker(
                                             context,
@@ -391,9 +401,9 @@ class _ProductAddState extends State<ProductAdd> {
                             padding: const EdgeInsets.all(8.0),
                             child: defaultTextFormField(
                                 obscureText: false,
-                                fieldController: contProductname,
+                                fieldController: contTypename,
                                 onChange: (value) => defaultTextFieldOnChange(
-                                    value!, 'Product Name'),
+                                    value!, 'Type Name'),
                                 type: TextInputType.emailAddress,
                                 prefixIcon: IconButton(
                                     icon: const Icon(
@@ -409,12 +419,12 @@ class _ProductAddState extends State<ProductAdd> {
                                         size: 20.0),
                                     onPressed: () {
                                       setState(() {
-                                        contProductid.clear();
+                                        contTypeid.clear();
                                       });
                                     }),
                                 validate: (value) => defaultTextFieldValidator(
-                                    value!, 'Product Name'),
-                                hintTextLabel: 'Product Name'),
+                                    value!, 'Type Name'),
+                                hintTextLabel: 'Type Name'),
                           ),
 
                           isSave ? CircularProgressIndicator() : SizedBox(),
@@ -447,7 +457,7 @@ class _ProductAddState extends State<ProductAdd> {
                                   ),
                                   const SizedBox(width: 5),
                                   Expanded(
-                                    flex: 3,
+                                    flex: 8,
                                     child: Material(
                                       elevation: 0.0,
                                       borderRadius: BorderRadius.circular(5.0),
@@ -500,8 +510,10 @@ class _ProductAddState extends State<ProductAdd> {
                                                 //print('go to cat add');
                                                 var maxCatId =
                                                     await getDocumentMaxId(
-                                                        'Categorys', 'catId');
-                                                Get.to(CategoryAdd(
+                                                        StringManager
+                                                            .collectionTypeCategory,
+                                                        'catId');
+                                                Get.to(TypeCategoryAdd(
                                                   Docs_max: maxCatId + 1,
                                                 ));
                                               }),
@@ -517,10 +529,10 @@ class _ProductAddState extends State<ProductAdd> {
                             padding: const EdgeInsets.all(8.0),
                             child: defaultTextFormField(
                                 obscureText: false,
-                                fieldController: contProductAmt,
+                                fieldController: contTypeAmt,
                                 onChange: (value) => defaultTextFieldOnChange(
-                                    value!, 'Product Amt'),
-                                type: TextInputType.emailAddress,
+                                    value!, 'Type Amt'),
+                                type: TextInputType.number,
                                 prefixIcon: IconButton(
                                     icon: const Icon(
                                         Icons.account_circle_rounded,
@@ -535,12 +547,12 @@ class _ProductAddState extends State<ProductAdd> {
                                         size: 20.0),
                                     onPressed: () {
                                       setState(() {
-                                        contProductid.clear();
+                                        contTypeid.clear();
                                       });
                                     }),
                                 validate: (value) => defaultTextFieldValidator(
-                                    value!, 'Product Amt'),
-                                hintTextLabel: 'Product Amt'),
+                                    value!, 'Type Amt'),
+                                hintTextLabel: 'Type Amt'),
                           ),
                           image == null
                               ? Container()
@@ -553,6 +565,7 @@ class _ProductAddState extends State<ProductAdd> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 defaltElevationButton(
+                                  heightButton: pheight / FontManagerSize.s20,
                                   nameButton: 'Save',
                                   onTabButton: () {
                                     showDialog<void>(
@@ -564,6 +577,7 @@ class _ProductAddState extends State<ProductAdd> {
                                       },
                                     );
                                     uploadimage();
+                                    Navigator.of(context).pop();
                                   },
                                   parBackGroundColor: ColorManager.secondary,
                                   parBorderRadius: 5,
@@ -572,6 +586,7 @@ class _ProductAddState extends State<ProductAdd> {
                                   parForegroundColor: Colors.black,
                                 ),
                                 defaltElevationButton(
+                                  heightButton: pheight / FontManagerSize.s20,
                                   nameButton: 'Cancel',
                                   onTabButton: () {
                                     Navigator.pop(context);
@@ -582,36 +597,36 @@ class _ProductAddState extends State<ProductAdd> {
                                   parFontSize: 15,
                                   parForegroundColor: Colors.black,
                                 ),
-                                defaltElevationButton(
-                                  nameButton: 'Camera',
-                                  onTabButton: () async {
-                                    image = await ImagePicker()
-                                        .pickImage(source: ImageSource.camera);
-                                    setState(() {
-                                      //update UI
-                                    });
-                                  },
-                                  parBackGroundColor: ColorManager.secondary,
-                                  parBorderRadius: 5,
-                                  parBorderWidth: 5,
-                                  parFontSize: 15,
-                                  parForegroundColor: Colors.black,
-                                ),
-                                defaltElevationButton(
-                                  nameButton: 'Gallery',
-                                  onTabButton: () async {
-                                    image = await ImagePicker()
-                                        .pickImage(source: ImageSource.gallery);
-                                    setState(() {
-                                      //update UI
-                                    });
-                                  },
-                                  parBackGroundColor: ColorManager.secondary,
-                                  parBorderRadius: 5,
-                                  parBorderWidth: 5,
-                                  parFontSize: 15,
-                                  parForegroundColor: Colors.black,
-                                ),
+                                // defaltElevationButton(
+                                //   nameButton: 'Camera',
+                                //   onTabButton: () async {
+                                //     image = await ImagePicker()
+                                //         .pickImage(source: ImageSource.camera);
+                                //     setState(() {
+                                //       //update UI
+                                //     });
+                                //   },
+                                //   parBackGroundColor: ColorManager.secondary,
+                                //   parBorderRadius: 5,
+                                //   parBorderWidth: 5,
+                                //   parFontSize: 15,
+                                //   parForegroundColor: Colors.black,
+                                // ),
+                                // defaltElevationButton(
+                                //   nameButton: 'Gallery',
+                                //   onTabButton: () async {
+                                //     image = await ImagePicker()
+                                //         .pickImage(source: ImageSource.gallery);
+                                //     setState(() {
+                                //       //update UI
+                                //     });
+                                //   },
+                                //   parBackGroundColor: ColorManager.secondary,
+                                //   parBorderRadius: 5,
+                                //   parBorderWidth: 5,
+                                //   parFontSize: 15,
+                                //   parForegroundColor: Colors.black,
+                                // ),
                               ],
                             ),
                           ),
@@ -619,19 +634,19 @@ class _ProductAddState extends State<ProductAdd> {
                           const SizedBox(
                             height: AppSize.s20,
                           ),
-                          defaltElevationButton(
-                            nameButton: 'Show Nessage',
-                            onTabButton: () {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  defaultSnackBar("message",
-                                      actionMessage: "actionMessage"));
-                            },
-                            parBackGroundColor: ColorManager.secondary,
-                            parBorderRadius: 5,
-                            parBorderWidth: 5,
-                            parFontSize: 15,
-                            parForegroundColor: Colors.black,
-                          ),
+                          // defaltElevationButton(
+                          //   nameButton: 'Show Nessage',
+                          //   onTabButton: () {
+                          //     ScaffoldMessenger.of(context).showSnackBar(
+                          //         defaultSnackBar("message",
+                          //             actionMessage: "actionMessage"));
+                          //   },
+                          //   parBackGroundColor: ColorManager.secondary,
+                          //   parBorderRadius: 5,
+                          //   parBorderWidth: 5,
+                          //   parFontSize: 15,
+                          //   parForegroundColor: Colors.black,
+                          // ),
                         ],
                       ),
                     ),
@@ -648,42 +663,41 @@ class _ProductAddState extends State<ProductAdd> {
   }
 
   Future<void> uploadimage() async {
-    final Reference ref = FirebaseStorage.instance
-        .ref('/File/Products')
-        .child('${contProductname.text}.jpg');
-    final UploadTask task = ref.putFile(File(image!.path));
-    task.then((res) {
-      res.ref.getDownloadURL().then((value) {
-        url2 = value;
-        //print(value);
-        addDatacollection();
-      });
+    // final Reference ref = FirebaseStorage.instance
+    //     .ref('/File/Types')
+    //     .child('${contTypename.text}.jpg');
+    // final UploadTask task = ref.putFile(File(image!.path));
+    // task.then((res) {
+    //   res.ref.getDownloadURL().then((value) {
+    //     url2 = value;
+    //print(value);
+    addDatacollection();
+    //   });
 
-      //url=downurl as String;
-    });
+    //url=downurl as String;
+    //});
   }
 
   Future<void> addDatacollection() async {
-    var productsmap = {
-      "productId": int.parse(contProductid.text),
-      "productName": contProductname.text,
-      "productImage": url2,
-      "productPrice": contProductAmt.text,
-      "productCat": _selectedCat, //contProductcat.text,
-      "productEntryDate": DateTime.now(),
-      "favoriteFlag": 0, //contProductfav.text
-      "productCount": 1
+    var Typesmap = {
+      "TypeId": int.parse(contTypeid.text),
+      "TypeName": contTypename.text,
+      //"TypeImage": url2,
+      "TypePrice": contTypeAmt.text,
+      "TypeCat": _selectedCat, //contTypecat.text,
+      "TypeEntryDate": _date,
+      //"favoriteFlag": 0, //contTypefav.text
+      "TypeCount": 1
     };
-    addDataFireStore(StringManager.collectionProducts, productsmap);
-    int maxId =
-        await getDocumentMaxId(StringManager.collectionProducts, 'productId');
+    addDataFireStore(StringManager.collectionTypes, Typesmap);
+    int maxId = await getDocumentMaxId(StringManager.collectionTypes, 'TypeId');
     setState(() {
-      contProductid.text = (maxId + 1).toString();
-      contProductAmt.clear();
-      contProductcat.clear();
-      contProductname.clear();
-      contProductdate.clear();
-      contProductdate.clear();
+      contTypeid.text = (maxId + 1).toString();
+      contTypeAmt.clear();
+      contTypecat.clear();
+      contTypename.clear();
+      contTypedate.clear();
+      contTypedate.clear();
     });
     Navigator.of(context).pop();
   }
@@ -696,27 +710,26 @@ class _ProductAddState extends State<ProductAdd> {
     //return user.email;
   }
 
-  Future<http.Response> addProducttosql() async {
+  Future<http.Response> addTypetosql() async {
     final todayDate = DateTime.now();
     currentdate = formatDate(todayDate,
         [yyyy, '-', mm, '-', dd, ' ', hh, ':', nn, ':', ss, ' ', am]);
-    var url =
-        ("http://emaddwiekat.atwebpages.com/Sales/Flutter/AddProductd.php");
+    var url = ("http://emaddwiekat.atwebpages.com/Sales/Flutter/AddTyped.php");
 
     var response = await http.post(Uri.parse(url), body: {
-      "Product_id": contProductid.text,
-      "Product_name": contProductname.text,
-      "Product_desc": contProductdesc.text,
-      "Product_amt": contProductAmt.text,
-      "Product_to": _selectedProviders,
-      "Product_fav": "false",
-      "Product_cat": _selectedCat,
-      "Product_entry_date": _date.toString(), // currentdate,
-      "Product_modify_date": currentdate.toString(), // currentdate,
-      "Product_img": 'url2',
-      "Product_from": _selectedpays_from,
-      "Product_user": user!.email.toString(),
-      "Product_currency": _selectedcurrency
+      "Type_id": contTypeid.text,
+      "Type_name": contTypename.text,
+      "Type_desc": contTypedesc.text,
+      "Type_amt": contTypeAmt.text,
+      "Type_to": _selectedProviders,
+      "Type_fav": "false",
+      "Type_cat": _selectedCat,
+      "Type_entry_date": _date.toString(), // currentdate,
+      "Type_modify_date": currentdate.toString(), // currentdate,
+      "Type_img": 'url2',
+      "Type_from": _selectedpays_from,
+      "Type_user": user!.email.toString(),
+      "Type_currency": _selectedcurrency
     });
     //print("${response.statusCode}");
     //print("${response.body}");
@@ -787,7 +800,7 @@ class _ProductAddState extends State<ProductAdd> {
   void getCategory() {
     list_cat.clear();
     FirebaseFirestore.instance
-        .collection('Categorys')
+        .collection(StringManager.collectionTypeCategory)
         .get()
         .then((QuerySnapshot querySnapshot) {
       for (var element in querySnapshot.docs) {

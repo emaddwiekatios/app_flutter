@@ -9,7 +9,7 @@ import 'package:clean_arch_app/core/resource/StringManager.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../../../core/resource/RoutesManager.dart';
+//import '../../../../../core/resource/RoutesManager.dart';
 import '../../../../../core/resource/ValueManger.dart';
 
 class OnBoarding extends StatefulWidget {
@@ -61,8 +61,9 @@ class _OnBoardingState extends State<OnBoarding> {
             SizedBox(
               height: getHeight(context),
               child: StreamBuilder<OnBoardingClassObject>(
-                  stream:
-             _viewModelOnBording.get_onbordoutbut,///.get_onbordoutbut, //<SliderViewObject>,
+                  stream: _viewModelOnBording.get_onbordoutbut,
+
+                  ///.get_onbordoutbut, //<SliderViewObject>,
                   builder: (context, snapShot) {
                     return _getContentWidget(snapShot.data);
                   }),
@@ -88,13 +89,13 @@ class _OnBoardingState extends State<OnBoarding> {
               child: SizedBox(
                 height: getHeight(context) / 2,
                 width: getWidth(context),
-       child: PageView.builder(
+                child: PageView.builder(
                     controller: _pageController,
                     itemCount: onBoardingClassObject.noOfItem,
                     onPageChanged: (index) {
                       _viewModelOnBording.onPageChange(index);
                     },
-           itemBuilder: (context, index) {
+                    itemBuilder: (context, index) {
                       return OnBoardingPage(
                           onBoardingClassObject.onBoardingClass);
                     }),
@@ -120,9 +121,8 @@ class _OnBoardingState extends State<OnBoarding> {
                       borderRadius: BorderRadius.circular(350)))),
               onPressed: () {
                 Get.offAndToNamed('/SignIn');
-               // Navigator.pushReplacementNamed(context, RoutesManager.loginRoute);
-             //  Navigator.pushReplacementNamed(context, '/login');
-
+                // Navigator.pushReplacementNamed(context, RoutesManager.loginRoute);
+                //  Navigator.pushReplacementNamed(context, '/login');
               },
               child: Text(StringManager.onBoardSkip.tr)),
         ),
@@ -159,7 +159,7 @@ class _OnBoardingState extends State<OnBoarding> {
                     if (onBoardingClassObject.currentIndex >=
                         onBoardingClassObject.noOfItem - 1) {
                       Get.offAndToNamed('/SignIn');
-                    //  Navigator.pushReplacementNamed(
+                      //  Navigator.pushReplacementNamed(
                       //    context, '/login');
                     }
                   },

@@ -1,17 +1,17 @@
 //import 'dart:html';
 
 import 'package:clean_arch_app/Feature_Post/presentation/pages/Category/CategoryClass.dart';
-import 'package:clean_arch_app/core/resource/AssetManager.dart';
+//import 'package:clean_arch_app/core/resource/AssetManager.dart';
 import 'package:clean_arch_app/core/resource/MediaQuery.dart';
 import 'package:clean_arch_app/core/resource/StringManager.dart';
 import 'package:flutter/material.dart';
-import 'dart:ui';
+//import 'dart:ui';
 import 'dart:io';
 import 'dart:async';
-import 'package:image/image.dart' as Im;
+////import 'package:image/image.dart' as Im;
 import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
-import 'dart:math' as Math;
+//import 'package:path_provider/path_provider.dart';
+//import 'dart:math' as Math;
 
 import 'package:date_format/date_format.dart';
 
@@ -45,7 +45,7 @@ User? user;
 dynamic _pickImageError;
 bool isVideo = false;
 bool isSave = false;
-String? _retrieveDataError;
+//String? _retrieveDataError;
 typedef OnPickImageCallback = void Function(
     double? maxWidth, double? maxHeight, int? quality);
 final ImagePicker _picker = ImagePicker();
@@ -61,12 +61,12 @@ class _CategoryEditState extends State<CategoryEdit> {
 
 //  add  keyboard action
 
-  final FocusNode _nodeText1 = FocusNode();
-  final FocusNode _nodeText2 = FocusNode();
-  final FocusNode _nodeText3 = FocusNode();
-  final FocusNode _nodeText4 = FocusNode();
-  final FocusNode _nodeText5 = FocusNode();
-  final FocusNode _nodeText6 = FocusNode();
+  // final FocusNode _nodeText1 = FocusNode();
+  // final FocusNode _nodeText2 = FocusNode();
+  // final FocusNode _nodeText3 = FocusNode();
+  // final FocusNode _nodeText4 = FocusNode();
+  // final FocusNode _nodeText5 = FocusNode();
+  // final FocusNode _nodeText6 = FocusNode();
 
   /// Creates the [KeyboardActionsConfig] to hook up the fields
   /// and their focus nodes to our [FormKeyboardActions].
@@ -80,17 +80,17 @@ class _CategoryEditState extends State<CategoryEdit> {
   //File? _imageFile;
   DateTime _date = DateTime.now();
   QuerySnapshot? carsinvoice;
-  int maxCatId=0;
+  int maxCatId = 0;
   final GlobalKey<ScaffoldState> _scaffoldKeysnak =
       new GlobalKey<ScaffoldState>();
 
   @override
-  void initState()  {
+  void initState() {
     super.initState();
-    contcatid.text=widget.Intcategory.catId.toString() ;
-    contcatAmt.text=widget.Intcategory.catPrice ;
-    contcatdate.text=widget.Intcategory.catDate.toString() ;
-    contcatname.text=widget.Intcategory.catName ;
+    contcatid.text = widget.Intcategory.catId.toString();
+    contcatAmt.text = widget.Intcategory.catPrice;
+    contcatdate.text = widget.Intcategory.catDate.toString();
+    contcatname.text = widget.Intcategory.catName;
 
     getCategory();
     getCurrentUser();
@@ -98,7 +98,6 @@ class _CategoryEditState extends State<CategoryEdit> {
     colorOne = Colors.red;
     colorTwo = Colors.red;
     colorThree = Colors.red;
-
   }
 
 /*
@@ -111,6 +110,7 @@ class _CategoryEditState extends State<CategoryEdit> {
   String? imagename;
   //PickedFile sampleimage;
   File? sampleimage;
+  // ignore: prefer_typing_uninitialized_variables
   var currentdate;
   int state = 0;
   var url2;
@@ -219,7 +219,6 @@ class _CategoryEditState extends State<CategoryEdit> {
                   icon: const Icon(Icons.arrow_back),
                   onPressed: () {
                     Navigator.pop(context);
-                   
                   },
                 ),
               ),
@@ -260,39 +259,37 @@ class _CategoryEditState extends State<CategoryEdit> {
                             child: defaultTextFormField(
                                 obscureText: false,
                                 fieldController: contcatid,
-                                onChange: (value) =>defaultTextFieldOnChange(value!,'Category ID'),
-
+                                onChange: (value) => defaultTextFieldOnChange(
+                                    value!, 'Category ID'),
                                 type: TextInputType.emailAddress,
                                 prefixIcon: IconButton(
-                                    icon: const Icon(Icons.account_circle_rounded,
+                                    icon: const Icon(
+                                        Icons.account_circle_rounded,
                                         color: Colors.blue,
                                         // Color(getColorHexFromStr('#FEE16D')),
                                         size: 20.0),
                                     onPressed: () {}),
                                 suffixIcon: IconButton(
-                                    icon: const Icon(
-                                        Icons.cancel
-                                        , color: Colors.blue,
+                                    icon: const Icon(Icons.cancel,
+                                        color: Colors.blue,
                                         // Color(getColorHexFromStr('#FEE16D')),
                                         size: 20.0),
                                     onPressed: () {
                                       setState(() {
                                         contcatid.clear();
-
                                       });
                                     }),
-                                validate:(value)=>defaultTextFieldValidator(value!,'Category Id'),
-
+                                validate: (value) => defaultTextFieldValidator(
+                                    value!, 'Category Id'),
                                 hintTextLabel: 'Category Id'),
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Container(
-                              height:pheight/FontManagerSize.s20,
+                              height: pheight / FontManagerSize.s20,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(5),
-                                  border:Border.all(color: Colors.black)
-                              ),
+                                  border: Border.all(color: Colors.black)),
                               child: Row(
                                 children: [
                                   Expanded(
@@ -300,32 +297,46 @@ class _CategoryEditState extends State<CategoryEdit> {
                                       elevation: 0.0,
                                       borderRadius: BorderRadius.circular(0.0),
                                       child: const Padding(
-                                        padding:  EdgeInsets.only(left:AppSize.s10),
+                                        padding:
+                                            EdgeInsets.only(left: AppSize.s10),
                                         child: Text('Category_Date'
-                                          //  '${AppLocalizations.of(context).translate('Product_Date')} :'
-                                        ),
+                                            //  '${AppLocalizations.of(context).translate('Product_Date')} :'
+                                            ),
                                       ),
                                     ),
                                   ),
                                   SizedBox(width: 5),
-
-
                                   Row(
                                     children: <Widget>[
                                       SizedBox(
-                                        height: pheight/AppSize.s10,
+                                        height: pheight / AppSize.s10,
                                         width:
-                                        MediaQuery.of(context).size.width / 2,
-                                        child: defaltElevationButton(nameButton:'${formatDate(_date, [yyyy,'-',M,'-', dd,' '])}',
+                                            MediaQuery.of(context).size.width /
+                                                2,
+                                        child: defaltElevationButton(
+                                          nameButton: '${formatDate(_date, [
+                                                yyyy,
+                                                '-',
+                                                M,
+                                                '-',
+                                                dd,
+                                                ' '
+                                              ])}',
                                           onTabButton: () {
-                                            DatePicker.showDatePicker(context,
+                                            DatePicker.showDatePicker(
+                                              context,
                                               showTitleActions: true,
                                               minTime: DateTime(2020, 1, 1),
                                               maxTime: DateTime(2024, 12, 31),
-                                              onChanged: (date) {_date=date;},
-                                              onConfirm: (date) {date=date;},
+                                              onChanged: (date) {
+                                                _date = date;
+                                              },
+                                              onConfirm: (date) {
+                                                date = date;
+                                              },
                                               currentTime: DateTime.now(),
-                                            );},
+                                            );
+                                          },
                                           parBackGroundColor: Colors.grey[200]!,
                                           parBorderRadius: 5,
                                           parBorderWidth: 5,
@@ -336,13 +347,19 @@ class _CategoryEditState extends State<CategoryEdit> {
                                       InkWell(
                                         onTap: () {
                                           //   locale: LocaleType.ar
-                                          DatePicker.showDatePicker(context,
+                                          DatePicker.showDatePicker(
+                                            context,
                                             showTitleActions: true,
                                             minTime: DateTime(2020, 1, 1),
                                             maxTime: DateTime(2024, 12, 31),
-                                            onChanged: (date) {_date=date;},
-                                            onConfirm: (date) {date=date;},
-                                            currentTime: DateTime.now(),);
+                                            onChanged: (date) {
+                                              _date = date;
+                                            },
+                                            onConfirm: (date) {
+                                              date = date;
+                                            },
+                                            currentTime: DateTime.now(),
+                                          );
                                         },
                                         child: Icon(Icons.edit),
                                       ),
@@ -352,121 +369,112 @@ class _CategoryEditState extends State<CategoryEdit> {
                               ),
                             ),
                           ),
-
-
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: defaultTextFormField(
                                 obscureText: false,
                                 fieldController: contcatname,
-                                onChange: (value) =>defaultTextFieldOnChange(value!,'Category Name'),
-
+                                onChange: (value) => defaultTextFieldOnChange(
+                                    value!, 'Category Name'),
                                 type: TextInputType.emailAddress,
                                 prefixIcon: IconButton(
-                                    icon: const Icon(Icons.account_circle_rounded,
+                                    icon: const Icon(
+                                        Icons.account_circle_rounded,
                                         color: Colors.blue,
                                         // Color(getColorHexFromStr('#FEE16D')),
                                         size: 20.0),
                                     onPressed: () {}),
                                 suffixIcon: IconButton(
-                                    icon: const Icon(
-                                        Icons.cancel
-                                        , color: Colors.blue,
+                                    icon: const Icon(Icons.cancel,
+                                        color: Colors.blue,
                                         // Color(getColorHexFromStr('#FEE16D')),
                                         size: 20.0),
                                     onPressed: () {
                                       setState(() {
                                         contcatname.clear();
-
                                       });
                                     }),
-                                validate:(value)=>defaultTextFieldValidator(value!,'Category Name'),
-
+                                validate: (value) => defaultTextFieldValidator(
+                                    value!, 'Category Name'),
                                 hintTextLabel: 'Category Name'),
                           ),
-
                           isSave ? CircularProgressIndicator() : SizedBox(),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: defaultTextFormField(
                                 obscureText: false,
                                 fieldController: contcatAmt,
-                                onChange: (value) =>defaultTextFieldOnChange(value!,'Category Amt'),
-
+                                onChange: (value) => defaultTextFieldOnChange(
+                                    value!, 'Category Amt'),
                                 type: TextInputType.emailAddress,
                                 prefixIcon: IconButton(
-                                    icon: const Icon(Icons.account_circle_rounded,
+                                    icon: const Icon(
+                                        Icons.account_circle_rounded,
                                         color: Colors.blue,
                                         // Color(getColorHexFromStr('#FEE16D')),
                                         size: 20.0),
                                     onPressed: () {}),
                                 suffixIcon: IconButton(
-                                    icon: const Icon(
-                                        Icons.cancel
-                                        , color: Colors.blue,
+                                    icon: const Icon(Icons.cancel,
+                                        color: Colors.blue,
                                         // Color(getColorHexFromStr('#FEE16D')),
                                         size: 20.0),
                                     onPressed: () {
                                       setState(() {
                                         contcatAmt.clear();
-
                                       });
                                     }),
-                                validate:(value)=>defaultTextFieldValidator(value!,'Category Amt'),
-
+                                validate: (value) => defaultTextFieldValidator(
+                                    value!, 'Category Amt'),
                                 hintTextLabel: 'Category Amt'),
                           ),
-
-
                           Container(
                               padding:
-                              EdgeInsets.only(top: 20, left: 20, right: 20),
+                                  EdgeInsets.only(top: 20, left: 20, right: 20),
                               alignment: Alignment.topCenter,
                               child: Column(
                                 children: [
-
-
                                   image == null
                                       ? Container(
-                                    height:
-                                    getHeight(context) / FontManagerSize.s4,
-                                    decoration: BoxDecoration(
-                                      // borderRadius: BorderRadius.circular(AppSize.s20),
-                                      // color: Colors.tealAccent,
-                                        image: DecorationImage(
-                                            fit: BoxFit.fill,
-                                            // image: AssetImage(AssetManager.mancat4)
-                                            image: NetworkImage(
-                                                widget.Intcategory.catImage))),
-
-
-
-                                  )
+                                          height: getHeight(context) /
+                                              FontManagerSize.s4,
+                                          decoration: BoxDecoration(
+                                              // borderRadius: BorderRadius.circular(AppSize.s20),
+                                              // color: Colors.tealAccent,
+                                              image: DecorationImage(
+                                                  fit: BoxFit.fill,
+                                                  // image: AssetImage(AssetManager.mancat4)
+                                                  image: NetworkImage(widget
+                                                      .Intcategory.catImage))),
+                                        )
                                       : Container(
-                                      height: getHeight(context) / 4,
-                                      width: getWidth(context) - 20,
-                                      child: Image.file(File(image!.path)))
+                                          height: getHeight(context) / 4,
+                                          width: getWidth(context) - 20,
+                                          child: Image.file(File(image!.path)))
                                 ],
                               )),
-
                           FittedBox(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                defaltElevationButton(nameButton:'Save',
+                                defaltElevationButton(
+                                  nameButton: 'Save',
                                   onTabButton: () {
-                                    var categoryMap= {
+                                    var categoryMap = {
                                       "catId": contcatid.text,
                                       "catName": contcatname.text,
                                       //"catimage": url2,
                                       "catPrice": contcatAmt.text,
-                                      "catDesc":contcatname.text  ,//contcatcat.text,
+                                      "catDesc":
+                                          contcatname.text, //contcatcat.text,
                                       "catDate": _date,
                                       "Type": "0" //contcatfav.text
                                     };
 
-                                    updateDataFireStore(StringManager.collectionCategory,categoryMap ,widget.Intcategory.docsId);
-
+                                    updateDataFireStore(
+                                        StringManager.collectionCategory,
+                                        categoryMap,
+                                        widget.Intcategory.docsId);
                                   },
                                   parBackGroundColor: ColorManager.secondary,
                                   parBorderRadius: 5,
@@ -474,7 +482,8 @@ class _CategoryEditState extends State<CategoryEdit> {
                                   parFontSize: 15,
                                   parForegroundColor: Colors.black,
                                 ),
-                                defaltElevationButton(nameButton:'Cancel',
+                                defaltElevationButton(
+                                  nameButton: 'Cancel',
                                   onTabButton: () {
                                     Navigator.pop(context);
                                   },
@@ -484,11 +493,11 @@ class _CategoryEditState extends State<CategoryEdit> {
                                   parFontSize: 15,
                                   parForegroundColor: Colors.black,
                                 ),
-                                defaltElevationButton(nameButton:'Camera',
+                                defaltElevationButton(
+                                  nameButton: 'Camera',
                                   onTabButton: () async {
                                     image = await ImagePicker()
-                                        .pickImage(
-                                        source: ImageSource.camera);
+                                        .pickImage(source: ImageSource.camera);
                                     setState(() {
                                       //update UI
                                     });
@@ -499,12 +508,11 @@ class _CategoryEditState extends State<CategoryEdit> {
                                   parFontSize: 15,
                                   parForegroundColor: Colors.black,
                                 ),
-
-                                defaltElevationButton(nameButton:'Gallery',
+                                defaltElevationButton(
+                                  nameButton: 'Gallery',
                                   onTabButton: () async {
                                     image = await ImagePicker()
-                                        .pickImage(
-                                        source: ImageSource.gallery);
+                                        .pickImage(source: ImageSource.gallery);
                                     setState(() {
                                       //update UI
                                     });
@@ -518,8 +526,6 @@ class _CategoryEditState extends State<CategoryEdit> {
                               ],
                             ),
                           ),
-
-
                         ],
                       ),
                     ),
@@ -543,7 +549,7 @@ class _CategoryEditState extends State<CategoryEdit> {
     task.then((res) {
       res.ref.getDownloadURL().then((value) {
         url2 = value;
-       //print(value);
+        //print(value);
         addisubcollection();
       });
 
@@ -551,10 +557,7 @@ class _CategoryEditState extends State<CategoryEdit> {
     });
   }
 
-
-
   void addisubcollection() async {
-
     final todayDate = DateTime.now();
     currentdate = formatDate(todayDate,
         [yyyy, '-', mm, '-', dd, ' ', hh, ':', nn, ':', ss, ' ', am]);
@@ -564,24 +567,21 @@ class _CategoryEditState extends State<CategoryEdit> {
       "catName": contcatname.text,
       "catimage": url2,
       "catPrice": contcatAmt.text,
-      "catDesc":contcatname.text  ,//contcatcat.text,
+      "catDesc": contcatname.text, //contcatcat.text,
       "catDate": DateTime.now(),
       "Type": "0", //contcatfav.text
     });
 
-    int  maxcatId = await getDocumentMaxId('Categorys', 'catId');
-   //print(maxcatId);
+    int maxcatId = await getDocumentMaxId('Categorys', 'catId');
+    //print(maxcatId);
     setState(() {
-      contcatid.text=(maxcatId+1).toString();
+      contcatid.text = (maxcatId + 1).toString();
       contcatname.clear();
       contcatAmt.clear();
-
-
     });
 
     Navigator.of(context).pop();
   }
-
 
   getCurrentUser() async {
     final FirebaseAuth auth = FirebaseAuth.instance;
@@ -640,12 +640,11 @@ class _CategoryEditState extends State<CategoryEdit> {
   }
 
   Future<http.Response> addcattosql() async {
-   ////print('inside add');
+    ////print('inside add');
     final todayDate = DateTime.now();
     currentdate = formatDate(todayDate,
         [yyyy, '-', mm, '-', dd, ' ', hh, ':', nn, ':', ss, ' ', am]);
-    var url =
-        ("http://emaddwiekat.atwebpages.com/Sales/Flutter/Addcatd.php");
+    var url = ("http://emaddwiekat.atwebpages.com/Sales/Flutter/Addcatd.php");
 
     var response = await http.post(Uri.parse(url), body: {
       "cat_id": contcatid.text,
@@ -662,13 +661,9 @@ class _CategoryEditState extends State<CategoryEdit> {
       "cat_user": user!.email.toString(),
       "cat_currency": _selectedcurrency
     });
-    
+
     return response;
   }
-
-
-
-
 
   printlistproviders() {
     // if (cars != null) {
@@ -700,7 +695,6 @@ class _CategoryEditState extends State<CategoryEdit> {
   }
 
   printlist() {
-
     if (cars != null) {
       list_cat.clear();
       for (var element in cars!.docs) {
@@ -708,7 +702,6 @@ class _CategoryEditState extends State<CategoryEdit> {
           setState(() {
             list_cat.add(element['catName']);
           });
-
         });
       }
 
@@ -717,7 +710,7 @@ class _CategoryEditState extends State<CategoryEdit> {
       //     list_cat.add(element['catName']);
       //   });
     } else {
-     //print("error");
+      //print("error");
     }
   }
 
@@ -733,24 +726,19 @@ class _CategoryEditState extends State<CategoryEdit> {
 //     ));
   }
 
-
-
-
   void getCategory() {
     list_cat.clear();
-    FirebaseFirestore.instance.collection('Categorys').get().then((QuerySnapshot querySnapshot) {
+    FirebaseFirestore.instance
+        .collection('Categorys')
+        .get()
+        .then((QuerySnapshot querySnapshot) {
       for (var element in querySnapshot.docs) {
         setState(() {
-          list_cat.add(
-              element['catName']);
+          list_cat.add(element['catName']);
         });
       }
     });
-
   }
-
-
-
 
 //  void _onPressed() {
 //   //print('inside onpreesses');

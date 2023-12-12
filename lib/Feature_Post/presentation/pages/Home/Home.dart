@@ -2,20 +2,26 @@
 import 'package:clean_arch_app/Feature_Post/presentation/pages/Login/view_login/Auth.dart';
 import 'package:clean_arch_app/Feature_Post/presentation/pages/Login/view_login/loginNew.dart';
 import 'package:clean_arch_app/Feature_Post/presentation/pages/Login/view_login/view_login.dart';
-import 'package:clean_arch_app/Feature_Post/presentation/pages/logingpt.dart';
-import 'package:clean_arch_app/Feature_Post/presentation/pages/splash/splash.dart';
+import 'package:clean_arch_app/Feature_Post/presentation/pages/Types/TypeMain.dart';
+//import 'package:clean_arch_app/Feature_Post/presentation/pages/logingpt.dart';
+//import 'package:clean_arch_app/Feature_Post/presentation/pages/splash/splash.dart';
 import 'package:clean_arch_app/core/resource/AssetManager.dart';
 import 'package:clean_arch_app/core/resource/ColorManger.dart';
 import 'package:clean_arch_app/core/resource/FontManager.dart';
 import 'package:clean_arch_app/core/resource/MediaQuery.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
+///import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import '../../manager/Language/LocaleController.dart';
 //import '../Products/ProductsClass.dart';
 //import 'HomePage.dart' as home;
 
 import '../LayoutBuilder/LayoutBuilder.dart';
+
+import '../TypeCategory/TypeCategoryMain.dart';
+
+import '../Types/PreTypeMain.dart';
 
 ///import '../../../../core/resource/template.dart';
 import 'HomePage.dart';
@@ -83,6 +89,7 @@ Widget getDrawer(context) {
                 //      color:Theme.of(context).backgroundColor
                 //  ),
               ),
+
               ListTile(
                   leading: Icon(
                     Icons.home,
@@ -94,10 +101,44 @@ Widget getDrawer(context) {
                     //print('ontap');
                     Navigator.pop(context);
                   }),
-              Divider(
+              const Divider(
                 height: FontManagerSize.s8,
               ),
-              Text('Admin Tab'),
+
+              //
+              ListTile(
+                  leading: Icon(
+                    Icons.generating_tokens,
+                    color: ColorManager.primary,
+                  ),
+                  title: Text('Add'.tr),
+                  trailing: Text('Add'.tr),
+                  onTap: () {
+                    ////print('ontap');
+                    Get.toNamed('/AddPages');
+                    //  Get.to(() => GetxManagement());
+                  }),
+              const Divider(
+                height: FontManagerSize.s8,
+              ),
+
+              ListTile(
+                  leading: Icon(
+                    Icons.generating_tokens,
+                    color: ColorManager.primary,
+                  ),
+                  title: Text('testing'.tr),
+                  trailing: Text('Add'.tr),
+                  onTap: () {
+                    print('ontap');
+                    Get.toNamed('/testing');
+                    //  Get.to(() => GetxManagement());
+                  }),
+              const Divider(
+                height: FontManagerSize.s8,
+              ),
+
+              const Text('Admin Tab'),
               const Divider(
                 height: FontManagerSize.s8,
               ),
@@ -136,11 +177,22 @@ Widget getDrawer(context) {
                     Icons.layers_outlined,
                     color: ColorManager.primary,
                   ),
-                  title: Text('Layout'.tr),
-                  trailing: Text('Layout'.tr),
+                  title: Text('Masaref'.tr),
+                  trailing: Text('Masaref'.tr),
                   onTap: () {
                     //Get.toNamed(RoutesManager.layoutbuilderRoute);
-                    Get.to(() => GetLayoutBuilder());
+                    Get.to(() => PreTypeMain());
+                  }),
+              ListTile(
+                  leading: Icon(
+                    Icons.layers_outlined,
+                    color: ColorManager.primary,
+                  ),
+                  title: Text('Type Category'.tr),
+                  //trailing: Text('Type Category'.tr),
+                  onTap: () {
+                    //Get.toNamed(RoutesManager.layoutbuilderRoute);
+                    Get.to(() => TypeCategoryMain());
                   }),
               const Divider(
                 height: FontManagerSize.s8,

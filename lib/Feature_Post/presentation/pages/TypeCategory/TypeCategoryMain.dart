@@ -1,54 +1,61 @@
-import 'package:clean_arch_app/Feature_Post/presentation/pages/Home/HomePage.dart';
-import 'package:clean_arch_app/Feature_Post/presentation/pages/Products/ProductAdd.dart';
-import 'package:clean_arch_app/Feature_Post/presentation/pages/Products/ProductDetailsEdit.dart';
-import 'package:clean_arch_app/Feature_Post/presentation/pages/Products/ProductsClass.dart';
+//import 'package:clean_arch_app/Feature_Post/presentation/pages/TypeCategory/TypeCategoryAdd.dart';
+//import 'package:clean_arch_app/Feature_Post/presentation/pages/TypeCategory/TypeCategoryClass.dart';
+//import 'package:clean_arch_app/Feature_Post/presentation/pages/Home/HomePage.dart';
 import 'package:clean_arch_app/core/resource/FontManager.dart';
 import 'package:clean_arch_app/core/resource/MediaQuery.dart';
+import 'package:clean_arch_app/core/resource/StringManager.dart';
 import 'package:clean_arch_app/core/resource/ValueManger.dart';
+
 import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_format/date_format.dart';
 import 'package:get/get.dart';
 
+import '../../../../core/resource/AssetManager.dart';
 import '../../../../core/resource/Construct.dart';
-import '../../../../core/resource/StringManager.dart';
+import 'TypeCategoryAdd.dart';
+import 'TypeCategoryClass.dart';
+import 'TypeCategoryDetailsEdit.dart';
+import 'TypeCategoryEdit.dart';
+//import 'TypeCategoryDetailsEdit.dart';
 
-class ProductMainNew extends StatefulWidget {
-  const ProductMainNew({super.key});
+class TypeCategoryMain extends StatefulWidget {
+  const TypeCategoryMain({super.key});
 
   @override
-  _ProductMainNewState createState() => _ProductMainNewState();
+  _TypeCategoryMainState createState() => _TypeCategoryMainState();
 }
 
-List<ProductClass> list = [];
+List<TypeCategoryClass> list = [];
 
-List<ProductClass>? listTemp;
-List<ProductClass> duplicateItems = [];
-List<ProductClass> duplicateItems2 = [];
+List<TypeCategoryClass> instCatList = [];
+
+List<TypeCategoryClass>? listTemp;
+List<TypeCategoryClass> duplicateItems = [];
+List<TypeCategoryClass> duplicateItems2 = [];
 var db = FirebaseFirestore.instance;
 
 QuerySnapshot? cars;
-//List<ProductClass> ProductMainNew= [];
-//final CollectionReference _productss =FirebaseFirestore.instance.collection(StringManager.collection_Products);
-var _productss = getCollectionReference(StringManager.collectionProducts);
+//List<TypeCategoryClass> TypeCategoryMain= [];
+final CollectionReference TypeCategory =
+    FirebaseFirestore.instance.collection(StringManager.collectionTypeCategory);
+final TextEditingController _catIdController = TextEditingController();
+final TextEditingController _catNameController = TextEditingController();
+final TextEditingController _catImageController = TextEditingController();
+final TextEditingController _catPriceController = TextEditingController();
+final TextEditingController _catCatController = TextEditingController();
+final TextEditingController _catEntryDateController = TextEditingController();
 
-final TextEditingController _productIdController = TextEditingController();
-final TextEditingController _productNameController = TextEditingController();
-final TextEditingController _productImageController = TextEditingController();
-final TextEditingController _productPriceController = TextEditingController();
-final TextEditingController _productCatController = TextEditingController();
-final TextEditingController _productEntryDateController =
-    TextEditingController();
-
-class _ProductMainNewState extends State<ProductMainNew> {
+class _TypeCategoryMainState extends State<TypeCategoryMain> {
   void filterSearchResults(String query) {
-    List<ProductClass> dummySearchList = [];
+    List<TypeCategoryClass> dummySearchList = [];
     dummySearchList = duplicateItems;
     if (query.isNotEmpty) {
-      List<ProductClass> dummyListData = [];
+      //print('inside if');
+      List<TypeCategoryClass> dummyListData = [];
       for (var item in dummySearchList) {
-        if (item.productName.toUpperCase().contains(query.toUpperCase())) {
+        if (item.catName.toUpperCase().contains(query.toUpperCase())) {
           dummyListData.add(item);
         }
       }
@@ -67,30 +74,26 @@ class _ProductMainNewState extends State<ProductMainNew> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    //call_get_datatype();
-    // _readdball();
   }
 
-  @override
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  Color pyellow = Colors.red;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  Color pYellow = Colors.red;
 
-  Future<void> _createOrUpdate([ProductClass? documentSnapshot]) async {
+  Future<void> _createOrUpdate([TypeCategoryClass? documentSnapshot]) async {
     String action = 'create';
-
+    //print('inside _createOrUpdate');
     if (documentSnapshot != null) {
       action = 'update';
-      _productIdController.text = documentSnapshot.productId.toString();
-      _productNameController.text = documentSnapshot.productName;
-      _productImageController.text = documentSnapshot.productImage;
-      _productCatController.text = documentSnapshot.productCat;
-      _productEntryDateController.text =
-          documentSnapshot.productEntryDate.toString();
-      _productPriceController.text = documentSnapshot.productPrice;
+      _catIdController.text = documentSnapshot.catId.toString();
+      _catNameController.text = documentSnapshot.catName;
+      _catImageController.text = documentSnapshot.catImage;
+      _catCatController.text = documentSnapshot.catDesc;
+      _catEntryDateController.text = documentSnapshot.catDate.toString();
+      _catPriceController.text = documentSnapshot.catPrice;
     } else {
-      _productNameController.text = '';
-      _productPriceController.text = '';
-      _productCatController.text = '';
+      _catNameController.text = '';
+      _catPriceController.text = '';
+      _catCatController.text = '';
     }
 
     await showModalBottomSheet(
@@ -109,7 +112,7 @@ class _ProductMainNewState extends State<ProductMainNew> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 TextField(
-                  controller: _productNameController,
+                  controller: _catNameController,
                   decoration: const InputDecoration(labelText: 'Name'),
                 ),
                 const SizedBox(
@@ -118,7 +121,7 @@ class _ProductMainNewState extends State<ProductMainNew> {
                 TextField(
                   keyboardType:
                       const TextInputType.numberWithOptions(decimal: true),
-                  controller: _productPriceController,
+                  controller: _catPriceController,
                   decoration: const InputDecoration(
                     labelText: 'Price',
                   ),
@@ -129,7 +132,7 @@ class _ProductMainNewState extends State<ProductMainNew> {
                 TextField(
                   keyboardType:
                       const TextInputType.numberWithOptions(decimal: true),
-                  controller: _productCatController,
+                  controller: _catCatController,
                   decoration: const InputDecoration(
                     labelText: 'Cat',
                   ),
@@ -140,13 +143,13 @@ class _ProductMainNewState extends State<ProductMainNew> {
                 ElevatedButton(
                   child: Text(action == 'create' ? 'Create' : 'Update'),
                   onPressed: () async {
-                    final String name = _productNameController.text;
-                    final String price = _productPriceController.text;
-                    final String cat = _productCatController.text;
+                    final String name = _catNameController.text;
+                    final String price = _catPriceController.text;
+                    final String cat = _catCatController.text;
                     if (action == 'create') {
-                      _productNameController.text = '';
-                      _productPriceController.text = '';
-                      _productCatController.text = '';
+                      _catNameController.text = '';
+                      _catPriceController.text = '';
+                      _catCatController.text = '';
                       final todayDate = DateTime.now();
                       var currentdate = formatDate(todayDate, [
                         yyyy,
@@ -164,31 +167,27 @@ class _ProductMainNewState extends State<ProductMainNew> {
                         am
                       ]);
 
-                      // Persist a new product to Firestore
-                      await _productss.add({
-                        "productName": name,
-                        "productPrice": price,
-                        "productCat": cat,
-                        "productId": "13",
-                        "productImage": "IMAGEPAth",
-                        "productEntryDate": currentdate,
-                        "favoriteFlag": 0
+                      await TypeCategory.add({
+                        "catName": name,
+                        "catPrice": price,
+                        "catDesc": cat,
+                        "catId": "13",
+                        "catImage": "IMAGEAth",
+                        "catDate": currentdate,
+                        "favoriteFlag": "0"
                       });
                     }
 
                     if (action == 'update') {
-                      // Update the product
-                      await _productss.doc(documentSnapshot?.docsId).update({
-                        "productName": name,
-                        "productPrice": price,
-                        "productCat": cat
-                      });
+                      // Update the cat
+                      await TypeCategory.doc(documentSnapshot!.docsId).update(
+                          {"catName": name, "catPrice": price, "catDesc": cat});
                     }
 
                     // Clear the text fields
-                    _productNameController.text = '';
-                    _productPriceController.text = '';
-                    _productCatController.text = '';
+                    _catNameController.text = '';
+                    _catPriceController.text = '';
+                    _catCatController.text = '';
 
                     // Hide the bottom sheet
                     Navigator.of(context).pop();
@@ -200,6 +199,13 @@ class _ProductMainNewState extends State<ProductMainNew> {
         });
   }
 
+  Future<void> deleteProductMain(String CatId) async {
+    await TypeCategory.doc(CatId).delete();
+
+    ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('You have successfully deleted a cat')));
+  }
+
   @override
   Widget build(BuildContext context) {
     var pheight = MediaQuery.of(context).size.height;
@@ -208,13 +214,11 @@ class _ProductMainNewState extends State<ProductMainNew> {
     return SafeArea(
       child: Scaffold(
         key: _scaffoldKey,
-        // drawer: Appdrawer(),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => _createOrUpdate(),
-          // onPressed: () {  },
-          child: const Icon(Icons.add),
-        ),
-
+        // floatingActionButton: FloatingActionButton(
+        //   onPressed: () => _createOrUpdate(),
+        //   // onPressed: () {  },
+        //   child: const Icon(Icons.add),
+        // ),
         body: Stack(
           children: <Widget>[
             //header shape
@@ -224,7 +228,7 @@ class _ProductMainNewState extends State<ProductMainNew> {
               child: Container(
                 height: MediaQuery.of(context).size.height / 4,
                 width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   //borderRadius: BorderRadius.circular(200),
                   color: Colors.yellow,
                 ),
@@ -298,8 +302,8 @@ class _ProductMainNewState extends State<ProductMainNew> {
             Positioned(
               top: 50,
               left: MediaQuery.of(context).size.width / 2 - 70,
-              child: Text(
-                'List Products',
+              child: const Text(
+                'Categorys',
                 style: TextStyle(fontSize: 29, fontWeight: FontWeight.bold),
               ),
             ),
@@ -311,7 +315,7 @@ class _ProductMainNewState extends State<ProductMainNew> {
 
               // left: MediaQuery.of(context).size.width / 2 - 70,
               child: SingleChildScrollView(
-                child: Container(
+                child: SizedBox(
                   height: 50,
                   width: MediaQuery.of(context).size.width - 30,
                   child: Material(
@@ -322,7 +326,7 @@ class _ProductMainNewState extends State<ProductMainNew> {
                           //print('inside change');
                           filterSearchResults(value);
                         },
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                             border: InputBorder.none,
                             prefixIcon: Icon(Icons.search,
                                 color: Colors.yellow, size: 30.0),
@@ -338,48 +342,50 @@ class _ProductMainNewState extends State<ProductMainNew> {
             Positioned(
               top: 160,
               right: 0,
-              child: Container(
+              child: SizedBox(
                 width: MediaQuery.of(context).size.width,
-                height: getHeight(context) / 1.2,
+                height: getHeight(context) / 1.35,
                 child: StreamBuilder(
-                  stream: _productss.snapshots(),
+                  stream: TypeCategory.snapshots(),
                   builder:
                       (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
                     if (streamSnapshot.hasData) {
-                      instProdList.clear();
+                      instCatList.clear();
                       for (int i = 0;
                           i < streamSnapshot.data!.docs.length;
                           i++) {
                         final DocumentSnapshot documentSnapshot =
                             streamSnapshot.data!.docs[i];
-                        ProductClass filteredData = ProductClass(
-                            productId: documentSnapshot['productId'],
-                            productName: documentSnapshot['productName'],
-                            productImage: documentSnapshot['productImage'],
-                            productCat: documentSnapshot['productCat'],
-                            productEntryDate: DateTime.now(),
-                            //DateTime.parse(documentSnapshot['productEntryDate']),
-                            productPrice: documentSnapshot['productPrice'],
-                            favoriteFlag: documentSnapshot['favoriteFlag'],
-                            docsId: documentSnapshot.id,
-                            productCount: 1);
+                        TypeCategoryClass filteredData = TypeCategoryClass(
+                            catId: int.parse(documentSnapshot['catId']),
+                            catName: documentSnapshot['catName'],
+                            catImage: documentSnapshot['catImage'],
+                            catPrice: documentSnapshot['catPrice'],
+                            catDesc: documentSnapshot['catDesc'],
+                            catDate: DateTime.fromMicrosecondsSinceEpoch(
+                                documentSnapshot['catDate']
+                                    .microsecondsSinceEpoch),
+                            docsId: documentSnapshot
+                                .id //documentSnapshot['catDate']
+                            );
 
-                        instProdList.add(filteredData);
-                        duplicateItems = instProdList;
+                        instCatList.add(filteredData);
                       }
+
+                      instCatList
+                          .sort((a, b) => b.catDate.compareTo(a.catDate));
 
                       return ListView.builder(
                         itemCount: streamSnapshot.data!.docs.length,
                         itemBuilder: (context, index) {
                           return InkWell(
                             onTap: () {
-                              //print(instProdList[index].productEntryDate);
-                              Get.to(() => ProductDetailsEdit(
-                                  instProd: instProdList[index]
+                              Get.to(() => TypeCategoryEdit(
+                                  IntTypeCategory: instCatList[index]
                                   //   prodList: instProdListSimilar,
                                   ));
                             },
-                            child: Container(
+                            child: SizedBox(
                               height: getHeight(context) / FontManagerSize.s6,
                               width: double.infinity,
                               child: Card(
@@ -388,45 +394,45 @@ class _ProductMainNewState extends State<ProductMainNew> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.all(AppSize.s6),
+                                      const Padding(
+                                        padding: EdgeInsets.all(AppSize.s6),
                                         child: CircleAvatar(
-                                          radius: FontManagerSize.s35,
-                                          backgroundImage: NetworkImage(
-                                              instProdList[index].productImage),
-                                        ),
+                                            radius: FontManagerSize.s35,
+                                            backgroundImage:
+                                                AssetImage(AssetManager.gift)
+                                            //  NetworkImage( instCatList[index].catImage),
+                                            ),
                                       ),
+                                      // Column(
+                                      //   mainAxisAlignment:
+                                      //       MainAxisAlignment.spaceAround,
+                                      //   children: [
+                                      //     Text(
+                                      //       instCatList[index].catName,
+                                      //       style: const TextStyle(
+                                      //           fontWeight: FontWeight.w500,
+                                      //           fontSize: AppSize.s20),
+                                      //     ),
+                                      //     Text(
+                                      //       instCatList[index].catPrice,
+                                      //       style: const TextStyle(
+                                      //           fontWeight: FontWeight.w300,
+                                      //           fontSize: AppSize.s20),
+                                      //     ),
+                                      //   ],
+                                      // ),
                                       Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceAround,
                                         children: [
                                           Text(
-                                            instProdList[index].productName,
+                                            instCatList[index].catDesc,
                                             style: const TextStyle(
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: AppSize.s20),
                                           ),
                                           Text(
-                                            '\$${instProdList[index].productPrice}',
-                                            style: const TextStyle(
-                                                fontWeight: FontWeight.w300,
-                                                fontSize: AppSize.s20),
-                                          ),
-                                        ],
-                                      ),
-                                      Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
-                                        children: [
-                                          Text(
-                                            instProdList[index].productCat,
-                                            style: const TextStyle(
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: AppSize.s20),
-                                          ),
-                                          Text(
-                                            '${formatDate(instProdList[index].productEntryDate, [
+                                            '${formatDate(instCatList[index].catDate, [
                                                   yyyy,
                                                   '-',
                                                   mm,
@@ -443,16 +449,21 @@ class _ProductMainNewState extends State<ProductMainNew> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
                                         children: [
-                                          // Press this button to edit a single product
+                                          // Press this button to edit a single cat
                                           IconButton(
-                                              icon: const Icon(
-                                                Icons.edit,
-                                                size: AppSize.s20,
-                                              ),
-                                              //  onPressed: () =>
-                                              onPressed: () => _createOrUpdate(
-                                                  instProdList[index])),
-                                          // This icon button is used to delete a single product
+                                            icon: const Icon(
+                                              Icons.edit,
+                                              size: AppSize.s20,
+                                            ),
+                                            //  onPressed: () =>
+                                            onPressed: () => Get.to(() =>
+                                                TypeCategoryEdit(
+                                                    IntTypeCategory:
+                                                        instCatList[index]
+                                                    //   prodList: instProdListSimilar,
+                                                    )),
+                                          ),
+                                          // This icon button is used to delete a single cat
                                           IconButton(
                                               icon: const Icon(
                                                 Icons.delete,
@@ -464,14 +475,14 @@ class _ProductMainNewState extends State<ProductMainNew> {
                                                 deleteProduct(
                                                     context,
                                                     StringManager
-                                                        .collectionProducts,
-                                                    instProdList[index].docsId,
-                                                    instProdList[index]
-                                                        .productImage);
+                                                        .collectionTypeCategory,
+                                                    instCatList[index].docsId,
+                                                    instCatList[index]
+                                                        .catImage);
                                                 // Create a reference to the file to delete
                                                 // FirebaseStorage.instance
                                                 //     .refFromURL(documentSnapshot[
-                                                //         'productImage'])
+                                                // 'catImage'])
                                                 //     .delete();
 // Child references can also take paths
 // spaceRef now points to "images/space.jpg
@@ -485,21 +496,21 @@ class _ProductMainNewState extends State<ProductMainNew> {
                                   // ListTile(
                                   //
                                   //
-                                  //   title: Text('${instProdList[index].productName}'),
+                                  //   title: Text('${filteredData.catName}'),
                                   //   subtitle: Column(
                                   //     children: [
-                                  //      Text('${instProdList[index].productName}'),
-                                  //       Text('${instProdList[index].productPrice}')
+                                  //      Text('${filteredData.catName}'),
+                                  //       Text('${filteredData.catPrice}')
                                   //     ],
                                   //   ),
                                   //   leading:  Column(
                                   //     children: [
-                                  //       // Text('${instProdList[index].productImage}'),
-                                  //       Text('${instProdList[index].favoriteFlag}'),
-                                  //       //   Text('${instProdList[index].productPrice}'),
-                                  //       Text('${formatDate(instProdList[index].productEntryDate,
+                                  //       // Text('${filteredData.catImage}'),
+                                  //       Text('${filteredData.favoriteFlag}'),
+                                  //       //   Text('${filteredData.catPrice}'),
+                                  //       Text('${formatDate(filteredData.catDate,
                                   //           [yyyy, '-', mm, '-', dd])}'),
-                                  //       Text('${instProdList[index].productCat}'),
+                                  //       Text('${filteredData.catDesc}'),
                                   //     ],
                                   //   ),
                                   //   trailing: SizedBox(
@@ -507,17 +518,17 @@ class _ProductMainNewState extends State<ProductMainNew> {
                                   //     height: 200,
                                   //     child: Row(
                                   //       children: [
-                                  //         // Press this button to edit a single product
+                                  //         // Press this button to edit a single cat
                                   //         IconButton(
                                   //           icon: const Icon(Icons.edit),
                                   //           //  onPressed: () =>
                                   //           onPressed:()=> _createOrUpdate(documentSnapshot)
                                   //         ),
-                                  //         // This icon button is used to delete a single product
+                                  //         // This icon button is used to delete a single cat
                                   //         IconButton(
                                   //             icon: const Icon(Icons.delete),
                                   //             ///onPressed: (){},
-                                  //             onPressed: () =>  _deleteProduct(documentSnapshot.id)
+                                  //             onPressed: () =>  _deletecat(documentSnapshot.id)
                                   //         ),
                                   //
                                   //       ],
@@ -543,15 +554,24 @@ class _ProductMainNewState extends State<ProductMainNew> {
               top: pheight / 30,
               right: pwidth / 20,
               child: IconButton(
-                icon: Icon(Icons.add, size: 30),
-                onPressed: () async {
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (_) => ProductAdd()));
+                  icon: const Icon(Icons.add, size: 30),
+                  onPressed: () async {
+                    //print('go to cat add');
+                    var maxCatId = await getDocumentMaxId(
+                        StringManager.collectionTypeCategory, 'catId');
 
-                  //  }
-                  //pushNamed(context, "/ProductAdd");
-                },
-              ),
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => TypeCategoryAdd(
+                          Docs_max: maxCatId + 1,
+                        ),
+                      ),
+                    );
+                  }
+                  //pushNamed(context, "/catAdd");
+
+                  ),
             ),
           ],
         ),

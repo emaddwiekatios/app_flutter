@@ -1,28 +1,20 @@
 //import 'dart:html';
 
-import 'dart:convert';
-
-import 'package:clean_arch_app/core/resource/AssetManager.dart';
-import 'package:clean_arch_app/core/resource/FontManager.dart';
+//import 'package:clean_arch_app/core/resource/AssetManager.dart';
 import 'package:clean_arch_app/core/resource/MediaQuery.dart';
 import 'package:clean_arch_app/core/resource/StringManager.dart';
-import 'package:clean_arch_app/core/resource/ValueManger.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'dart:ui';
+//import 'package:get/get_core/src/get_main.dart';
+//import 'dart:ui';
 import 'dart:io';
 import 'dart:async';
-import 'package:image/image.dart' as Im;
+//import 'package:image/image.dart' as Im;
 import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
-import 'dart:math' as Math;
+//import 'dart:math' as Math;
 
 import 'package:date_format/date_format.dart';
-
-import 'package:firebase_storage/firebase_storage.dart';
+//import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -30,27 +22,30 @@ import 'package:http/http.dart' as http;
 
 import '../../../../core/resource/ColorManger.dart';
 import '../../../../core/resource/Construct.dart';
-import '../Category/CategoryAdd.dart';
+import '../../../../core/resource/FontManager.dart';
+import '../../../../core/resource/ValueManger.dart';
 
-// ignore: must_be_immutable
-class ProductAdd extends StatefulWidget {
-  ProductAdd({super.key});
+class TypeCategoryAdd extends StatefulWidget {
+  var Docs_max;
+  TypeCategoryAdd({@required this.Docs_max});
   @override
-  _ProductAddState createState() => _ProductAddState();
+  _TypeCategoryAddState createState() => _TypeCategoryAddState();
 }
 
 QuerySnapshot? cars;
-QuerySnapshot? carsToken;
-QuerySnapshot? carsProviders;
-
+QuerySnapshot? cars_token;
+QuerySnapshot? carsproviders;
+const CURVE_HEIGHT = 160.0;
+const AVATAR_RADIUS = CURVE_HEIGHT * 0.28;
+const AVATAR_DIAMETER = AVATAR_RADIUS * 2;
 Color? colorOne;
 Color? colorTwo;
 Color? colorThree;
 User? user;
-//dynamic _pickImageError;
+dynamic _pickImageError;
 bool isVideo = false;
 bool isSave = false;
-//String? _retrieveDataError;
+String? _retrieveDataError;
 typedef OnPickImageCallback = void Function(
     double? maxWidth, double? maxHeight, int? quality);
 final ImagePicker _picker = ImagePicker();
@@ -58,10 +53,10 @@ final TextEditingController maxWidthController = TextEditingController();
 final TextEditingController maxHeightController = TextEditingController();
 final TextEditingController qualityController = TextEditingController();
 
-final CollectionReference _Categoryss =
-    FirebaseFirestore.instance.collection('Category');
+final CollectionReference _TypeCategoryss =
+    FirebaseFirestore.instance.collection('TypeCategorys');
 
-class _ProductAddState extends State<ProductAdd> {
+class _TypeCategoryAddState extends State<TypeCategoryAdd> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
 //  add  keyboard action
@@ -85,27 +80,15 @@ class _ProductAddState extends State<ProductAdd> {
   //File? _imageFile;
   DateTime _date = DateTime.now();
   QuerySnapshot? carsinvoice;
-
   int maxCatId = 0;
-  int maxProductId = 0;
-  // final GlobalKey<ScaffoldState> _scaffoldKeysnak = new GlobalKey<ScaffoldState>();
-
-  Future<void> getProductIdmax() async {
-    maxProductId =
-        await getDocumentMaxId(StringManager.collectionProducts, 'productId');
-    maxProductId = maxProductId + 1;
-    setState(() {
-      contProductid.text = (maxProductId).toString();
-    });
-    print('maxProductId=$maxProductId');
-  }
+  final GlobalKey<ScaffoldState> _scaffoldKeysnak =
+      new GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    getProductIdmax();
-
-    getCategory();
+    contcatid.text = widget.Docs_max.toString();
+    getTypeCategory();
     getCurrentUser();
     // //print("inside init");
     colorOne = Colors.red;
@@ -113,6 +96,13 @@ class _ProductAddState extends State<ProductAdd> {
     colorThree = Colors.red;
   }
 
+/*
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return null;
+  }
+*/
   String? imagename;
   //PickedFile sampleimage;
   File? sampleimage;
@@ -122,7 +112,7 @@ class _ProductAddState extends State<ProductAdd> {
 
   List<String> list_cat = [];
 
-  String _selectedCat = 'Category';
+  String _selectedCat = 'TypeCategory';
 
   List<String> list_Providers = [];
 
@@ -136,16 +126,16 @@ class _ProductAddState extends State<ProductAdd> {
 
   String _selectedpays_from = 'Emad';
 
-  TextEditingController contProductid = new TextEditingController();
-  TextEditingController contProductname = new TextEditingController();
-  TextEditingController contProductAmt = new TextEditingController();
-  TextEditingController contProductfav = new TextEditingController();
-  TextEditingController contProductcat = new TextEditingController();
-  TextEditingController contProductdesc = new TextEditingController();
-  TextEditingController contProducturl = new TextEditingController();
-  TextEditingController contProductdentrydate = new TextEditingController();
-  TextEditingController contProductTo = new TextEditingController();
-  TextEditingController contProductdate = new TextEditingController();
+  TextEditingController contcatid = new TextEditingController();
+  TextEditingController contcatname = new TextEditingController();
+  TextEditingController contcatAmt = new TextEditingController();
+  TextEditingController contcatfav = new TextEditingController();
+  TextEditingController contcatcat = new TextEditingController();
+  TextEditingController contcatdesc = new TextEditingController();
+  TextEditingController contcaturl = new TextEditingController();
+  TextEditingController contcatdentrydate = new TextEditingController();
+  TextEditingController contcatTo = new TextEditingController();
+  TextEditingController contcatdate = new TextEditingController();
   File? imageFile;
 
   @override
@@ -157,17 +147,6 @@ class _ProductAddState extends State<ProductAdd> {
 
     return SafeArea(
       child: Scaffold(
-        // appBar:  defualtAppBarWidget(titleName: 'emad',
-        //                      child: Row(
-        //                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        //                          children: [
-        //                          IconButton(icon:Icon(Icons.add),
-        //                            onPressed: () {print('add');
-        //                            },),
-        //                            IconButton(icon:Icon(Icons.add_business),
-        //                              onPressed: () { print('add b ');  },),
-        //
-        //                          ],),),
         //  resizeToAvoidBottomPadding: false,
         resizeToAvoidBottomInset: true,
         key: _scaffoldKey,
@@ -235,18 +214,24 @@ class _ProductAddState extends State<ProductAdd> {
                   icon: const Icon(Icons.arrow_back),
                   onPressed: () {
                     Navigator.pop(context);
+
+                    //_scaffoldKey.currentState.openDrawer();
+                    // Navigator.of(context).pushReplacement(
+                    //   new MaterialPageRoute(
+                    //       builder: (BuildContext context) => new main_page()),
+                    // );
                   },
                 ),
               ),
               Positioned(
                 top: MediaQuery.of(context).size.height / 15,
                 left: MediaQuery.of(context).size.width / 2 -
-                    ('Add Product'.toString().length * 8),
+                    ('Add TypeCategory'.toString().length * 8),
                 child: const Text(
-                  'Add Product',
-                  //AppLocalizations.of(context).translate('Add Product'),
+                  'Add TypeCategory',
+                  //AppLocalizations.of(context).translate('Add cat'),
 
-                  //'Add Product',
+                  //'Add cat',
                   style: TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
@@ -270,14 +255,13 @@ class _ProductAddState extends State<ProductAdd> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
-                          //prodid
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: defaultTextFormField(
                                 obscureText: false,
-                                fieldController: contProductid,
+                                fieldController: contcatid,
                                 onChange: (value) => defaultTextFieldOnChange(
-                                    value!, 'Product ID'),
+                                    value!, 'TypeCategory ID'),
                                 type: TextInputType.emailAddress,
                                 prefixIcon: IconButton(
                                     icon: const Icon(
@@ -293,14 +277,13 @@ class _ProductAddState extends State<ProductAdd> {
                                         size: 20.0),
                                     onPressed: () {
                                       setState(() {
-                                        contProductid.clear();
+                                        contcatid.clear();
                                       });
                                     }),
                                 validate: (value) => defaultTextFieldValidator(
-                                    value!, 'Product Id'),
-                                hintTextLabel: 'Product Id'),
+                                    value!, 'TypeCategory Id'),
+                                hintTextLabel: 'TypeCategory Id'),
                           ),
-
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Container(
@@ -317,7 +300,7 @@ class _ProductAddState extends State<ProductAdd> {
                                       child: const Padding(
                                         padding:
                                             EdgeInsets.only(left: AppSize.s10),
-                                        child: Text('Product_Date'
+                                        child: Text('TypeCategory_Date'
                                             //  '${AppLocalizations.of(context).translate('Product_Date')} :'
                                             ),
                                       ),
@@ -391,9 +374,9 @@ class _ProductAddState extends State<ProductAdd> {
                             padding: const EdgeInsets.all(8.0),
                             child: defaultTextFormField(
                                 obscureText: false,
-                                fieldController: contProductname,
+                                fieldController: contcatname,
                                 onChange: (value) => defaultTextFieldOnChange(
-                                    value!, 'Product Name'),
+                                    value!, 'TypeCategory Name'),
                                 type: TextInputType.emailAddress,
                                 prefixIcon: IconButton(
                                     icon: const Icon(
@@ -409,118 +392,21 @@ class _ProductAddState extends State<ProductAdd> {
                                         size: 20.0),
                                     onPressed: () {
                                       setState(() {
-                                        contProductid.clear();
+                                        contcatname.clear();
                                       });
                                     }),
                                 validate: (value) => defaultTextFieldValidator(
-                                    value!, 'Product Name'),
-                                hintTextLabel: 'Product Name'),
-                          ),
-
-                          isSave ? CircularProgressIndicator() : SizedBox(),
-                          //category
-                          Padding(
-                            padding: const EdgeInsets.only(left: 8.0, right: 8),
-                            child: Container(
-                              height: pheight / FontManagerSize.s20,
-                              decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.black),
-                                  borderRadius: BorderRadius.circular(7)),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    flex: 2,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(0),
-                                      child: Material(
-                                        elevation: 0.0,
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                        child: const Padding(
-                                          padding: EdgeInsets.all(AppSize.s12),
-                                          child: Text(
-                                            'Category',
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 5),
-                                  Expanded(
-                                    flex: 3,
-                                    child: Material(
-                                      elevation: 0.0,
-                                      borderRadius: BorderRadius.circular(5.0),
-                                      child: Row(
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 0.0, right: 0),
-                                            child: Align(
-                                              alignment: Alignment.topLeft,
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 15.0),
-                                                child: DropdownButton<String>(
-                                                    items: list_cat
-                                                        .map((String val) {
-                                                      return DropdownMenuItem<
-                                                          String>(
-                                                        value: val,
-                                                        child: Text(val),
-                                                      );
-                                                    }).toList(),
-                                                    hint: Text(_selectedCat),
-                                                    onChanged: (newVal) {
-                                                      setState(() {
-                                                        _selectedCat = newVal!;
-                                                      });
-                                                    }),
-                                              ),
-                                            ),
-                                          ),
-                                          IconButton(
-                                              icon: Icon(
-                                                Icons.refresh,
-                                                color: Colors.red,
-                                                size: 20,
-                                              ),
-                                              onPressed: () async {
-                                                //print('ffffff');
-                                                // setState(() {
-                                                //  maxCatId=await getDocumentMaxId('Categorys','Cat_Id');
-                                                // });
-
-                                                getCategory();
-                                              }),
-                                          IconButton(
-                                              icon: const Icon(Icons.add,
-                                                  size: 20),
-                                              onPressed: () async {
-                                                //print('go to cat add');
-                                                var maxCatId =
-                                                    await getDocumentMaxId(
-                                                        'Categorys', 'catId');
-                                                Get.to(CategoryAdd(
-                                                  Docs_max: maxCatId + 1,
-                                                ));
-                                              }),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
+                                    value!, 'TypeCategory Name'),
+                                hintTextLabel: 'TypeCategory Name'),
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: defaultTextFormField(
                                 obscureText: false,
-                                fieldController: contProductAmt,
+                                fieldController: contcatAmt,
                                 onChange: (value) => defaultTextFieldOnChange(
-                                    value!, 'Product Amt'),
-                                type: TextInputType.emailAddress,
+                                    value!, 'TypeCategory Amt'),
+                                type: TextInputType.number,
                                 prefixIcon: IconButton(
                                     icon: const Icon(
                                         Icons.account_circle_rounded,
@@ -535,35 +421,45 @@ class _ProductAddState extends State<ProductAdd> {
                                         size: 20.0),
                                     onPressed: () {
                                       setState(() {
-                                        contProductid.clear();
+                                        contcatAmt.clear();
                                       });
                                     }),
                                 validate: (value) => defaultTextFieldValidator(
-                                    value!, 'Product Amt'),
-                                hintTextLabel: 'Product Amt'),
+                                    value!, 'TypeCategory Amt'),
+                                hintTextLabel: 'TypeCategory Amt'),
                           ),
-                          image == null
-                              ? Container()
-                              : Container(
-                                  height: getHeight(context) / 4,
-                                  width: getWidth(context) - 20,
-                                  child: Image.file(File(image!.path))),
+                          Container(
+                              padding:
+                                  EdgeInsets.only(top: 20, left: 20, right: 20),
+                              alignment: Alignment.topCenter,
+                              child: Column(
+                                children: [
+                                  image == null
+                                      ? Container()
+                                      : Container(
+                                          height: getHeight(context) / 4,
+                                          width: getWidth(context) - 20,
+                                          child: Image.file(File(image!.path)))
+                                ],
+                              )),
                           FittedBox(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 defaltElevationButton(
+                                  heightButton: pheight / FontManagerSize.s20,
                                   nameButton: 'Save',
                                   onTabButton: () {
                                     showDialog<void>(
                                       context: context,
                                       // false = user must tap button, true = tap outside dialog
                                       builder: (BuildContext dialogContext) {
-                                        return Center(
+                                        return const Center(
                                             child: CircularProgressIndicator());
                                       },
                                     );
-                                    uploadimage();
+                                    addisubcollection();
+                                    Navigator.of(context).pop();
                                   },
                                   parBackGroundColor: ColorManager.secondary,
                                   parBorderRadius: 5,
@@ -572,6 +468,7 @@ class _ProductAddState extends State<ProductAdd> {
                                   parForegroundColor: Colors.black,
                                 ),
                                 defaltElevationButton(
+                                  heightButton: pheight / FontManagerSize.s20,
                                   nameButton: 'Cancel',
                                   onTabButton: () {
                                     Navigator.pop(context);
@@ -582,55 +479,38 @@ class _ProductAddState extends State<ProductAdd> {
                                   parFontSize: 15,
                                   parForegroundColor: Colors.black,
                                 ),
-                                defaltElevationButton(
-                                  nameButton: 'Camera',
-                                  onTabButton: () async {
-                                    image = await ImagePicker()
-                                        .pickImage(source: ImageSource.camera);
-                                    setState(() {
-                                      //update UI
-                                    });
-                                  },
-                                  parBackGroundColor: ColorManager.secondary,
-                                  parBorderRadius: 5,
-                                  parBorderWidth: 5,
-                                  parFontSize: 15,
-                                  parForegroundColor: Colors.black,
-                                ),
-                                defaltElevationButton(
-                                  nameButton: 'Gallery',
-                                  onTabButton: () async {
-                                    image = await ImagePicker()
-                                        .pickImage(source: ImageSource.gallery);
-                                    setState(() {
-                                      //update UI
-                                    });
-                                  },
-                                  parBackGroundColor: ColorManager.secondary,
-                                  parBorderRadius: 5,
-                                  parBorderWidth: 5,
-                                  parFontSize: 15,
-                                  parForegroundColor: Colors.black,
-                                ),
+                                // defaltElevationButton(
+                                //   nameButton: 'Camera',
+                                //   onTabButton: () async {
+                                //     image = await ImagePicker()
+                                //         .pickImage(source: ImageSource.camera);
+                                //     setState(() {
+                                //       //update UI
+                                //     });
+                                //   },
+                                //   parBackGroundColor: ColorManager.secondary,
+                                //   parBorderRadius: 5,
+                                //   parBorderWidth: 5,
+                                //   parFontSize: 15,
+                                //   parForegroundColor: Colors.black,
+                                // ),
+                                // defaltElevationButton(
+                                //   nameButton: 'Gallery',
+                                //   onTabButton: () async {
+                                //     image = await ImagePicker()
+                                //         .pickImage(source: ImageSource.gallery);
+                                //     setState(() {
+                                //       //update UI
+                                //     });
+                                //   },
+                                //   parBackGroundColor: ColorManager.secondary,
+                                //   parBorderRadius: 5,
+                                //   parBorderWidth: 5,
+                                //   parFontSize: 15,
+                                //   parForegroundColor: Colors.black,
+                                // ),
                               ],
                             ),
-                          ),
-
-                          const SizedBox(
-                            height: AppSize.s20,
-                          ),
-                          defaltElevationButton(
-                            nameButton: 'Show Nessage',
-                            onTabButton: () {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  defaultSnackBar("message",
-                                      actionMessage: "actionMessage"));
-                            },
-                            parBackGroundColor: ColorManager.secondary,
-                            parBorderRadius: 5,
-                            parBorderWidth: 5,
-                            parFontSize: 15,
-                            parForegroundColor: Colors.black,
                           ),
                         ],
                       ),
@@ -648,91 +528,124 @@ class _ProductAddState extends State<ProductAdd> {
   }
 
   Future<void> uploadimage() async {
-    final Reference ref = FirebaseStorage.instance
-        .ref('/File/Products')
-        .child('${contProductname.text}.jpg');
-    final UploadTask task = ref.putFile(File(image!.path));
-    task.then((res) {
-      res.ref.getDownloadURL().then((value) {
-        url2 = value;
-        //print(value);
-        addDatacollection();
-      });
-
-      //url=downurl as String;
-    });
+    // final Reference ref = FirebaseStorage.instance
+    //     .ref('/File/TypeCategory')
+    //     .child('${contcatname.text}.jpg');
+    // final UploadTask task = ref.putFile(File(image!.path));
+    // task.then((res) {
+    //   res.ref.getDownloadURL().then((value) async {
+    //     url2 = value;
+    addisubcollection();
+    // });
+    // });
   }
 
-  Future<void> addDatacollection() async {
-    var productsmap = {
-      "productId": int.parse(contProductid.text),
-      "productName": contProductname.text,
-      "productImage": url2,
-      "productPrice": contProductAmt.text,
-      "productCat": _selectedCat, //contProductcat.text,
-      "productEntryDate": DateTime.now(),
-      "favoriteFlag": 0, //contProductfav.text
-      "productCount": 1
+  void addisubcollection() async {
+    var TypeCategoryMap = {
+      "catId": contcatid.text,
+      "catName": contcatname.text,
+      "catImage": "url2",
+      "catPrice": contcatAmt.text,
+      "catDesc": contcatname.text, //contcatcat.text,
+      "catDate": DateTime.now(),
+      "Type": "0", //contcatfav.text
     };
-    addDataFireStore(StringManager.collectionProducts, productsmap);
-    int maxId =
-        await getDocumentMaxId(StringManager.collectionProducts, 'productId');
+    addDataFireStore(StringManager.collectionTypeCategory, TypeCategoryMap);
+    int maxcatId =
+        await getDocumentMaxId(StringManager.collectionTypeCategory, 'catId');
     setState(() {
-      contProductid.text = (maxId + 1).toString();
-      contProductAmt.clear();
-      contProductcat.clear();
-      contProductname.clear();
-      contProductdate.clear();
-      contProductdate.clear();
+      contcatid.text = (maxcatId + 1).toString();
+      contcatname.clear();
+      contcatAmt.clear();
     });
+
     Navigator.of(context).pop();
   }
 
   getCurrentUser() async {
     final FirebaseAuth auth = FirebaseAuth.instance;
     user = auth.currentUser;
-
-    //final uid = user.uid;
-    //return user.email;
   }
 
-  Future<http.Response> addProducttosql() async {
+  // addimagedata() {
+  //   final todayDate = DateTime.now();
+  //   currentdate = formatDate(todayDate,
+  //       [yyyy, '-', mm, '-', dd, ' ', hh, ':', nn, ':', ss, ' ', am]);
+  //
+  //   getCurrentUser();
+  //   FirebaseFirestore.instance.collection("Clean_App_cats_New").doc().set({
+  //     'catid': contcatid.text,
+  //     'catname': contcatname.text,
+  //     'catamt': contcatAmt.text,
+  //     'catentry_date': _date, // currentdate,
+  //     'catmodify_date': todayDate, // currentdate,
+  //     'catimg': url2,
+  //     'catfrom': _selectedpays_from,
+  //     'catuser': user?.email.toString(),
+  //     'catcurrency': _selectedcurrency
+  //   });
+  //
+  //   FirebaseFirestore.instance.collection("catsHistory").doc().set({
+  //     'cat_id': contcatid.text,
+  //     'cat_name': contcatname.text,
+  //     'cat_desc': contcatdesc.text,
+  //     'cat_amt': contcatAmt.text,
+  //     'cat_to': contcatTo.text,
+  //     'cat_fav': "false",
+  //     'cat_cat': _selectedCat,
+  //     'cat_entry_date': todayDate, //currentdate,
+  //     'cat_modify_date': todayDate, //currentdate,
+  //     'cat_img': url2,
+  //     'cat_from': _selectedpays_from,
+  //     'cat_user': user?.email.toString(),
+  //     'cat_currency': _selectedcurrency
+  //   });
+  //
+  //   _showSnackbar(contcatname.text);
+  //   setState(() {
+  //     contcatid.text = (int.parse(contcatid.text) + 1).toString();
+  //     contcatname.clear();
+  //     contcatdesc.clear();
+  //     contcatAmt.clear();
+  //     contcatTo.clear();
+  //   });
+  // }
+
+  Future<http.Response> addcattosql() async {
     final todayDate = DateTime.now();
     currentdate = formatDate(todayDate,
         [yyyy, '-', mm, '-', dd, ' ', hh, ':', nn, ':', ss, ' ', am]);
-    var url =
-        ("http://emaddwiekat.atwebpages.com/Sales/Flutter/AddProductd.php");
+    var url = ("http://emaddwiekat.atwebpages.com/Sales/Flutter/Addcatd.php");
 
     var response = await http.post(Uri.parse(url), body: {
-      "Product_id": contProductid.text,
-      "Product_name": contProductname.text,
-      "Product_desc": contProductdesc.text,
-      "Product_amt": contProductAmt.text,
-      "Product_to": _selectedProviders,
-      "Product_fav": "false",
-      "Product_cat": _selectedCat,
-      "Product_entry_date": _date.toString(), // currentdate,
-      "Product_modify_date": currentdate.toString(), // currentdate,
-      "Product_img": 'url2',
-      "Product_from": _selectedpays_from,
-      "Product_user": user!.email.toString(),
-      "Product_currency": _selectedcurrency
+      "cat_id": contcatid.text,
+      "cat_name": contcatname.text,
+      "cat_desc": contcatdesc.text,
+      "cat_amt": contcatAmt.text,
+      "cat_to": _selectedProviders,
+      "cat_fav": "false",
+      "cat_cat": _selectedCat,
+      "cat_entry_date": _date.toString(), // currentdate,
+      "cat_modify_date": currentdate.toString(), // currentdate,
+      "cat_img": 'url2',
+      "cat_from": _selectedpays_from,
+      "cat_user": user!.email.toString(),
+      "cat_currency": _selectedcurrency
     });
-    //print("${response.statusCode}");
-    //print("${response.body}");
+
     return response;
   }
 
-  printlistproviders() {
-    // if (cars != null) {
-    //   list_Providers.clear();
-    //   for (var i = 0; i < carsproviders.docs.length; i++) {
-    //     list_Providers.add(carsproviders.docs[i].data()['Provider_name']);
-    //   }
-    // } else {
-    //  //print("error");
-    // }
-  }
+  // printlistproviders() {
+  //   // if (cars != null) {
+  //   //   list_Providers.clear();
+  //   //   for (var i = 0; i < carsproviders.docs.length; i++) {
+  //   //     list_Providers.add(carsproviders.docs[i].data()['Provider_name']);
+  //   //   }
+  //   // } else {
+  //   //  //print("error");
+  //   // }
+  // }
 
   print_data() async {
     return await FirebaseFirestore.instance.collection('users').get();
@@ -745,7 +658,7 @@ class _ProductAddState extends State<ProductAdd> {
     //   for (var i = 0; i < cars_token.docs.length; i++) {
     //    //print('token data ');
     //    //print(cars_token.docs[i].data());
-    //     //list_cat.add(cars.docs[i].data()['cat_name']);
+    //     //list_cat.add(cars.docs[i].data()['catname']);
     //   }
     // } else {
     //  //print("error");
@@ -758,36 +671,19 @@ class _ProductAddState extends State<ProductAdd> {
       for (var element in cars!.docs) {
         setState(() {
           setState(() {
-            list_cat.add(element['Cat_Name']);
+            list_cat.add(element['catName']);
           });
         });
       }
-
-      // querySnapshot.docs.forEach((element) {
-      //   setState(() {
-      //     list_cat.add(element['Cat_Name']);
-      //   });
     } else {
       //print("error");
     }
   }
 
-  void _showSnackbar(String name) {
-//    final scaff = Scaffold.of(context);
-//     _scaffoldKey.currentState.showSnackBar(SnackBar(
-//       content: Text('Tranaction ${name} Saved'),
-//       backgroundColor: Colors.amber,
-//       duration: Duration(seconds: 5),
-//       action: SnackBarAction(
-//         label: 'Done', onPressed: _scaffoldKey.currentState.hideCurrentSnackBar,
-//       ),
-//     ));
-  }
-
-  void getCategory() {
+  void getTypeCategory() {
     list_cat.clear();
     FirebaseFirestore.instance
-        .collection('Categorys')
+        .collection('TypeCategorys')
         .get()
         .then((QuerySnapshot querySnapshot) {
       for (var element in querySnapshot.docs) {
@@ -797,51 +693,6 @@ class _ProductAddState extends State<ProductAdd> {
       }
     });
   }
-
-//  void _onPressed() {
-//   //print('inside onpreesses');
-//    FirebaseFirestore.instance.collection("users").get().then((querySnapshot) {
-//      querySnapshot.docs.forEach((result) {
-//       //print(result.data);
-////        FirebaseFirestore.instance
-////            .collection("users")
-////            .doc(result.id)
-////            .collection("tokens")
-////            .get()
-////            .then((querySnapshot) {
-////          querySnapshot.docs.forEach((result) {
-////           //print(result.data);
-////          });
-////        });
-//      });
-//    });
-//  }
-//
-//
-//  void _onPressedone() async{
-//    final User _auth = FirebaseAuth.instance.currentUser;
-//    FirebaseFirestore.instance
-//        .collection("users")
-//        .doc(_auth.uid)
-//        .collection("tokens")
-//        .get().then((value){
-//          value.docs.forEach((element) {
-//           //print(element.data()['token']);
-//          });
-//
-//    });
-//  }
-//
-//  void _onPressedall() async{
-//
-
-//    FirebaseFirestore.instance
-//        .collection("users")
-//        .doc(_auth.uid)
-//        .collection("tokens")
-//        .get().then((value){
-//     //print(value.docs[0].data()['token']);
-//    });
 }
 
 class _MyPainter extends CustomPainter {

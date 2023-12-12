@@ -6,7 +6,7 @@ import 'package:clean_arch_app/core/resource/ColorManger.dart';
 import 'package:clean_arch_app/core/resource/FontManager.dart';
 import 'package:clean_arch_app/core/resource/MediaQuery.dart';
 import 'package:clean_arch_app/core/resource/ValueManger.dart';
-import 'package:date_format/date_format.dart';
+//import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -33,14 +33,14 @@ Color colorThree = ColorManager.primary;
 
 Auth _auth = Get.put(Auth());
 late ProductClass instProd;
-bool updateDataFlag=true;
+bool updateDataFlag = true;
 late CategoryClass instCat;
 List<CategoryClass> instCatList = [];
 List<ProductClass> instProdListSimilar = [];
 
 //final CollectionReference _productss =FirebaseFirestore.instance.collection(StringManager.collection_Products);
 //final CollectionReference _categoryss =FirebaseFirestore.instance.collection('Categorys');
-List<ProductClass> instProdList=[] ;
+List<ProductClass> instProdList = [];
 List<ProductClass> dummyListData = [];
 List<ProductClass> duplicateItems2 = [];
 List<ProductClass> duplicateItems = [];
@@ -79,46 +79,41 @@ class _HomePageState extends State<HomePage> {
 
   void filterSearchResultsCat(String query) {
     setState(() {
-      updateDataFlag=false;
+      updateDataFlag = false;
     });
     dummySearchList = duplicateItems;
-    dummyListData=[];
-  // //print('instProdList=${instProdList.length}');
+    dummyListData = [];
+    // //print('instProdList=${instProdList.length}');
     if (query.isNotEmpty) {
       for (var item in dummySearchList) {
         if (item.productCat.toUpperCase().contains(query.toUpperCase()) ||
             item.productCat.contains(query)) {
           dummyListData.add(item);
-         //print('dummyListData=$dummyListData');
+          //print('dummyListData=$dummyListData');
         }
       }
-
-
-    }
-    else {
+    } else {
       //print("inside else");
       setState(() {
         instProdList = duplicateItems;
         indexParameter = null;
         titlePage = 'Home';
 
-        updateDataFlag=true;
-
+        updateDataFlag = true;
       });
     }
     setState(() {
       instProdList = dummyListData;
     });
-   ////print('instProdList=${instProdList.length}');
+    ////print('instProdList=${instProdList.length}');
   }
-
 
   void filterSearchResults(String query) {
     setState(() {
-      updateDataFlag=false;
+      updateDataFlag = false;
     });
     dummySearchList = duplicateItems;
-    dummyListData=[];
+    dummyListData = [];
 
     if (query.isNotEmpty) {
       for (var item in dummySearchList) {
@@ -131,28 +126,29 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         instProdList = dummyListData;
       });
-
-    }
-    else {
-
+    } else {
       setState(() {
         instProdList = duplicateItems;
         indexParameter = null;
         titlePage = 'Home';
 
-          updateDataFlag=true;
-
+        updateDataFlag = true;
       });
     }
-
-
   }
 
   @override
   void initState() {
-    instProdList.add(ProductClass(productId: 1, productName: "1", productImage: "",
-        productPrice: "0", productCat: "0", productEntryDate: DateTime.now(), favoriteFlag: 0,
-        docsId: "",productCount: 1));
+    instProdList.add(ProductClass(
+        productId: 1,
+        productName: "1",
+        productImage: "",
+        productPrice: "0",
+        productCat: "0",
+        productEntryDate: DateTime.now(),
+        favoriteFlag: 0,
+        docsId: "",
+        productCount: 1));
     super.initState();
   }
 
@@ -175,7 +171,7 @@ class _HomePageState extends State<HomePage> {
               top: AppSize.s4,
               left: -AppSize.s4,
               child: IconButton(
-                icon:  Icon(
+                icon: Icon(
                   Icons.menu,
                   color: ColorManager.grey2,
                 ),
@@ -194,7 +190,7 @@ class _HomePageState extends State<HomePage> {
               child: Row(
                 children: [
                   IconButton(
-                    icon:  Icon(
+                    icon: Icon(
                       Icons.notification_add_sharp,
                       color: ColorManager.grey2,
                     ),
@@ -207,7 +203,7 @@ class _HomePageState extends State<HomePage> {
                     },
                   ),
                   IconButton(
-                    icon:  Icon(
+                    icon: Icon(
                       Icons.shopping_cart_outlined,
                       color: ColorManager.grey2,
                     ),
@@ -249,7 +245,6 @@ class _HomePageState extends State<HomePage> {
                           left: AppSize.s8, right: AppSize.s8),
                       child: TextFormField(
                         onChanged: (value) {
-
                           filterSearchResults(value);
                         },
                         showCursor: true,
@@ -290,39 +285,36 @@ class _HomePageState extends State<HomePage> {
                         width: getWidth(context),
 
                         child: StreamBuilder(
-                          stream: getCollectionReference('Categorys').snapshots(),
-                          builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
-
-
-
-
-                           ////print("inside _categoryss");
+                          stream:
+                              getCollectionReference('Categorys').snapshots(),
+                          builder: (context,
+                              AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+                            ////print("inside _categoryss");
                             if (streamSnapshot.hasData) {
-
                               instCatList.clear();
-                              for (int i =0 ;i<streamSnapshot.data!.docs.length;i++) {
-                                final DocumentSnapshot documentSnapshot = streamSnapshot
-                                    .data!.docs[i];
+                              for (int i = 0;
+                                  i < streamSnapshot.data!.docs.length;
+                                  i++) {
+                                final DocumentSnapshot documentSnapshot =
+                                    streamSnapshot.data!.docs[i];
                                 CategoryClass filteredData = CategoryClass(
-                                  catId: int.parse(documentSnapshot['catId']),
-                                  catName: documentSnapshot['catName'],
-                                  catImage: documentSnapshot['catImage'],
-                                  catPrice: documentSnapshot['catPrice'],
-                                  catDesc: documentSnapshot['catDesc'],
-                                  catDate: DateTime
-                                      .now(),
-                                    docsId:documentSnapshot.id//documentSnapshot['catDate']
-                                );
-
-
-
+                                    catId: int.parse(documentSnapshot['catId']),
+                                    catName: documentSnapshot['catName'],
+                                    catImage: documentSnapshot['catImage'],
+                                    catPrice: documentSnapshot['catPrice'],
+                                    catDesc: documentSnapshot['catDesc'],
+                                    catDate: DateTime.now(),
+                                    docsId: documentSnapshot
+                                        .id //documentSnapshot['catDate']
+                                    );
 
                                 instCatList.add(filteredData);
                               }
-                             ////print("inside if");
+                              ////print("inside if");
                               return ListView.builder(
                                 scrollDirection: Axis.horizontal,
-                                itemCount:instCatList.length,// streamSnapshot.data!.docs.length,
+                                itemCount: instCatList
+                                    .length, // streamSnapshot.data!.docs.length,
                                 itemBuilder: (context, index) {
                                   //final DocumentSnapshot documentSnapshot =streamSnapshot.data!.docs[index];
                                   return SizedBox(
@@ -332,66 +324,72 @@ class _HomePageState extends State<HomePage> {
                                       children: [
                                         Padding(
                                           padding: const EdgeInsets.only(
-                                              left: AppSize.s8, right: AppSize.s8),
+                                              left: AppSize.s8,
+                                              right: AppSize.s8),
                                           child: GestureDetector(
                                             onTap: () {
                                               //print('ontp');
                                               setState(() {
                                                 indexParameter = index;
                                               });
-                                             //print('indexParameter=$indexParameter');
+                                              //print('indexParameter=$indexParameter');
 
                                               filterSearchResultsCat(
                                                   instCatList[index].catName);
-                                            
                                             },
                                             child: Stack(
                                               children: [
                                                 Card(
                                                   elevation: 4,
                                                   shape: RoundedRectangleBorder(
-                                                      side: index == indexParameter
+                                                      side: index ==
+                                                              indexParameter
                                                           ? BorderSide(
-                                                          color: Colors.grey,
-                                                          width: AppSize.s1)
+                                                              color:
+                                                                  Colors.grey,
+                                                              width: AppSize.s1)
                                                           : BorderSide(
-                                                          color: Colors.transparent,
-                                                          width: AppSize.s0),
+                                                              color: Colors
+                                                                  .transparent,
+                                                              width:
+                                                                  AppSize.s0),
                                                       borderRadius:
-                                                      BorderRadius.circular(250)),
+                                                          BorderRadius.circular(
+                                                              250)),
                                                   child: Container(
+                                                    height: 50,
+                                                    width: 50,
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              250),
+                                                      image: DecorationImage(
+                                                          image: NetworkImage(
+                                                        instCatList[index]
+                                                            .catImage,
+                                                      )
+                                                          //  image:Image.network( documentSnapshot['catImage'])
+                                                          ),
+                                                    ),
+                                                  ),
 
-                                                        height: 50,
-                                                        width: 50,
-
-                                                       decoration: BoxDecoration(
-                                                         borderRadius: BorderRadius.circular(250),
-                                                         image: DecorationImage(
-                                                           image: NetworkImage( instCatList[index].catImage,
-                                                         )
-                                                         //  image:Image.network( documentSnapshot['catImage'])
-                                                       ),
-
-
-                                                  ),),
-
-                                                       //   image: Image.network( documentSnapshot['catImage'])),
-
-
-
-
+                                                  //   image: Image.network( documentSnapshot['catImage'])),
                                                 ),
                                                 Positioned(
                                                   right: 10,
                                                   top: 5,
-                                                  child: index == indexParameter? Container(
-                                                    height: 10,
-                                                    width: 10,
-                                                    decoration: BoxDecoration(
-                                                        color: Colors.green,
-                                                        borderRadius:
-                                                        BorderRadius.circular(250)),
-                                                  )
+                                                  child: index == indexParameter
+                                                      ? Container(
+                                                          height: 10,
+                                                          width: 10,
+                                                          decoration: BoxDecoration(
+                                                              color:
+                                                                  Colors.green,
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          250)),
+                                                        )
                                                       : Container(),
                                                 ),
                                               ],
@@ -481,271 +479,308 @@ class _HomePageState extends State<HomePage> {
                           width: getWidth(context),
                           height: getHeight(context), //FontManagerSize.s3,
                           child: StreamBuilder(
-                            stream:getCollectionReference(StringManager.collectionProducts).snapshots(),
-                            builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
-
-
-
+                            stream: getCollectionReference(
+                                    StringManager.collectionProducts)
+                                .snapshots(),
+                            builder: (context,
+                                AsyncSnapshot<QuerySnapshot> streamSnapshot) {
                               if (streamSnapshot.hasData) {
                                 if (updateDataFlag) {
                                   instProdList.clear();
-                                  for (int i = 0; i <
-                                      streamSnapshot.data!.docs.length; i++) {
-                                    final DocumentSnapshot documentSnapshot = streamSnapshot
-                                        .data!.docs[i];
+                                  for (int i = 0;
+                                      i < streamSnapshot.data!.docs.length;
+                                      i++) {
+                                    final DocumentSnapshot documentSnapshot =
+                                        streamSnapshot.data!.docs[i];
                                     ProductClass filteredData = ProductClass(
                                         productId:
                                             documentSnapshot['productId'],
-                                        productName: documentSnapshot['productName'],
-                                        productImage: documentSnapshot['productImage'],
-                                        productCat: documentSnapshot['productCat'],
+                                        productName:
+                                            documentSnapshot['productName'],
+                                        productImage:
+                                            documentSnapshot['productImage'],
+                                        productCat:
+                                            documentSnapshot['productCat'],
                                         productEntryDate: DateTime.now(),
                                         //DateTime.parse(documentSnapshot['productEntryDate']),
-                                        productPrice: documentSnapshot['productPrice'],
+                                        productPrice:
+                                            documentSnapshot['productPrice'],
                                         favoriteFlag:
                                             documentSnapshot['favoriteFlag'],
-                                        docsId: documentSnapshot.id
-                                    ,productCount: 1);
-
+                                        docsId: documentSnapshot.id,
+                                        productCount: 1);
 
                                     instProdList.add(filteredData);
                                     duplicateItems = instProdList;
                                   }
                                 }
-                              //  return ProdcutCeil( instProdList: instProdList,);
-                              return   GridView.builder(
-                                itemCount:instProdList.length,//streamSnapshot.data!.docs.length,
-                                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2),
-                                itemBuilder: (context, int index) {
-                                  return InkWell(
-                                    onTap: () {
-                                      
-                                      //(index);
-                                      // instProdListSimilar.clear();
-                                      filterSearchResultsCatSimilar(
-                                          instProdList[index].productCat);
-                                      Get.to(() => ProductDetails(
-                                        instProd: instProdList[index],
-                                        prodList: instProdListSimilar,
-                                      ));
-                                    },
-                                    child: Stack(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Hero(
-                                            tag: instProdList[index].productName,
-                                            child: Card(
-                                              color: Colors.red,
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                  BorderRadius.circular(
-                                                      AppSize.s10)),
-                                              child: GridTile(
-                                                  header: Align(
-                                                    alignment:
-                                                    Alignment.topLeft,
-                                                    child: Container(
-                                                        decoration:
-                                                        BoxDecoration(
-                                                          color: ColorManager
-                                                              .primary
-                                                              .withOpacity(
-                                                              .9),
-                                                          borderRadius: const BorderRadius
-                                                              .only(
-  topLeft: Radius
-                                                                  .circular(
-                                                                  AppSize
-                                                                      .s10)),
-                                                        ),
-                                                        height: getHeight(
-                                                            context) /
-                                                            AppSize.s40,
-                                                        child: Padding(
-                                                          padding:
-                                                          const EdgeInsets
-                                                              .only(
-                                                              left: AppSize
-                                                                  .s4),
-                                                          // child: Text( filteredData.productCat),
-                                                          child:Text(instProdList[index].productCat),
-                                                        )),
-                                                  ),
-                                                  footer: Container(
-                                                      decoration:
-                                                      BoxDecoration(
-                                                        color: ColorManager
-                                                            .white
-                                                            .withOpacity(.6),
-                                                        borderRadius: const BorderRadius
-                                                            .only(
-                                                            bottomLeft: Radius
-                                                                .circular(
-                                                                AppSize
-                                                                    .s10),
-                                                            bottomRight: Radius
-                                                                .circular(
-                                                                AppSize
-                                                                    .s10)),
-                                                      ),
-                                                      height:
-                                                      getHeight(context) /
-                                                          FontManagerSize
-                                                              .s26,
-                                                      child:
-                                                      Row(
-                                                        mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceAround,
-                                                        crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                        children: [
-
-                                                          Text('${instProdList[index].productName} ',
-                                                            //  Text(' ${filteredData.productName}',
-                                                            style: TextStyle(
-                                                                fontSize:
-                                                                FontManagerSize
-                                                                    .s16,
-                                                                fontWeight:
-                                                                FontWeight
-                                                                    .bold),
+                                //  return ProdcutCeil( instProdList: instProdList,);
+                                return GridView.builder(
+                                  itemCount: instProdList
+                                      .length, //streamSnapshot.data!.docs.length,
+                                  gridDelegate:
+                                      const SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 2),
+                                  itemBuilder: (context, int index) {
+                                    return InkWell(
+                                      onTap: () {
+                                        //(index);
+                                        // instProdListSimilar.clear();
+                                        filterSearchResultsCatSimilar(
+                                            instProdList[index].productCat);
+                                        Get.to(() => ProductDetails(
+                                              instProd: instProdList[index],
+                                              prodList: instProdListSimilar,
+                                            ));
+                                      },
+                                      child: Stack(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Hero(
+                                              tag: instProdList[index]
+                                                  .productName,
+                                              child: Card(
+                                                color: Colors.red,
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            AppSize.s10)),
+                                                child: GridTile(
+                                                    header: Align(
+                                                      alignment:
+                                                          Alignment.topLeft,
+                                                      child: Container(
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: ColorManager
+                                                                .primary
+                                                                .withOpacity(
+                                                                    .9),
+                                                            borderRadius: const BorderRadius
+                                                                    .only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        AppSize
+                                                                            .s10)),
                                                           ),
-
-                                                          Padding(
-                                                            padding: const EdgeInsets.all(4.0),
-                                                            child: Text('${instProdList[index].productPrice} \$',
+                                                          height: getHeight(
+                                                                  context) /
+                                                              AppSize.s40,
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .only(
+                                                                    left: AppSize
+                                                                        .s4),
+                                                            // child: Text( filteredData.productCat),
+                                                            child: Text(
+                                                                instProdList[
+                                                                        index]
+                                                                    .productCat),
+                                                          )),
+                                                    ),
+                                                    footer: Container(
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: ColorManager
+                                                              .white
+                                                              .withOpacity(.6),
+                                                          borderRadius: const BorderRadius
+                                                                  .only(
+                                                              bottomLeft: Radius
+                                                                  .circular(
+                                                                      AppSize
+                                                                          .s10),
+                                                              bottomRight: Radius
+                                                                  .circular(
+                                                                      AppSize
+                                                                          .s10)),
+                                                        ),
+                                                        height:
+                                                            getHeight(context) /
+                                                                FontManagerSize
+                                                                    .s26,
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceAround,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Text(
+                                                              '${instProdList[index].productName} ',
                                                               //  Text(' ${filteredData.productName}',
                                                               style: TextStyle(
                                                                   fontSize:
-                                                                  FontManagerSize
-                                                                      .s16,
+                                                                      FontManagerSize
+                                                                          .s16,
                                                                   fontWeight:
-                                                                  FontWeight
-                                                                      .bold),
+                                                                      FontWeight
+                                                                          .bold),
                                                             ),
-                                                          ),
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(4.0),
+                                                              child: Text(
+                                                                '${instProdList[index].productPrice} \$',
+                                                                //  Text(' ${filteredData.productName}',
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        FontManagerSize
+                                                                            .s16,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        )),
+                                                    child: Container(
+                                                      height:
+                                                          getHeight(context) /
+                                                              AppSize.s20,
 
-                                                        ],
-                                                      )),
-                                                  child: Container(
-                                                    height:
-                                                    getHeight(context) /
-                                                        AppSize.s20,
+                                                      //width: 80,
 
-                                                    //width: 80,
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(
+                                                                    AppSize
+                                                                        .s10),
+                                                        image: DecorationImage(
+                                                            fit: BoxFit.fill,
+                                                            image: NetworkImage(
+                                                              //AssetManager.mancat
 
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                      BorderRadius
-                                                          .circular(
-                                                          AppSize
-                                                              .s10),
-                                                      image: DecorationImage(
-                                                          fit: BoxFit.fill,
-                                                          image: NetworkImage(
-                                                            //AssetManager.mancat
-
-                                                            instProdList[index].
-                                                            productImage,
-                                                          )
+                                                              instProdList[
+                                                                      index]
+                                                                  .productImage,
+                                                            )),
+                                                        color: ColorManager
+                                                            .primary
+                                                            .withOpacity(.9),
                                                       ),
-                                                      color: ColorManager
-                                                          .primary
-                                                          .withOpacity(.9),
-                                                    ),
-                                                  )
-
+                                                    )),
                                               ),
                                             ),
                                           ),
-                                        ),
-                                        Positioned(
-                                            right: AppSize.s4,
-                                            child: Column(
-                                              mainAxisAlignment: MainAxisAlignment.start,
-                                             // crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                IconButton(
-                                                    onPressed: () async {
+                                          Positioned(
+                                              right: AppSize.s4,
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                // crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  IconButton(
+                                                      onPressed: () async {
+                                                        int isCarts =
+                                                            await getIsProductInCarts(
+                                                                StringManager
+                                                                    .collectionCarts,
+                                                                instProdList[
+                                                                        index]
+                                                                    .productId);
 
-                                                  int  isCarts = await getIsProductInCarts(
-                                                      StringManager.collectionCarts,
-                                                      instProdList[index].productId
-                                                  );
+                                                        if (isCarts == 0) {
+                                                          print(
+                                                              'in side if >0 =$isCarts');
+                                                          var cartMap = {
+                                                            "productId":
+                                                                instProdList[
+                                                                        index]
+                                                                    .productId,
+                                                            "productName":
+                                                                instProdList[
+                                                                        index]
+                                                                    .productName,
+                                                            "productImage":
+                                                                instProdList[
+                                                                        index]
+                                                                    .productImage,
+                                                            "productPrice":
+                                                                instProdList[
+                                                                        index]
+                                                                    .productPrice,
+                                                            "productCat":
+                                                                instProdList[
+                                                                        index]
+                                                                    .productCat,
+                                                            //contProductcat.text,
+                                                            "productEntryDate":
+                                                                DateTime.now(),
+                                                            "favoriteFlag":
+                                                                instProdList[
+                                                                        index]
+                                                                    .favoriteFlag,
+                                                            "productCount": 1
+                                                            //contProductfav.text
+                                                          };
 
+                                                          addDataFireStore(
+                                                              StringManager
+                                                                  .collectionCarts,
+                                                              cartMap);
+                                                          showMessage(
+                                                              context,
+                                                              "The products add to carts Successfully",
+                                                              Colors.green);
+                                                        } else {
+                                                          showMessage(
+                                                              context,
+                                                              "The products all ready on Carts",
+                                                              Colors.blue);
+                                                        }
+                                                      },
+                                                      icon: const Icon(
+                                                        Icons
+                                                            .shopping_cart_checkout,
+                                                        color: Colors.red,
+                                                      )),
+                                                  IconButton(
+                                                      onPressed: () {
+                                                        setState(() {
+                                                          int temp = instProdList[
+                                                                          index]
+                                                                      .favoriteFlag ==
+                                                                  0
+                                                              ? 1
+                                                              : 0;
+                                                          // instProdList[index].favoriteFlag = temp;
 
-                                                  if (isCarts == 0) {
-                                                    print('in side if >0 =$isCarts');
-                                                    var cartMap = {
-                                                      "productId": instProdList[index]
-                                                          .productId,
-                                                      "productName": instProdList[index]
-                                                          .productName,
-                                                      "productImage": instProdList[index]
-                                                          .productImage,
-                                                      "productPrice": instProdList[index]
-                                                          .productPrice,
-                                                      "productCat": instProdList[index]
-                                                          .productCat,
-                                                      //contProductcat.text,
-                                                      "productEntryDate": DateTime
-                                                          .now(),
-                                                      "favoriteFlag": instProdList[index]
-                                                          .favoriteFlag,
-                                                      "productCount": 1
-                                                      //contProductfav.text
-                                                    };
-
-                                                    addDataFireStore(
-                                                        StringManager.collectionCarts,
-                                                        cartMap);
-                                                    showMessage(context,
-                                                        "The products add to carts Successfully",Colors.green);
-                                                  }
-                                                  else {
-                                                    showMessage(context,
-                                                        "The products all ready on Carts",Colors.blue);
-
-                                                  }
-                                                },
-                                                    icon:  const Icon(Icons.shopping_cart_checkout,color: Colors.red, )
-                                                ),
-                                                IconButton(
-                                                    onPressed: () {
-
-                                                      setState(() {
-                                                        int temp = instProdList[index].favoriteFlag ==0
-                                                            ? 1
-                                                            : 0;
-                                                       // instProdList[index].favoriteFlag = temp;
-
-                                                        updateIntField(StringManager.collectionProducts,'favoriteFlag',instProdList[index].docsId,temp);
-                                                      });
-                                                    },
-                                                    icon: instProdList[index]
-                                                        .favoriteFlag ==
-                                                        1
-                                                        ? const Icon(
-                                                      Icons
-                                                          .favorite_outlined,
-                                                      color: Colors.red,
-                                                    )
-                                                        : const Icon(
-                                                      Icons.favorite_border,
-                                                      color: Colors.red,
-                                                    )),
-                                              ],
-                                            ))
-                                      ],
-                                    ),
-                                  );
-
-                                },
-                              );
+                                                          updateIntField(
+                                                              StringManager
+                                                                  .collectionProducts,
+                                                              'favoriteFlag',
+                                                              instProdList[
+                                                                      index]
+                                                                  .docsId,
+                                                              temp);
+                                                        });
+                                                      },
+                                                      icon: instProdList[index]
+                                                                  .favoriteFlag ==
+                                                              1
+                                                          ? const Icon(
+                                                              Icons
+                                                                  .favorite_outlined,
+                                                              color: Colors.red,
+                                                            )
+                                                          : const Icon(
+                                                              Icons
+                                                                  .favorite_border,
+                                                              color: Colors.red,
+                                                            )),
+                                                ],
+                                              ))
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                );
                               }
 
                               return const Center(
@@ -753,7 +788,6 @@ class _HomePageState extends State<HomePage> {
                               );
                             },
                           ),
-
                         ),
                       ),
                     )
@@ -784,9 +818,6 @@ class _HomePageState extends State<HomePage> {
       'price': "10",
     });
   }
-
-
-
 }
 
 class MyPainter extends CustomPainter {
@@ -812,8 +843,6 @@ class MyPainter extends CustomPainter {
     return true;
   }
 }
-
-
 
 class GetCarouselSlider extends StatefulWidget {
   GetCarouselSlider({Key? key}) : super(key: key);
@@ -890,316 +919,261 @@ class _GetCarouselSliderState extends State<GetCarouselSlider> {
   }
 }
 
-
 class CatListCiel extends StatelessWidget {
-   CatListCiel({Key? key,required this.instCatClass}) : super(key: key);
+  CatListCiel({Key? key, required this.instCatClass}) : super(key: key);
   CategoryClass instCatClass;
 
   @override
   Widget build(BuildContext context) {
-    return
-      Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Hero(
-              tag: instCatClass.catName,
-              child: Card(
-                color: Colors.red,
-                shape: RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.circular(
-                            AppSize.s10)),
-                child: GridTile(
-                    header: Align(
-                      alignment:
-                          Alignment.topLeft,
-                      child: Container(
-                          decoration:
-                              BoxDecoration(
-                            color: ColorManager
-                                .primary
-                                .withOpacity(.9),
-                            borderRadius: const BorderRadius
-                                    .only(
-
-                                // bottomLeft:Radius.circular(AppSize.s10),
-
-                                topLeft: Radius
-                                    .circular(
-                                        AppSize
-                                            .s10)),
-                          ),
-                          height:
-                              getHeight(context) /
-                                  AppSize.s40,
-                          child: Padding(
-                            padding:
-                                const EdgeInsets
-                                        .only(
-                                    left: AppSize
-                                        .s4),
-                            child: Text(
-                                instCatClass
-                                    .catDesc),
-                          )),
-                    ),
-                    footer: Container(
-                        decoration: BoxDecoration(
-                          color: ColorManager
-                              .white
-                              .withOpacity(.6),
-                          borderRadius: const BorderRadius
-                                  .only(
-                              bottomLeft:
-                                  Radius.circular(
-                                      AppSize
-                                          .s10),
-                              bottomRight:
-                                  Radius.circular(
-                                      AppSize
-                                          .s10)),
-                        ),
-                        height:
-                            getHeight(context) /
-                                FontManagerSize
-                                    .s24,
-                        child: Column(
-                          mainAxisAlignment:
-                              MainAxisAlignment
-                                  .center,
-                          crossAxisAlignment:
-                              CrossAxisAlignment
-                                  .start,
-                          children: [
-                            Text(
-                              ' ${instCatClass.catName}',
-                              style: TextStyle(
-                                  fontSize:
-                                      FontManagerSize
-                                          .s14,
-                                  fontWeight:
-                                      FontWeight
-                                          .bold),
-                            ),
-                            Text(
-                              ' Price :${instCatClass.catPrice} \$',
-                              style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight:
-                                      FontWeight
-                                          .bold,
-                                  color:
-                                      ColorManager
-                                          .primary),
-                            ),
-                          ],
-                        )),
+    return Stack(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Hero(
+            tag: instCatClass.catName,
+            child: Card(
+              color: Colors.red,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(AppSize.s10)),
+              child: GridTile(
+                  header: Align(
+                    alignment: Alignment.topLeft,
                     child: Container(
-                      height: getHeight(context) /
-                          AppSize.s20,
+                        decoration: BoxDecoration(
+                          color: ColorManager.primary.withOpacity(.9),
+                          borderRadius: const BorderRadius.only(
 
-                      //width: 80,
+                              // bottomLeft:Radius.circular(AppSize.s10),
 
+                              topLeft: Radius.circular(AppSize.s10)),
+                        ),
+                        height: getHeight(context) / AppSize.s40,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: AppSize.s4),
+                          child: Text(instCatClass.catDesc),
+                        )),
+                  ),
+                  footer: Container(
                       decoration: BoxDecoration(
-                        borderRadius:
-                            BorderRadius.circular(
-                                AppSize.s10),
-                        image: DecorationImage(
-                            fit: BoxFit.fill,
-                            image: NetworkImage(
-                              //AssetManager.mancat
-
-                              instCatClass
-                                  .catImage,
-                            )),
-                        color: ColorManager
-                            .primary
-                            .withOpacity(.9),
+                        color: ColorManager.white.withOpacity(.6),
+                        borderRadius: const BorderRadius.only(
+                            bottomLeft: Radius.circular(AppSize.s10),
+                            bottomRight: Radius.circular(AppSize.s10)),
                       ),
-                    )
+                      height: getHeight(context) / FontManagerSize.s24,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            ' ${instCatClass.catName}',
+                            style: TextStyle(
+                                fontSize: FontManagerSize.s14,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            ' Price :${instCatClass.catPrice} \$',
+                            style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                color: ColorManager.primary),
+                          ),
+                        ],
+                      )),
+                  child: Container(
+                    height: getHeight(context) / AppSize.s20,
 
-                    // Column(
+                    //width: 80,
 
-                    //   children: [
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(AppSize.s10),
+                      image: DecorationImage(
+                          fit: BoxFit.fill,
+                          image: NetworkImage(
+                            //AssetManager.mancat
 
-                    //     Card(
-
-                    //       elevation: 0,
-
-                    //       shape: const OutlineInputBorder(
-
-                    //         borderSide: BorderSide(
-
-                    //             color: Colors.transparent,
-
-                    //             width: AppSize.s0_5),
-
-                    //         borderRadius: BorderRadius.all(
-
-                    //           Radius.circular(AppSize.s8),
-
-                    //         ),
-
-                    //       ),
-
-                    //       child: Stack(
-
-                    //         children: [
-
-                    //           Positioned(
-
-                    //             child: Container(
-
-                    //               height: 90,
-
-                    //               //width: 80,
-
-                    //               decoration: BoxDecoration(
-
-                    //                 borderRadius: BorderRadius.circular(5),
-
-                    //                 image: const DecorationImage(
-
-                    //                     fit: BoxFit.fill,
-
-                    //             ';]        image: AssetImage(
-
-                    //                       AssetManager.mancat4,
-
-                    //                     )),
-
-                    //                 color: Colors.green,
-
-                    //               ),
-
-                    //             ),
-
-                    //           ),
-
-                    //           Positioned(
-
-                    //               bottom: AppSize.s0,
-
-                    //               left: AppSize.s0,
-
-                    //               right: AppSize.s0,
-
-                    //               child: Container(
-
-                    //                   height:
-
-                    //                       get_height(context) / AppSize.s40,
-
-                    //                   color: ColorManager.primary
-
-                    //                       .withOpacity(.4),
-
-                    //                   child: const Center(
-
-                    //                       child: Text('T-shirt')))),
-
-                    //           const Positioned(
-
-                    //             right: AppSize.s4,
-
-                    //             child: const Icon(
-
-                    //               Icons.favorite_border_outlined,
-
-                    //               color: Colors.red,
-
-                    //             ),
-
-                    //           ),
-
-                    //         ],
-
-                    //       ),
-
-                    //     ),
-
-                    //     Column(
-
-                    //       children: [
-
-                    //         const Text('Price :50'),
-
-                    //       ],
-
-                    //     ),
-
-                    //     // Text('price : ${23}\$'),
-
-                    //   ],
-
-                    // ),
-
+                            instCatClass.catImage,
+                          )),
+                      color: ColorManager.primary.withOpacity(.9),
                     ),
-              ),
+                  )
+
+                  // Column(
+
+                  //   children: [
+
+                  //     Card(
+
+                  //       elevation: 0,
+
+                  //       shape: const OutlineInputBorder(
+
+                  //         borderSide: BorderSide(
+
+                  //             color: Colors.transparent,
+
+                  //             width: AppSize.s0_5),
+
+                  //         borderRadius: BorderRadius.all(
+
+                  //           Radius.circular(AppSize.s8),
+
+                  //         ),
+
+                  //       ),
+
+                  //       child: Stack(
+
+                  //         children: [
+
+                  //           Positioned(
+
+                  //             child: Container(
+
+                  //               height: 90,
+
+                  //               //width: 80,
+
+                  //               decoration: BoxDecoration(
+
+                  //                 borderRadius: BorderRadius.circular(5),
+
+                  //                 image: const DecorationImage(
+
+                  //                     fit: BoxFit.fill,
+
+                  //             ';]        image: AssetImage(
+
+                  //                       AssetManager.mancat4,
+
+                  //                     )),
+
+                  //                 color: Colors.green,
+
+                  //               ),
+
+                  //             ),
+
+                  //           ),
+
+                  //           Positioned(
+
+                  //               bottom: AppSize.s0,
+
+                  //               left: AppSize.s0,
+
+                  //               right: AppSize.s0,
+
+                  //               child: Container(
+
+                  //                   height:
+
+                  //                       get_height(context) / AppSize.s40,
+
+                  //                   color: ColorManager.primary
+
+                  //                       .withOpacity(.4),
+
+                  //                   child: const Center(
+
+                  //                       child: Text('T-shirt')))),
+
+                  //           const Positioned(
+
+                  //             right: AppSize.s4,
+
+                  //             child: const Icon(
+
+                  //               Icons.favorite_border_outlined,
+
+                  //               color: Colors.red,
+
+                  //             ),
+
+                  //           ),
+
+                  //         ],
+
+                  //       ),
+
+                  //     ),
+
+                  //     Column(
+
+                  //       children: [
+
+                  //         const Text('Price :50'),
+
+                  //       ],
+
+                  //     ),
+
+                  //     // Text('price : ${23}\$'),
+
+                  //   ],
+
+                  // ),
+
+                  ),
             ),
           ),
-          Positioned(
-              right: AppSize.s4,
-              child: IconButton(
-                  onPressed: () {
-                    // setState(() {
-                    //   int temp = filteredData
-                    //               .catPrice ==
-                    //           0
-                    //       ? 1
-                    //       : 0;
-                    //
-                    //  //print('temp=$temp');
-                    //
-                    //   filteredData.catPrice =
-                    //       temp.toString();
-                    //
-                    //  //print(
-                    //       filteredData.catPrice);
-                    // });
-                  },
-                  icon: instCatClass.catPrice ==
-                          1
-                      ? const Icon(
-                          Icons.favorite_outlined,
-                          color: Colors.red,
-                        )
-                      : const Icon(
-                          Icons.favorite_border,
-                          color: Colors.red,
-                        )))
-        ],
-      );
-
+        ),
+        Positioned(
+            right: AppSize.s4,
+            child: IconButton(
+                onPressed: () {
+                  // setState(() {
+                  //   int temp = filteredData
+                  //               .catPrice ==
+                  //           0
+                  //       ? 1
+                  //       : 0;
+                  //
+                  //  //print('temp=$temp');
+                  //
+                  //   filteredData.catPrice =
+                  //       temp.toString();
+                  //
+                  //  //print(
+                  //       filteredData.catPrice);
+                  // });
+                },
+                icon: instCatClass.catPrice == 1
+                    ? const Icon(
+                        Icons.favorite_outlined,
+                        color: Colors.red,
+                      )
+                    : const Icon(
+                        Icons.favorite_border,
+                        color: Colors.red,
+                      )))
+      ],
+    );
   }
 }
 
-
-
 class ProdcutCeil extends StatelessWidget {
-   ProdcutCeil({Key? key,required this.instProdList}) : super(key: key);
-List<ProductClass> instProdList;
+  ProdcutCeil({Key? key, required this.instProdList}) : super(key: key);
+  List<ProductClass> instProdList;
   @override
   Widget build(BuildContext context) {
-    return   GridView.builder(
-      itemCount:instProdList.length,//streamSnapshot.data!.docs.length,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2),
+    return GridView.builder(
+      itemCount: instProdList.length, //streamSnapshot.data!.docs.length,
+      gridDelegate:
+          const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
       itemBuilder: (context, int index) {
-
         ////print(instProdList.length);
         return InkWell(
           onTap: () {
-           ////print('inside tabbbbb=  $index');
+            ////print('inside tabbbbb=  $index');
             //(index);
             // instProdListSimilar.clear();
             // filterSearchResultsCatSimilar(
             //     instProdList[index].productCat);
             Get.to(() => ProductDetails(
-              instProd: instProdList[index],
-              prodList: instProdListSimilar,
-            ));
+                  instProd: instProdList[index],
+                  prodList: instProdListSimilar,
+                ));
           },
           child: Stack(
             children: [
@@ -1210,123 +1184,72 @@ List<ProductClass> instProdList;
                   child: Card(
                     color: Colors.red,
                     shape: RoundedRectangleBorder(
-                        borderRadius:
-                        BorderRadius.circular(
-                            AppSize.s10)),
+                        borderRadius: BorderRadius.circular(AppSize.s10)),
                     child: GridTile(
                         header: Align(
-                          alignment:
-                          Alignment.topLeft,
+                          alignment: Alignment.topLeft,
                           child: Container(
-                              decoration:
-                              BoxDecoration(
-                                color: ColorManager
-                                    .primary
-                                    .withOpacity(
-                                    .9),
-                                borderRadius: const BorderRadius
-                                    .only(
+                              decoration: BoxDecoration(
+                                color: ColorManager.primary.withOpacity(.9),
+                                borderRadius: const BorderRadius.only(
 
-                                  // bottomLeft:Radius.circular(AppSize.s10),
+                                    // bottomLeft:Radius.circular(AppSize.s10),
 
-                                    topLeft: Radius
-                                        .circular(
-                                        AppSize
-                                            .s10)),
+                                    topLeft: Radius.circular(AppSize.s10)),
                               ),
-                              height: getHeight(
-                                  context) /
-                                  AppSize.s40,
+                              height: getHeight(context) / AppSize.s40,
                               child: Padding(
                                 padding:
-                                const EdgeInsets
-                                    .only(
-                                    left: AppSize
-                                        .s4),
+                                    const EdgeInsets.only(left: AppSize.s4),
                                 // child: Text( filteredData.productCat),
-                                child:Text(instProdList[index].productCat),
+                                child: Text(instProdList[index].productCat),
                               )),
                         ),
                         footer: Container(
-                            decoration:
-                            BoxDecoration(
-                              color: ColorManager
-                                  .white
-                                  .withOpacity(.6),
-                              borderRadius: const BorderRadius
-                                  .only(
-                                  bottomLeft: Radius
-                                      .circular(
-                                      AppSize
-                                          .s10),
-                                  bottomRight: Radius
-                                      .circular(
-                                      AppSize
-                                          .s10)),
+                            decoration: BoxDecoration(
+                              color: ColorManager.white.withOpacity(.6),
+                              borderRadius: const BorderRadius.only(
+                                  bottomLeft: Radius.circular(AppSize.s10),
+                                  bottomRight: Radius.circular(AppSize.s10)),
                             ),
-                            height:
-                            getHeight(context) /
-                                FontManagerSize
-                                    .s20,
+                            height: getHeight(context) / FontManagerSize.s20,
                             child: Row(
-                              mainAxisAlignment:
-                              MainAxisAlignment
-                                  .center,
-                              crossAxisAlignment:
-                              CrossAxisAlignment
-                                  .start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('${instProdList[index].productName}',
+                                Text(
+                                  '${instProdList[index].productName}',
                                   //  Text(' ${filteredData.productName}',
                                   style: TextStyle(
-                                      fontSize:
-                                      FontManagerSize
-                                          .s16,
-                                      fontWeight:
-                                      FontWeight
-                                          .bold),
+                                      fontSize: FontManagerSize.s16,
+                                      fontWeight: FontWeight.bold),
                                 ),
                                 Text(
                                   ' Price :${instProdList[index].productPrice} \$',
                                   style: TextStyle(
                                       fontSize: 12,
-                                      fontWeight:
-                                      FontWeight
-                                          .bold,
-                                      color: ColorManager
-                                          .primary),
+                                      fontWeight: FontWeight.bold,
+                                      color: ColorManager.primary),
                                 ),
                               ],
                             )),
                         child: Container(
-                          height:
-                          getHeight(context) /
-                              AppSize.s20,
+                          height: getHeight(context) / AppSize.s20,
 
                           //width: 80,
 
                           decoration: BoxDecoration(
-                            borderRadius:
-                            BorderRadius
-                                .circular(
-                                AppSize
-                                    .s10),
+                            borderRadius: BorderRadius.circular(AppSize.s10),
                             image: DecorationImage(
                                 fit: BoxFit.fill,
                                 image: NetworkImage(
                                   //AssetManager.mancat
 
-                                  instProdList[index].
-                                  productImage,
-                                )
-                            ),
-                            color: ColorManager
-                                .primary
-                                .withOpacity(.9),
+                                  instProdList[index].productImage,
+                                )),
+                            color: ColorManager.primary.withOpacity(.9),
                           ),
-                        )
-
-                    ),
+                        )),
                   ),
                 ),
               ),
@@ -1350,24 +1273,19 @@ List<ProductClass> instProdList;
                         //       .favoriteFlag);
                         // });
                       },
-                      icon: instProdList[index]
-                          .favoriteFlag ==
-                          1
+                      icon: instProdList[index].favoriteFlag == 1
                           ? const Icon(
-                        Icons
-                            .favorite_outlined,
-                        color: Colors.red,
-                      )
+                              Icons.favorite_outlined,
+                              color: Colors.red,
+                            )
                           : const Icon(
-                        Icons.favorite_border,
-                        color: Colors.red,
-                      )))
+                              Icons.favorite_border,
+                              color: Colors.red,
+                            )))
             ],
           ),
         );
-
       },
     );
   }
 }
-

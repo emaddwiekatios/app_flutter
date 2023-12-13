@@ -1,5 +1,6 @@
-const  String imagePath = "images";
+const String imagePath = "images";
 
+/// emad
 const String imagePathCat = "images/category";
 const String imagePathHome = "images/home";
 
@@ -47,4 +48,3 @@ class AssetManager {
 
   static const String login = "$imagePathlogin/login.png";
 }
-

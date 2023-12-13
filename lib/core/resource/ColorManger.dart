@@ -20,6 +20,7 @@ class ColorManager {
   static Color black = Colors.black; // red color
 
 }
+// add for testing
 
 extension HexColor on Color {
   static Color fromHex(String hexColorString) {
